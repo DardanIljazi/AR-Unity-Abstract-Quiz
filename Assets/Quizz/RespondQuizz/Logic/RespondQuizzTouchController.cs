@@ -11,7 +11,6 @@ public class RespondQuizzTouchController : MonoBehaviour
     int lastTapCount = 0;
     bool blockTouchOrClick = false;
 
-
     public RespondQuizzMainController RespondQuizzMainController; // Reference to the main controller (so we can pass him delegates)
 
     delegate void DelegateOnResponseCellTouched(string quizzNumber);
@@ -19,7 +18,7 @@ public class RespondQuizzTouchController : MonoBehaviour
 
     public void Initialize()
     {
-        OnResponseCellTouched += RespondQuizzMainController.ResponseSelected; // Call QuizzSelected method from RespondQuizzMainController when a cell is clicked/touchced
+        OnResponseCellTouched = RespondQuizzMainController.ResponseSelected; // Call QuizzSelected method from RespondQuizzMainController when a cell is clicked/touchced
     }
 
     public void Reset()
@@ -48,8 +47,6 @@ public class RespondQuizzTouchController : MonoBehaviour
 
     void Update()
     {
-        if (blockTouchOrClick)
-            return;
 
         
         if (Application.platform == RuntimePlatform.WindowsEditor || 
@@ -76,17 +73,19 @@ public class RespondQuizzTouchController : MonoBehaviour
             }
         }
 
+        if (blockTouchOrClick)
+            return;
 
         if (touched && Physics.Raycast(ray, out raycastHit, Mathf.Infinity))
         {
-            Debug.Log("Clicked a quizz");
+            Debug.Log("CLICKED");
             RespondQuizzCellView RespondQuizzCellView = raycastHit.collider.gameObject.GetComponentInParent<RespondQuizzCellView>();
 
             if (RespondQuizzCellView != null)
             {
                 blockTouchOrClick = true;
                 // Call the methods
-                OnResponseCellTouched(RespondQuizzCellView._data.name);
+                OnResponseCellTouched(RespondQuizzCellView._data.GetDataToShowInCellView());
             }
         }
     }

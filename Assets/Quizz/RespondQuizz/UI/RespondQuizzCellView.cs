@@ -24,7 +24,7 @@ public class RespondQuizzCellView : EnhancedScrollerCellView
 
     public void ReloadData()
     {
-        textObject.text = _data.name;
+        textObject.text = _data.GetDataToShowInCellView();
     }
 
     public void Update()

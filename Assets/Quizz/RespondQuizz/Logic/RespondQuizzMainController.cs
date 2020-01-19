@@ -12,8 +12,8 @@ public class RespondQuizzMainController : MonoBehaviour
 {
     
     public Api api;
-    public RespondQuizzScrollerController RespondQuizzScrollerController;
-    public RespondQuizzTouchController RespondQuizzTouchController;
+    public RespondQuizzScrollerController respondQuizzScrollerController;
+    public RespondQuizzTouchController respondQuizzTouchController;
 
     public Text quizzQuestion;
     public Image quizzImage;
@@ -30,12 +30,12 @@ public class RespondQuizzMainController : MonoBehaviour
     private int rightResponses = 0;
     private int falseResponses = 0;
 
+    public Pages pages;
+
     public void Start()
     {
-        RespondQuizzScrollerController.Initialize();
-        RespondQuizzTouchController.Initialize();
-
-        // Get quizz list from API and put them into scroll list (RespondQuizzScrollerController)
+        respondQuizzScrollerController.Initialize();
+        respondQuizzTouchController.Initialize();
 
         gameQuizze = api.getGameQuizzeFromAPI("5c4ebb440eab7e0004ffcb76" /*selectQuizzMainController.selectedQuizzNumber*/);
 
@@ -44,10 +44,12 @@ public class RespondQuizzMainController : MonoBehaviour
         LoadQuestionAndPossibleResponses(0);
     }
 
-    
 
     public void LoadQuestionAndPossibleResponses(int arrayIndex)
     {
+        respondQuizzScrollerController.Reset();
+        respondQuizzTouchController.Reset();
+
         quizzQuestion.text = gameQuizze.questions[arrayIndex].question;
 
         foreach (ApiData.Answer answer in gameQuizze.questions[arrayIndex].answers)
@@ -55,8 +57,13 @@ public class RespondQuizzMainController : MonoBehaviour
             if (answer.value == true)
                 goodAnswer = answer.name;
 
-            RespondQuizzScrollerController.AddDataToScroller(new RespondQuizzData { name = answer.name, value = answer.value });
+
+            RespondQuizzData respondQuizzData = new RespondQuizzData();
+            respondQuizzData.SetDataToShowInCellView(answer.name);
+
+            respondQuizzScrollerController.AddDataToScroller(respondQuizzData);
         }
+
     } 
 
     private static RespondQuizzMainController singleton;
@@ -76,16 +83,16 @@ public class RespondQuizzMainController : MonoBehaviour
         if (goodAnswer.Equals(response))
         {
             rightResponses++;
-        } else
+        }
+        else
         {
             falseResponses++;
         }
 
-        if (actualQuestionArrayIndex < numberOfQuestions-1)
+        actualQuestionArrayIndex++;
+            
+        if (actualQuestionArrayIndex <= numberOfQuestions - 1)
         {
-            actualQuestionArrayIndex++;
-            RespondQuizzTouchController.Reset();
-            RespondQuizzScrollerController.Reset();
             LoadQuestionAndPossibleResponses(actualQuestionArrayIndex);
         }
         else
@@ -98,8 +105,8 @@ public class RespondQuizzMainController : MonoBehaviour
     {
         Debug.Log("Finished");
         Debug.Log("Résultat (right response: " + rightResponses + ", bad response: " + falseResponses + ")");
+        pages.ShowNext();
     }
-
 
     /**
      * Delegates called from inside of RespondQuizzTouchController

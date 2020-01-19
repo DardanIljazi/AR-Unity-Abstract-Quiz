@@ -14,6 +14,7 @@ public class SelectQuizzMainController : MonoBehaviour
 
     public RespondQuizzMainController respondQuizzMainController;
 
+    public Pages pages;
 
     public void Start()
     {
@@ -43,6 +44,7 @@ public class SelectQuizzMainController : MonoBehaviour
     public void SetSelectedQuizzNumber(string quizzNumber)
     {
         selectedQuizzNumber = quizzNumber;
+        pages.ShowNext();
     }
 
 

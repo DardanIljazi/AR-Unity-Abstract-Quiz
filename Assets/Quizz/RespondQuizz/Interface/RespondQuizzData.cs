@@ -9,7 +9,15 @@ using UnityEngine;
  * 
  *   _title will always represent the "text"/"title" shown into cell views. So if you change ApiData.IndexQuizz and that ApiData.IndexQuizz.title is changed to something else, replace it in the constructor below
  */
-public class RespondQuizzData : ApiData.Answer
+public class RespondQuizzData : ApiData.Answer, IRespondQuizzCellViewStructure<string>
 {
+    public string GetDataToShowInCellView()
+    {
+        return name;
+    }
 
+    public void SetDataToShowInCellView(string data)
+    {
+        base.name = data;
+    }
 }

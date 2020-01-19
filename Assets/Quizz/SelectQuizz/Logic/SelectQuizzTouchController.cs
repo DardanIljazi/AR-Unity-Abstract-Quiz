@@ -69,7 +69,6 @@ public class SelectQuizzTouchController : MonoBehaviour
             }
         }
 
-
         if (touched && Physics.Raycast(ray, out raycastHit, Mathf.Infinity))
         {
             Debug.Log("Clicked a quizz");
