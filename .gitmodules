@@ -1,0 +1,3 @@
+[submodule "quizawa"]
+	path = quizawa
+	url = https://github.com/NicolasHenryCPNV/quizawa.git
