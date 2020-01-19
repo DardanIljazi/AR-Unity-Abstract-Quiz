@@ -37,7 +37,7 @@ public class SelectQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDel
 
     public void AddDataToScroller(SelectQuizzData data)
     {
-        Debug.Log("data.title: " + data.title);
+        //Debug.Log("data.title: " + data.title);
         this._data.Add(data);
         myScroller.ReloadData();
     }
