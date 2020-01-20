@@ -6,14 +6,17 @@ using EnhancedUI.EnhancedScroller;
 
 public class SelectQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDelegate
 {
+    [Header("Link to the instance of scroller (contains all cells of data)")]
+    public EnhancedScroller enhancedScroller;
+    [Header("Link to the prefab to show for each data in scroller")]
+    public SelectQuizzCellView selectQuizzCellView;
+
     private List<SelectQuizzData> _data;
-    public EnhancedScroller myScroller;
-    public SelectQuizzCellView animalCellViewPrefab;
 
     public void Initialize()
     {
         _data = new List<SelectQuizzData>();
-        myScroller.Delegate = this;
+        enhancedScroller.Delegate = this;
     }
 
     public int GetNumberOfCells(EnhancedScroller scroller)
@@ -29,7 +32,7 @@ public class SelectQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDel
     public EnhancedScrollerCellView GetCellView(EnhancedScroller scroller, int
     dataIndex, int cellIndex)
     {
-        SelectQuizzCellView cellView = scroller.GetCellView(animalCellViewPrefab) as
+        SelectQuizzCellView cellView = scroller.GetCellView(selectQuizzCellView) as
         SelectQuizzCellView;
         cellView.SetData(_data[dataIndex]);
         return cellView;
@@ -37,8 +40,7 @@ public class SelectQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDel
 
     public void AddDataToScroller(SelectQuizzData data)
     {
-        //Debug.Log("data.title: " + data.title);
-        this._data.Add(data);
-        myScroller.ReloadData();
+        _data.Add(data);
+        enhancedScroller.ReloadData();
     }
 }

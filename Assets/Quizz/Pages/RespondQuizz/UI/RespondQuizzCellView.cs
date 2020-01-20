@@ -5,15 +5,13 @@ using EnhancedUI.EnhancedScroller;
 using TMPro;
 using EnhancedScrollerDemos.GridSelection;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class RespondQuizzCellView : EnhancedScrollerCellView
+public class RespondQuizzCellView : EnhancedScrollerCellView, IPointerUpHandler, IPointerDownHandler, IPointerClickHandler
 {
     public BoxCollider boxCollider; // Used for the raycast
     public RespondQuizzData _data;
 
-    /**
-     * All elements to modify when new data come
-     */
     public Text textObject;
 
     public void SetData(RespondQuizzData data)
@@ -33,6 +31,21 @@ public class RespondQuizzCellView : EnhancedScrollerCellView
         {
             boxCollider.size = GetComponent<RectTransform>().rect.size;
         }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        Debug.Log("OnPointerDown");
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        Debug.Log("OnPointerUp");
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        GameManager.Instance.respondQuizzManager.ResponseSelected(_data.name);
     }
 }
 

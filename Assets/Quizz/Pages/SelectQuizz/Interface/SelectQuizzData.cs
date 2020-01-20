@@ -11,5 +11,8 @@ using UnityEngine;
  */
 public class SelectQuizzData : ApiData.IndexQuizz
 {
-
+    public string GetQuizzId()
+    {
+        return id;
+    }
 }
