@@ -25,5 +25,6 @@ public class SelectQuizzManager : MonoBehaviour
     {
         selectedQuizzId = quizzId;
         GameManager.Instance.pagesManager.ShowNext();
+        GameManager.Instance.respondQuizzManager.LoadQuizz(selectedQuizzId);
     }
 }

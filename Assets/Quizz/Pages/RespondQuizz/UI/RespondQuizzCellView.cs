@@ -35,12 +35,12 @@ public class RespondQuizzCellView : EnhancedScrollerCellView, IPointerUpHandler,
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("OnPointerDown");
+        //Debug.Log("OnPointerDown");
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log("OnPointerUp");
+        //Debug.Log("OnPointerUp");
     }
 
     public void OnPointerClick(PointerEventData eventData)

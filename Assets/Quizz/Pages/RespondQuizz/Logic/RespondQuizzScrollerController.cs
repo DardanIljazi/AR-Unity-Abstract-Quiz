@@ -19,6 +19,7 @@ public class RespondQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDe
     public void Reset()
     {
         myScroller.ClearAll();
+
         _data.Clear();
     }
 

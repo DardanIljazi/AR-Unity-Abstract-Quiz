@@ -12,8 +12,9 @@ public class Pages : MonoBehaviour
     public RectTransform pageBase; // The object that will old the place of pages
     private GameObject lastParent;
 
+
     // Those 2 elements are only to have something "visual" in unity editor. They will be hidden when code is launched
-    [Header("Destined to be hidden when code launched")]
+    [Header("Destined to be hidden when code launched (only here for visual)")]
     public GameObject pageBaseUI;
     public GameObject pageBaseText; 
 
@@ -35,10 +36,15 @@ public class Pages : MonoBehaviour
 
     private  void Show(int index)
     {
-        
         listofOrderedObjectToShow[lastShownId].SetActive(false);
         listofOrderedObjectToShow[index].SetActive(true);
         lastShownId = index;
+    }
+
+    public void ShowFirstPage()
+    {
+        actualGameObjectShownIndex = 0;
+        Show(0);
     }
 
     private  void Hide(int index)

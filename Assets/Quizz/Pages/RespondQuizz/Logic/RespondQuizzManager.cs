@@ -20,11 +20,14 @@ public class RespondQuizzManager : MonoBehaviour
     private int falseResponses = 0;
 
     private ApiData.GameQuizze gameQuizze;
-    public void Start()
+
+
+    public void LoadQuizz(string quizzId)
     {
+        this.Reset();
         respondQuizzScrollerController.Initialize();
 
-        gameQuizze = GameManager.Instance.api.getGameQuizzeFromAPI(GameManager.Instance.selectQuizzManager.selectedQuizzId);
+        gameQuizze = GameManager.Instance.api.getGameQuizzeFromAPI(quizzId);
 
         numberOfQuestions = gameQuizze.questions.Count;
 
@@ -77,9 +80,17 @@ public class RespondQuizzManager : MonoBehaviour
         SaveResponseAndGoToNext(response);
     }
 
+    public void Reset()
+    {
+        numberOfQuestions = 0;
+        actualQuestionArrayIndex = 0;
+        rightResponses = 0;
+        falseResponses = 0;
+    }
+
     public void Finished()
     {
-        GameManager.Instance.finishQuizzManager.SetFinalScore(rightResponses, falseResponses, numberOfQuestions);
         GameManager.Instance.pagesManager.ShowNext();
+        GameManager.Instance.finishQuizzManager.SetFinalScore(rightResponses, falseResponses, numberOfQuestions);
     }
 }
