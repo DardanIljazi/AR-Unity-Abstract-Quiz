@@ -1,3 +1,6 @@
 [submodule "quizawa"]
 	path = quizawa
 	url = https://github.com/NicolasHenryCPNV/quizawa.git
+[submodule "KUIZAWA_api"]
+	path = KUIZAWA_api
+	url = https://github.com/CPNV-ES/KUIZAWA_api.git
