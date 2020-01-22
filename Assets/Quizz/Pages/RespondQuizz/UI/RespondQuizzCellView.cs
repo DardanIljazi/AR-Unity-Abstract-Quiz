@@ -46,7 +46,7 @@ public class RespondQuizzCellView : EnhancedScrollerCellView, IPointerUpHandler,
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        GameManager.Instance.respondQuizzManager.ResponseSelected(_data.name);
+        GameManager.Instance.respondQuizzManager.ResponseSelected(_data);
     }
 }
 

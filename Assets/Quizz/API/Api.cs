@@ -30,10 +30,11 @@ public class Api : MonoBehaviour
     }
 
     // Get the selected question
-    public ApiData.GameQuizze GetQuestionsQuizzListFromAPI(int id)
+    public QuestionsQuizzData GetQuestionsQuizzListFromAPI(int id)
     {
-        string JSON_quizze = CallHttpWebRequest(api_URL + "/questions/" + id.ToString());   // get the json
-        return JsonUtility.FromJson<ApiData.GameQuizze>(JSON_quizze);       // convert all data into defined classes  
+        string JSON_quizze = CallHttpWebRequest(api_URL + "/" + id.ToString() +"/questions");   // get the json
+        Debug.Log(JSON_quizze);
+        return JsonUtility.FromJson<QuestionsQuizzData>(JSON_quizze);       // convert all data into defined classes  
     }
 
     // get base string from API
@@ -47,9 +48,11 @@ public class Api : MonoBehaviour
     {
         try
         {
+
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
             string token = "VgraUq6VmHOo1UtNBn8y24tTHzQAPgmPBWZqSBLuckSC7rSMVU0Mbm5nobZx9mzQJyJZWWzMJC7mpbLh";
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(URL + "?api_token=" + token);
+            Debug.Log(URL + "?api_token=" + token);
             //req.Headers["quizz-token"] = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0IiwicGFzc3dvcmQiOiIkcGJrZGYyLXNoYTI1NiQyMDAwMCRjNjRWd3RnN0IuQThKeVJrN1AzL1h3JG9BRDloUnVEQTVkWVpKR1Y2cDNpdDBzYVFqdlFBemFZbi9wNW1kSGRDbDQifQ.P-KfTO8nq5oQNC_bIAY5VKOeNLyNbGE-gGrf0oIKQjc";
             req.Accept = "text/xml,text/plain,text/html,application/json";
             req.Method = "GET";
@@ -72,7 +75,7 @@ public class Api : MonoBehaviour
 
     private void CheckConnection()
     {
-        count = 0;
+       /* count = 0;
         _threadRunning = true;
         string res = null;
        
@@ -81,19 +84,22 @@ public class Api : MonoBehaviour
             _threadRunning = (count >= 5) ? false : true;              // stop chacking after 5 times to upgrade the connection state 
             count++;
             res = getStringDataFromAPI();
+
+            if (res != null)
+                _threadRunning = false;
         }
         isConnected = (res == null) ? false : true;                    // upgrade connection state
-        _thread.Abort();                                               // stop checking for connection
+        _thread.Abort(); */                                              // stop checking for connection
 
     }
 
     void Update()
     {
-        if (!_thread.IsAlive)                                       // Check for internet connection
+        /*if (!_thread.IsAlive)                                       // Check for internet connection
         {
             _thread = new Thread(CheckConnection);                  // start checking in background
             _thread.Start();
-        }
+        }*/
     }
 
 }

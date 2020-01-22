@@ -13,14 +13,14 @@ public class SelectQuizzManager : MonoBehaviour
         selectQuizzScrollerController.Initialize();
 
         QuizzesData quizzes = GameManager.Instance.api.GetQuizzesListFromAPI();
-
+        
         if (quizzes == null)
         {
             Debug.LogError("[WARNING]: quizzes is equal to null. Is your QuizzesData superclass class configured in the same way the API (json) data is ?");
-        } 
+        }
 
         // Get quizz list from API and put them into scroll list (SelectQuizzScrollerController)
-        foreach (ApiData.Quizz indexQuizz in GameManager.Instance.api.GetQuizzesListFromAPI())
+        foreach (ApiData.Quizz indexQuizz in quizzes)
         {
             selectQuizzScrollerController.AddDataToScroller(new QuizzData { title = indexQuizz.title, id = indexQuizz.id });
         }

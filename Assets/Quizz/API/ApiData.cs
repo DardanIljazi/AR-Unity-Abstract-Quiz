@@ -56,6 +56,7 @@ public static class ApiData
      * It gives the possibility to change easily the API while keeping the working code intact
      * Only the return types (int/string..) should be changed according to the API and what's inside the methods
      */
+    [Serializable]
     public class QuizzData : Quizz
     {
         public int GetQuizzId()
@@ -86,6 +87,14 @@ public static class ApiData
         public IEnumerator GetEnumerator()
         {
             return data.GetEnumerator();
+        }
+    }
+    [Serializable]
+    public class QuestionsQuizzData : Questions
+    {
+        public List<Question> GetQuestionsList()
+        {
+            return data;
         }
     }
     /** -- END OF QUIZZ QUESTIONS **/
@@ -125,8 +134,10 @@ public static class ApiData
     [Serializable]
     public class Answer
     {
-        public string name;
-        public bool value;
+        public int id;
+        public string value;
+        public int correct;
+        public string question_id;
     }
     /**
      * AnswerQuizzData should has to stay as a class over future versions. 
@@ -143,7 +154,12 @@ public static class ApiData
 
         public string GetDataToShowAsPossibleAnswer()
         {
-            return name;
+            return value;
+        }
+
+        public bool IsCorrectAnswer()
+        {
+            return correct == 1;
         }
     }
     /** -- END OF QUIZZ ANSWER **/

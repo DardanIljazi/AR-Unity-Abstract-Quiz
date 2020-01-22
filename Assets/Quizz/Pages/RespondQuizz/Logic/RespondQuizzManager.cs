@@ -19,7 +19,7 @@ public class RespondQuizzManager : MonoBehaviour
     private int rightResponses = 0;
     private int falseResponses = 0;
 
-    private ApiData.GameQuizze gameQuizze;
+    private QuestionsQuizzData questions;
 
 
     public void LoadQuizz(QuizzData quizz)
@@ -27,9 +27,14 @@ public class RespondQuizzManager : MonoBehaviour
         this.Reset();
         respondQuizzScrollerController.Initialize();
 
-        gameQuizze = GameManager.Instance.api.GetQuestionsQuizzListFromAPI(quizz.GetQuizzId());
+        questions = GameManager.Instance.api.GetQuestionsQuizzListFromAPI(quizz.GetQuizzId());
 
-        numberOfQuestions = gameQuizze.questions.Count;
+        if (questions == null)
+        {
+            Debug.LogError("[WARNING]: questions is equal to null. Is your QuestionsQuizzData superclass class configured in the same way the API (json) data is ?");
+        }
+
+        numberOfQuestions = questions.GetQuestionsList().Count;
 
         LoadQuestionAndPossibleResponses(0);
     }
@@ -38,12 +43,12 @@ public class RespondQuizzManager : MonoBehaviour
     {
         respondQuizzScrollerController.Reset();
 
-        quizzQuestion.text = gameQuizze.questions[arrayIndex].question;
+        quizzQuestion.text = questions.GetQuestionsList()[arrayIndex].question;
 
-        foreach (AnswerQuizzData answer in gameQuizze.questions[arrayIndex].answers)
+        foreach (AnswerQuizzData answer in questions.GetQuestionsList()[arrayIndex].answers)
         {
-            if (answer.value == true)
-                goodAnswer = answer.name;
+            if (answer.IsCorrectAnswer())
+                goodAnswer = answer.GetDataToShowAsPossibleAnswer();
 
             AnswerQuizzData answerQuizzData = new AnswerQuizzData(answer);
 
@@ -51,9 +56,9 @@ public class RespondQuizzManager : MonoBehaviour
         }
     }
 
-    public void SaveResponseAndGoToNext(string response)
+    public void SaveResponseAndGoToNext(AnswerQuizzData answer)
     {
-        if (goodAnswer.Equals(response))
+        if (goodAnswer.Equals(answer))
         {
             rightResponses++;
         }
@@ -74,9 +79,9 @@ public class RespondQuizzManager : MonoBehaviour
         }
     }
 
-    public void ResponseSelected(string response)
+    public void ResponseSelected(AnswerQuizzData answer)
     {
-        SaveResponseAndGoToNext(response);
+        SaveResponseAndGoToNext(answer);
     }
 
     public void Reset()
