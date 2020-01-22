@@ -6,12 +6,13 @@ using TMPro;
 using EnhancedScrollerDemos.GridSelection;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using static ApiData;
 
 // For click: https://stackoverflow.com/questions/53517667/unity-ar-how-can-i-trigger-a-button-in-the-scene
 public class SelectQuizzCellView : EnhancedScrollerCellView, IPointerUpHandler, IPointerDownHandler, IPointerClickHandler
 {
     public BoxCollider boxCollider; // Used for the raycast
-    public SelectQuizzData _data;
+    public QuizzData _data;
     
     /**
      * All elements to modify when new data come
@@ -19,7 +20,7 @@ public class SelectQuizzCellView : EnhancedScrollerCellView, IPointerUpHandler, 
     public Text textObject;
 
 
-    public void SetData(SelectQuizzData data)
+    public void SetData(QuizzData data)
     {
         _data = data;
         ReloadData();
@@ -51,7 +52,7 @@ public class SelectQuizzCellView : EnhancedScrollerCellView, IPointerUpHandler, 
     public void OnPointerClick(PointerEventData eventData)
     {
         //Debug.Log("OnPointerClick");
-        GameManager.Instance.selectQuizzManager.QuizzSelected(_data.GetQuizzId());
+        GameManager.Instance.selectQuizzManager.QuizzSelected(_data);
     }
 }
 

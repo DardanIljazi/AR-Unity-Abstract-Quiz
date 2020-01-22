@@ -1,4 +1,4 @@
-﻿// Davide Carboni
+﻿// Based on Davide Carboni's work done in 2019, took and modified/adapted by Dardan Iljazi in 2020 for a new project
 // Api Data Connection: Get data from a url
 
 using System.Collections;
@@ -10,7 +10,8 @@ using System.Threading;
 
 public class Api : MonoBehaviour
 {
-    private string api_URL = "https://awa-quizz.herokuapp.com/api/quizzes";            // Api url
+    private string api_URL = "http://127.0.0.1:8000/api/quizzes";            // Api url
+    //private string api_URL = "https://awa-quizz.herokuapp.com/api/quizzes";            // Api url
     //public string api_URL = "http://www.api.carboni.ch/quizzes";                     // Api url for test 
     public string Api_URL { get => api_URL; set => api_URL = value; }
     public bool isStarted = false;                                                     // Api loaded state 
@@ -20,17 +21,17 @@ public class Api : MonoBehaviour
     private bool _threadRunning = false;
 
 
-    // get all quizzes from url
-    public  ApiData.GameQuizzes getGameQuizzesFromAPI()
+    // Get list of quizzes from url
+    public  ApiData.GameQuizzes GetGameQuizzesListFromAPI()
     {
-        string JSON_quizzes = CallHttpWebRequest(api_URL);                    // get the json file
+        string JSON_quizzes = CallHttpWebRequest(api_URL);                    // get the json
         return JsonUtility.FromJson<ApiData.GameQuizzes>(JSON_quizzes);      // convert all data into defined classes 
     }
 
-    // get a selected quiz from url
-    public ApiData.GameQuizze getGameQuizzeFromAPI(string nQuizze)
+    // Get the selected question
+    public ApiData.GameQuizze GetGameQuizzeQuestionsListFromAPI(int id)
     {
-        string JSON_quizze = CallHttpWebRequest(api_URL + "/" + nQuizze);   // get the json file
+        string JSON_quizze = CallHttpWebRequest(api_URL + "/questions/" + id.ToString());   // get the json
         return JsonUtility.FromJson<ApiData.GameQuizze>(JSON_quizze);       // convert all data into defined classes  
     }
 

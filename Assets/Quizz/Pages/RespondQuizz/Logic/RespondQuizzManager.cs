@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
-
+using static ApiData;
 
 public class RespondQuizzManager : MonoBehaviour
 {
@@ -22,12 +22,12 @@ public class RespondQuizzManager : MonoBehaviour
     private ApiData.GameQuizze gameQuizze;
 
 
-    public void LoadQuizz(string quizzId)
+    public void LoadQuizz(QuizzData quizz)
     {
         this.Reset();
         respondQuizzScrollerController.Initialize();
 
-        gameQuizze = GameManager.Instance.api.getGameQuizzeFromAPI(quizzId);
+        gameQuizze = GameManager.Instance.api.GetGameQuizzeQuestionsListFromAPI(quizz.GetQuizzId());
 
         numberOfQuestions = gameQuizze.questions.Count;
 

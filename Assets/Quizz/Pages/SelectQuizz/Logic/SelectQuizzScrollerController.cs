@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using EnhancedUI.EnhancedScroller;
-
+using static ApiData;
 
 public class SelectQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDelegate
 {
@@ -11,11 +11,11 @@ public class SelectQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDel
     [Header("Link to the prefab to show for each data in scroller")]
     public SelectQuizzCellView selectQuizzCellView;
 
-    private List<SelectQuizzData> _data;
+    private List<QuizzData> _data;
 
     public void Initialize()
     {
-        _data = new List<SelectQuizzData>();
+        _data = new List<QuizzData>();
         enhancedScroller.Delegate = this;
     }
 
@@ -38,7 +38,7 @@ public class SelectQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDel
         return cellView;
     }
 
-    public void AddDataToScroller(SelectQuizzData data)
+    public void AddDataToScroller(QuizzData data)
     {
         _data.Add(data);
         enhancedScroller.ReloadData();

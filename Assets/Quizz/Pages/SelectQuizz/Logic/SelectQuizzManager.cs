@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using static ApiData;
 
 public class SelectQuizzManager : MonoBehaviour
 {
@@ -13,18 +13,15 @@ public class SelectQuizzManager : MonoBehaviour
         selectQuizzScrollerController.Initialize();
 
         // Get quizz list from API and put them into scroll list (SelectQuizzScrollerController)
-        foreach (ApiData.IndexQuizz indexQuizz in GameManager.Instance.api.getGameQuizzesFromAPI())
+        foreach (ApiData.Quizz indexQuizz in GameManager.Instance.api.GetGameQuizzesListFromAPI())
         {
-            selectQuizzScrollerController.AddDataToScroller(new SelectQuizzData { title = indexQuizz.title, id = indexQuizz.id });
+            selectQuizzScrollerController.AddDataToScroller(new QuizzData { title = indexQuizz.title, id = indexQuizz.id });
         }
     }
 
-    [HideInInspector]
-    public string selectedQuizzId;
-    public void QuizzSelected(string quizzId)
+    public void QuizzSelected(QuizzData quizz)
     {
-        selectedQuizzId = quizzId;
         GameManager.Instance.pagesManager.ShowNext();
-        GameManager.Instance.respondQuizzManager.LoadQuizz(selectedQuizzId);
+        GameManager.Instance.respondQuizzManager.LoadQuizz(quizz);
     }
 }
