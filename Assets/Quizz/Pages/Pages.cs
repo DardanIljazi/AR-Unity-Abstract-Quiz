@@ -39,24 +39,6 @@ public class Pages : MonoBehaviour
         listofOrderedObjectToShow[lastShownId].SetActive(false);
         listofOrderedObjectToShow[index].SetActive(true);
         lastShownId = index;
-
-        ChangeParentToActualOne();
-    }
-
-    private void ChangeParentToActualOne()
-    {
-        lastParent = listofOrderedObjectToShow[lastShownId].gameObject;
-
-        Transform newPageToShowUI = listofOrderedObjectToShow[lastShownId].transform.Find("UI");
-
-        int childCount = newPageToShowUI.childCount;
-
-        for (int childIndex = 0; childIndex < childCount; childIndex++)
-        {
-            newPageToShowUI.GetChild(0).SetParent(pageBase);
-        }
-
-        // Move to actual position
     }
 
     private  void Hide(int index)
