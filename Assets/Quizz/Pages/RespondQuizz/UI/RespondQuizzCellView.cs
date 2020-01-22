@@ -6,15 +6,16 @@ using TMPro;
 using EnhancedScrollerDemos.GridSelection;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using static ApiData;
 
 public class RespondQuizzCellView : EnhancedScrollerCellView, IPointerUpHandler, IPointerDownHandler, IPointerClickHandler
 {
     public BoxCollider boxCollider; // Used for the raycast
-    public RespondQuizzData _data;
+    public AnswerQuizzData _data;
 
     public Text textObject;
 
-    public void SetData(RespondQuizzData data)
+    public void SetData(AnswerQuizzData data)
     {
         _data = data;
         ReloadData();
@@ -22,7 +23,7 @@ public class RespondQuizzCellView : EnhancedScrollerCellView, IPointerUpHandler,
 
     public void ReloadData()
     {
-        textObject.text = _data.GetDataToShowInCellView();
+        textObject.text = _data.GetDataToShowAsPossibleAnswer();
     }
 
     public void Update()

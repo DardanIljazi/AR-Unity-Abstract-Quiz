@@ -7,6 +7,7 @@ using System.IO;
 using System.Net;
 using UnityEngine;
 using System.Threading;
+using static ApiData;
 
 public class Api : MonoBehaviour
 {
@@ -22,14 +23,14 @@ public class Api : MonoBehaviour
 
 
     // Get list of quizzes from url
-    public  ApiData.GameQuizzes GetGameQuizzesListFromAPI()
+    public QuizzesData GetQuizzesListFromAPI()
     {
-        string JSON_quizzes = CallHttpWebRequest(api_URL);                    // get the json
-        return JsonUtility.FromJson<ApiData.GameQuizzes>(JSON_quizzes);      // convert all data into defined classes 
+        string JSON_quizzes = CallHttpWebRequest(api_URL);           // get the json
+        return JsonUtility.FromJson<QuizzesData>(JSON_quizzes);      // convert all data into defined classes 
     }
 
     // Get the selected question
-    public ApiData.GameQuizze GetGameQuizzeQuestionsListFromAPI(int id)
+    public ApiData.GameQuizze GetQuestionsQuizzListFromAPI(int id)
     {
         string JSON_quizze = CallHttpWebRequest(api_URL + "/questions/" + id.ToString());   // get the json
         return JsonUtility.FromJson<ApiData.GameQuizze>(JSON_quizze);       // convert all data into defined classes  
@@ -47,8 +48,9 @@ public class Api : MonoBehaviour
         try
         {
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(URL);
-            req.Headers["quizz-token"] = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0IiwicGFzc3dvcmQiOiIkcGJrZGYyLXNoYTI1NiQyMDAwMCRjNjRWd3RnN0IuQThKeVJrN1AzL1h3JG9BRDloUnVEQTVkWVpKR1Y2cDNpdDBzYVFqdlFBemFZbi9wNW1kSGRDbDQifQ.P-KfTO8nq5oQNC_bIAY5VKOeNLyNbGE-gGrf0oIKQjc";
+            string token = "VgraUq6VmHOo1UtNBn8y24tTHzQAPgmPBWZqSBLuckSC7rSMVU0Mbm5nobZx9mzQJyJZWWzMJC7mpbLh";
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(URL + "?api_token=" + token);
+            //req.Headers["quizz-token"] = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0IiwicGFzc3dvcmQiOiIkcGJrZGYyLXNoYTI1NiQyMDAwMCRjNjRWd3RnN0IuQThKeVJrN1AzL1h3JG9BRDloUnVEQTVkWVpKR1Y2cDNpdDBzYVFqdlFBemFZbi9wNW1kSGRDbDQifQ.P-KfTO8nq5oQNC_bIAY5VKOeNLyNbGE-gGrf0oIKQjc";
             req.Accept = "text/xml,text/plain,text/html,application/json";
             req.Method = "GET";
             HttpWebResponse result = (HttpWebResponse)req.GetResponse();

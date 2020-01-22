@@ -1,4 +1,4 @@
-﻿// Davide Carboni
+﻿// Based on Davide Carboni's work in 2019
 // Main classes for the data
 
 using System;
@@ -8,10 +8,13 @@ using UnityEngine;
 
 public static class ApiData
 {
-    #region Classes
 
+    #region Quizzes (list)
+    /**
+     * QUIZZES
+     */
     [Serializable]
-    public class GameQuizzes : IEnumerable
+    public class Quizzes : IEnumerable
     {
         public List<Quizz> data = new List<Quizz>(); // List of quizz
 
@@ -20,45 +23,23 @@ public static class ApiData
             return this.data.GetEnumerator();
         }
     }
-
+    /**
+     * QuizzesData should has to stay as a class over future versions. 
+     * It gives the possibility to change easily the API while keeping the working code intact
+     * Only the return types (int/string..) should be changed according to the API and what's inside the methods
+     */
     [Serializable]
-    public class Answer
+    public class QuizzesData : Quizzes
     {
-        public string name;
-        public bool value;
+
     }
+    /** -- END OF QUIZZES **/
+    #endregion 
 
-    [Serializable]
-    public class Question
-    {
-        public string question;
-        public string image;
-        public List<Answer> answers = new List<Answer>();
-    }
-
-    [Serializable]
-    public class Creator
-    {
-        string id;
-        string username;
-    }
-
-    [Serializable]
-    public class GameQuizze
-    {
-        public string id;
-        public string title;
-        public string description;
-        public string created_by;
-        public List<Question> questions = new List<Question>();
-        public int number_participants;
-
-        public IEnumerator GetEnumerator()
-        {
-            return this.questions.GetEnumerator();
-        }
-    }
-
+    #region Quizz
+    /**
+     * QUIZZ
+     */
     [Serializable]
     public class Quizz
     {
@@ -70,11 +51,10 @@ public static class ApiData
         public int user_id;
         public List<ImageQuizzs> image_quizzs;
     }
-
     /**
      * QuizzData should has to stay as a class over future versions. 
      * It gives the possibility to change easily the API while keeping the working code intact
-     * Only the return types (int/string..) should be changed according to the API
+     * Only the return types (int/string..) should be changed according to the API and what's inside the methods
      */
     public class QuizzData : Quizz
     {
@@ -84,9 +64,6 @@ public static class ApiData
         }
     }
 
-
-
-
     [Serializable]
     public class ImageQuizzs
     {
@@ -94,91 +71,82 @@ public static class ApiData
         public string url;
         public int quizz_id;
     }
-
+    /** -- END OF QUIZZ **/
     #endregion
-}
 
-
-// Kept this one only to have a copy of the old api
-public static class OldApiData
-{
-    #region Classes
-
+    #region Quizz questions (list)
+    /**
+     * QUIZZ QUESTIONS
+     */
     [Serializable]
-    public class GameQuizzes : IEnumerable
+    public class Questions : IEnumerable
     {
-        public List<IndexQuizz> quizzes = new List<IndexQuizz>();
+        public List<Question> data = new List<Question>(); // List of questions
 
         public IEnumerator GetEnumerator()
         {
-            return this.quizzes.GetEnumerator();
+            return data.GetEnumerator();
         }
     }
+    /** -- END OF QUIZZ QUESTIONS **/
+    #endregion
 
+    #region Quizz question
+    /**
+     * QUIZZ QUESTION
+     */
+    [Serializable]
+    public class Question
+    {
+        public int id;
+        public string question;
+        public string image;
+        public List<Answer> answers;
+    }
+    /**
+     * QuestionQuizzData should has to stay as a class over future versions. 
+     * It gives the possibility to change easily the API while keeping the working code intact
+     * Only the return types (int/string..) should be changed according to the API and what's inside the methods
+     */
+    public class QuestionQuizzData : Question
+    {
+        public string GetDataToShowAsQuestion()
+        {
+            return question;
+        }
+    }
+    /** -- END OF QUIZZ QUESTIONS **/
+    #endregion
+
+    #region Quizz answer
+    /**
+     * QUIZZ ANSWER
+     */
     [Serializable]
     public class Answer
     {
         public string name;
         public bool value;
     }
-
-    public class RespondQuizzData : ApiData.Answer
+    /**
+     * AnswerQuizzData should has to stay as a class over future versions. 
+     * It gives the possibility to change easily the API while keeping the working code intact
+     * Only the return types (int/string..) should be changed according to the API and what's inside the methods
+     */
+    public class AnswerQuizzData : Answer
     {
-        public string GetDataToShowInCellView()
+        private AnswerQuizzData answerQuizzData;
+        public AnswerQuizzData(AnswerQuizzData answer)
+        {
+            this.answerQuizzData = answer;
+        }
+
+        public string GetDataToShowAsPossibleAnswer()
         {
             return name;
         }
-
-        public void SetDataToShowInCellView(string data)
-        {
-            base.name = data;
-        }
     }
-
-    [Serializable]
-    public class Question
-    {
-        public string question;
-        public string image;
-        public List<Answer> answers = new List<Answer>();
-    }
-
-
-    [Serializable]
-    public class Creator
-    {
-        string id;
-        string username;
-    }
-
-    [Serializable]
-    public class GameQuizze
-    {
-        public string id;
-        public string title;
-        public string description;
-        public string created_by;
-        public List<Question> questions = new List<Question>();
-        public int number_participants;
-
-        public IEnumerator GetEnumerator()
-        {
-            return this.questions.GetEnumerator();
-        }
-    }
-
-    [Serializable]
-    public class IndexQuizz
-    {
-        public string title;
-        public string image;
-        public string description;
-        public Creator created_by = new Creator();
-        public int number_participants;
-        public string id;
-
-    }
-
-
+    /** -- END OF QUIZZ ANSWER **/
     #endregion
+
 }

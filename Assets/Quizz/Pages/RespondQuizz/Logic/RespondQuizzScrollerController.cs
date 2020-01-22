@@ -2,17 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using EnhancedUI.EnhancedScroller;
-
+using static ApiData;
 
 public class RespondQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDelegate
 {
-    private List<RespondQuizzData> _data;
+    private List<AnswerQuizzData> _data;
     public EnhancedScroller myScroller;
     public RespondQuizzCellView respondQuizzCellViewPrefab;
 
     public void Initialize()
     {
-        _data = new List<RespondQuizzData>();
+        _data = new List<AnswerQuizzData>();
         myScroller.Delegate = this;
     }
 
@@ -42,7 +42,7 @@ public class RespondQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDe
         return cellView;
     }
 
-    public void AddDataToScroller(RespondQuizzData data)
+    public void AddDataToScroller(AnswerQuizzData data)
     {
         this._data.Add(data);
         myScroller.ReloadData();

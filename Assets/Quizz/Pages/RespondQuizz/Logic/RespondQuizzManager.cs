@@ -27,7 +27,7 @@ public class RespondQuizzManager : MonoBehaviour
         this.Reset();
         respondQuizzScrollerController.Initialize();
 
-        gameQuizze = GameManager.Instance.api.GetGameQuizzeQuestionsListFromAPI(quizz.GetQuizzId());
+        gameQuizze = GameManager.Instance.api.GetQuestionsQuizzListFromAPI(quizz.GetQuizzId());
 
         numberOfQuestions = gameQuizze.questions.Count;
 
@@ -40,17 +40,16 @@ public class RespondQuizzManager : MonoBehaviour
 
         quizzQuestion.text = gameQuizze.questions[arrayIndex].question;
 
-        foreach (ApiData.Answer answer in gameQuizze.questions[arrayIndex].answers)
+        foreach (AnswerQuizzData answer in gameQuizze.questions[arrayIndex].answers)
         {
             if (answer.value == true)
                 goodAnswer = answer.name;
 
-            RespondQuizzData respondQuizzData = new RespondQuizzData();
-            respondQuizzData.SetDataToShowInCellView(answer.name);
+            AnswerQuizzData answerQuizzData = new AnswerQuizzData(answer);
 
-            respondQuizzScrollerController.AddDataToScroller(respondQuizzData);
+            respondQuizzScrollerController.AddDataToScroller(answerQuizzData);
         }
-    } 
+    }
 
     public void SaveResponseAndGoToNext(string response)
     {
