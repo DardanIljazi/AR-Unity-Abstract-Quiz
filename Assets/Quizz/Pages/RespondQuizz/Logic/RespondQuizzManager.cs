@@ -42,17 +42,26 @@ public class RespondQuizzManager : MonoBehaviour
     public void LoadQuestionAndPossibleResponses(int arrayIndex)
     {
         respondQuizzScrollerController.Reset();
-
         quizzQuestion.text = questions.GetQuestionsList()[arrayIndex].question;
 
-        foreach (AnswerQuizzData answer in questions.GetQuestionsList()[arrayIndex].answers)
+
+        QuestionQuizzData questionData = JsonUtility.FromJson<QuestionQuizzData>(JsonUtility.ToJson(questions.GetQuestionsList()[arrayIndex]));
+
+        if (questionData == null)
         {
+            Debug.LogError("[WARNING]: questionData is null");
+        }
+
+        for (int answerIndex = 0; answerIndex < questionData.answers.Count; ++answerIndex)
+        {
+            AnswerQuizzData answer = JsonUtility.FromJson<AnswerQuizzData>(JsonUtility.ToJson(questionData.answers[answerIndex])); ;
+
+            Debug.Log(JsonUtility.ToJson(answer));
+
             if (answer.IsCorrectAnswer())
                 goodAnswer = answer.GetDataToShowAsPossibleAnswer();
 
-            AnswerQuizzData answerQuizzData = new AnswerQuizzData(answer);
-
-            respondQuizzScrollerController.AddDataToScroller(answerQuizzData);
+            respondQuizzScrollerController.AddDataToScroller(answer.Clone() as AnswerQuizzData);
         }
     }
 

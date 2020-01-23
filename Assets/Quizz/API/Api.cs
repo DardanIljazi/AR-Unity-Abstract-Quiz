@@ -33,7 +33,7 @@ public class Api : MonoBehaviour
     public QuestionsQuizzData GetQuestionsQuizzListFromAPI(int id)
     {
         string JSON_quizze = CallHttpWebRequest(api_URL + "/" + id.ToString() +"/questions");   // get the json
-        Debug.Log(JSON_quizze);
+        //Debug.Log(JSON_quizze);
         return JsonUtility.FromJson<QuestionsQuizzData>(JSON_quizze);       // convert all data into defined classes  
     }
 
@@ -50,7 +50,7 @@ public class Api : MonoBehaviour
         {
 
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-            string token = "VgraUq6VmHOo1UtNBn8y24tTHzQAPgmPBWZqSBLuckSC7rSMVU0Mbm5nobZx9mzQJyJZWWzMJC7mpbLh";
+            string token = "2HFBBCs4TiiCbsJ470QjVrVjcntE5BEaee0VzXTNWuQ6rE8Ado1t29o05grDpo14mldCN4wPw31wAiJI";
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(URL + "?api_token=" + token);
             Debug.Log(URL + "?api_token=" + token);
             //req.Headers["quizz-token"] = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0IiwicGFzc3dvcmQiOiIkcGJrZGYyLXNoYTI1NiQyMDAwMCRjNjRWd3RnN0IuQThKeVJrN1AzL1h3JG9BRDloUnVEQTVkWVpKR1Y2cDNpdDBzYVFqdlFBemFZbi9wNW1kSGRDbDQifQ.P-KfTO8nq5oQNC_bIAY5VKOeNLyNbGE-gGrf0oIKQjc";

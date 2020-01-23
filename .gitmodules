@@ -4,3 +4,6 @@
 [submodule "KUIZAWA_api"]
 	path = KUIZAWA_api
 	url = https://github.com/CPNV-ES/KUIZAWA_api.git
+[submodule "KUIZAWA_dashboard"]
+	path = KUIZAWA_dashboard
+	url = https://github.com/CPNV-ES/KUIZAWA_dashboard.git
