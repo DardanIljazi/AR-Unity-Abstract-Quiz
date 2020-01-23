@@ -20,7 +20,7 @@ public class PopupManager : MonoBehaviour, ICloneable
     {
     }
 
-    public void PopupAlert(string title, string text, string buttonText = null, OnClickCallback callbackClickFunc=null)
+    public void ShowError(string title, string text, string buttonText = null, OnClickCallback callbackClickFunc=null)
     {
         popupButton.onClick.AddListener(ButtonClicked);
 
@@ -50,4 +50,10 @@ public class PopupManager : MonoBehaviour, ICloneable
     {
         return MemberwiseClone();
     }
+
+    public static void PopupAlert(string title, string text, string buttonText = null, OnClickCallback callbackClickFunc=null)
+    {
+        (GameManager.Instance.popupManager.Clone() as PopupManager).ShowError(title, text, buttonText, callbackClickFunc);
+    }
+
 }

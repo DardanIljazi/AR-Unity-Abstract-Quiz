@@ -20,7 +20,6 @@ public class Api : MonoBehaviour
     public bool isConnected = false;                                                   // Api connection state
     private int count = 0;
 
-
     // Get list of quizzes from url
     public QuizzesData GetQuizzesListFromAPI()
     {
@@ -66,25 +65,27 @@ public class Api : MonoBehaviour
     }
 
     // Get all Data for api
+    public static string lastHttpWebRequestErrorMessage = null;
     private string CallHttpWebRequest(string URL)
     {
+        lastHttpWebRequestErrorMessage = null;
         try
         {
-
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-            string token = "2HFBBCs4TiiCbsJ470QjVrVjcntE5BEaee0VzXTNWuQ6rE8Ado1t29o05grDpo14mldCN4wPw31wAiJI";
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(URL + "?api_token=" + token);
-            Debug.Log(URL + "?api_token=" + token);
-            //req.Headers["quizz-token"] = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0IiwicGFzc3dvcmQiOiIkcGJrZGYyLXNoYTI1NiQyMDAwMCRjNjRWd3RnN0IuQThKeVJrN1AzL1h3JG9BRDloUnVEQTVkWVpKR1Y2cDNpdDBzYVFqdlFBemFZbi9wNW1kSGRDbDQifQ.P-KfTO8nq5oQNC_bIAY5VKOeNLyNbGE-gGrf0oIKQjc";
+            string userApiToken = "2HFBBCs4TiiCbsJ470QjVrVjcntE5BEaee0VzXTNWuQ6rE8Ado1t29o05grDpo14mldCN4wPw31wAiJI";
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(URL + "?api_token=" + userApiToken);
+            Debug.Log(URL + "?api_token=" + userApiToken);
             req.Accept = "text/xml,text/plain,text/html,application/json";
             req.Method = "GET";
             HttpWebResponse result = (HttpWebResponse)req.GetResponse();
+
             Stream ReceiveStream = result.GetResponseStream();
             StreamReader reader = new StreamReader(ReceiveStream, System.Text.Encoding.UTF8);
             return reader.ReadToEnd();
         }
-        catch
+        catch(WebException e)
         {
+            lastHttpWebRequestErrorMessage = e.Message;
             return null;
         }
     }
@@ -112,8 +113,9 @@ public class Api : MonoBehaviour
     {
         if (!isConnected)
         {
-            (GameManager.Instance.popupManager.Clone() as PopupManager).PopupAlert("Error", "Connection impossible. Are you connected to internet ?", "Retry", StartNewThread);
-        } else
+            PopupManager.PopupAlert("Error", "Connection impossible. Are you connected to internet ?", "Retry", StartNewThread);
+        }
+        else
         {
             GameManager.Instance.pagesManager.ShowNext();
         }
@@ -122,7 +124,7 @@ public class Api : MonoBehaviour
     void CheckConnection()
     {
         _threadRunning = true;
-        
+
         count = 0;
         string res = null;
         bool loopForConnection = true;
@@ -154,6 +156,5 @@ public class Api : MonoBehaviour
             FinishedThread();
         }
     }
-
 
 }

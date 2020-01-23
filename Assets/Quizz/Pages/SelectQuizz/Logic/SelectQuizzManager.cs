@@ -17,15 +17,17 @@ public class SelectQuizzManager : MonoBehaviour
         
         if (quizzes == null)
         {
-            
             Debug.LogError("[WARNING]: quizzes is equal to null. Is your QuizzesData superclass class configured in the same way the API (json) data is ?");
-            (GameManager.Instance.popupManager.Clone() as PopupManager).PopupAlert("Error", "quizzes is equal to null (is data from API valid ?)");
+
+            PopupManager.PopupAlert("Error", "Quizzes is equal to null (is data from API valid ?).\n" + Api.lastHttpWebRequestErrorMessage);
         }
 
         // Get quizz list from API and put them into scroll list (SelectQuizzScrollerController)
-        foreach (ApiData.Quizz indexQuizz in quizzes)
+        foreach (Quizz indexQuizz in quizzes)
         {
-            selectQuizzScrollerController.AddDataToScroller(new QuizzData { title = indexQuizz.title, id = indexQuizz.id });
+            QuizzData quizzData = JsonUtility.FromJson<QuizzData>(JsonUtility.ToJson(indexQuizz)); ;
+
+            selectQuizzScrollerController.AddDataToScroller(quizzData.Clone() as QuizzData);
         }
     }
 
