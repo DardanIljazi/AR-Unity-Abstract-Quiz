@@ -15,7 +15,7 @@ public class RespondQuizzManager : MonoBehaviour
 
     private int numberOfQuestions = 0;
     private int actualQuestionArrayIndex = 0;
-    private string goodAnswer;
+    private string goodAnswer = "";
     private int rightResponses = 0;
     private int falseResponses = 0;
 
@@ -32,6 +32,7 @@ public class RespondQuizzManager : MonoBehaviour
         if (questions == null)
         {
             Debug.LogError("[WARNING]: questions is equal to null. Is your QuestionsQuizzData superclass class configured in the same way the API (json) data is ?");
+
         }
 
         numberOfQuestions = questions.GetQuestionsList().Count;

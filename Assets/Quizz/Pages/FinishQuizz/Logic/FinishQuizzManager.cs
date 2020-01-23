@@ -29,7 +29,6 @@ public class FinishQuizzManager : MonoBehaviour
         textObject.text = originalText.Replace("%1", rightResponses.ToString()).Replace("%2", falseResponses.ToString());
     }
 
-
     void ReturnMainMenuButtonClicked()
     {
         GameManager.Instance.pagesManager.ShowFirstPage();

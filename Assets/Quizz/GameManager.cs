@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public SelectQuizzManager   selectQuizzManager;
     public RespondQuizzManager  respondQuizzManager;
     public FinishQuizzManager   finishQuizzManager;
+    public PopupManager         popupManager;
     public Pages pagesManager;
     public Api api;
     /** -- END of managers **/

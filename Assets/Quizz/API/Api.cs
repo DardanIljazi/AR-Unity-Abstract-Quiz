@@ -8,6 +8,7 @@ using System.Net;
 using UnityEngine;
 using System.Threading;
 using static ApiData;
+using System;
 
 public class Api : MonoBehaviour
 {
@@ -18,23 +19,44 @@ public class Api : MonoBehaviour
     public bool isStarted = false;                                                     // Api loaded state 
     public bool isConnected = false;                                                   // Api connection state
     private int count = 0;
-    private Thread _thread = null;
-    private bool _threadRunning = false;
 
 
     // Get list of quizzes from url
     public QuizzesData GetQuizzesListFromAPI()
     {
         string JSON_quizzes = CallHttpWebRequest(api_URL);           // get the json
-        return JsonUtility.FromJson<QuizzesData>(JSON_quizzes);      // convert all data into defined classes 
+        if (JSON_quizzes == null)
+        {
+            Debug.LogError("[CRITICAL]: (GetQuizzesListFromAPI) The url response doesn't return anything");
+        }
+
+        QuizzesData quizzesData = JsonUtility.FromJson<QuizzesData>(JSON_quizzes);      // convert all data into defined classes 
+
+        if (quizzesData == null)
+        {
+            Debug.LogError("[CRITICAL]: quizzesData is null");
+        }
+
+        return quizzesData;
     }
 
     // Get the selected question
     public QuestionsQuizzData GetQuestionsQuizzListFromAPI(int id)
     {
         string JSON_quizze = CallHttpWebRequest(api_URL + "/" + id.ToString() +"/questions");   // get the json
-        //Debug.Log(JSON_quizze);
-        return JsonUtility.FromJson<QuestionsQuizzData>(JSON_quizze);       // convert all data into defined classes  
+        if (JSON_quizze == null)
+        {
+            Debug.LogError("[CRITICAL]: (GetQuestionsQuizzListFromAPI) The url response doesn't return anything");
+        }
+
+        QuestionsQuizzData questionsQuizzData = JsonUtility.FromJson<QuestionsQuizzData>(JSON_quizze);
+
+        if (questionsQuizzData == null)
+        {
+            Debug.LogError("[CRITICAL]: questionsQuizzData is null");
+        }
+
+        return questionsQuizzData;     // convert all data into defined classes  
     }
 
     // get base string from API
@@ -67,39 +89,69 @@ public class Api : MonoBehaviour
         }
     }
 
+
+    bool _threadRunning;
+    Thread _thread;
+    Action actionAfterThread;
+    bool blockCondition = false;
     private void Start()
     {
         isStarted = true;
-        _thread = new Thread(CheckConnection);                         
+        actionAfterThread = FinishedThread;
+        StartNewThread();
     }
 
-    private void CheckConnection()
+    public void StartNewThread()
     {
-       /* count = 0;
-        _threadRunning = true;
-        string res = null;
-       
-        while (_threadRunning)                                         // check every 5 time if connection is available
+        Debug.Log("StartNewThread");
+        blockCondition = false;
+        _thread = new Thread(CheckConnection);
+        _thread.Start();
+    }
+
+    public void FinishedThread()
+    {
+        if (!isConnected)
         {
-            _threadRunning = (count >= 5) ? false : true;              // stop chacking after 5 times to upgrade the connection state 
+            (GameManager.Instance.popupManager.Clone() as PopupManager).PopupAlert("Error", "No connection to API", "Ressayer", StartNewThread);
+        }
+    }
+
+    void CheckConnection()
+    {
+        _threadRunning = true;
+        
+        count = 0;
+        string res = null;
+        bool loopForConnection = true;
+        while (loopForConnection)                                         // check every 5 time if connection is available
+        {
             count++;
             res = getStringDataFromAPI();
 
             if (res != null)
-                _threadRunning = false;
-        }
-        isConnected = (res == null) ? false : true;                    // upgrade connection state
-        _thread.Abort(); */                                              // stop checking for connection
+            {
+                isConnected = true;
+            }
 
+            if (count >= 2)
+                loopForConnection = false;
+
+        }
+
+
+        _threadRunning = false;
+        _thread.Abort();
     }
 
     void Update()
     {
-        /*if (!_thread.IsAlive)                                       // Check for internet connection
+        if (!blockCondition && isStarted && !_thread.IsAlive)
         {
-            _thread = new Thread(CheckConnection);                  // start checking in background
-            _thread.Start();
-        }*/
+            blockCondition = true;
+            FinishedThread();
+        }
     }
+
 
 }
