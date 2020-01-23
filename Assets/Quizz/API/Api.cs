@@ -77,6 +77,8 @@ public class Api : MonoBehaviour
             Debug.Log(URL + "?api_token=" + userApiToken);
             req.Accept = "text/xml,text/plain,text/html,application/json";
             req.Method = "GET";
+            req.Timeout = 2000;
+
             HttpWebResponse result = (HttpWebResponse)req.GetResponse();
 
             Stream ReceiveStream = result.GetResponseStream();
@@ -95,7 +97,7 @@ public class Api : MonoBehaviour
     Thread _thread;
     Action actionAfterThread;
     bool blockCondition = false;
-    private void Start()
+    void Start()
     {
         isStarted = true;
         actionAfterThread = FinishedThread;
@@ -111,6 +113,7 @@ public class Api : MonoBehaviour
 
     public void FinishedThread()
     {
+        
         if (!isConnected)
         {
             PopupManager.PopupAlert("Error", "Connection impossible. Are you connected to internet ?", "Retry", StartNewThread);
