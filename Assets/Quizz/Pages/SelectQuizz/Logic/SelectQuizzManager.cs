@@ -11,7 +11,7 @@ public class SelectQuizzManager : MonoBehaviour
 
     public void Start()
     {
-        /*selectQuizzScrollerController.Initialize();
+        selectQuizzScrollerController.Initialize();
 
         QuizzesData quizzes = GameManager.Instance.api.GetQuizzesListFromAPI();
         
@@ -26,7 +26,7 @@ public class SelectQuizzManager : MonoBehaviour
         foreach (ApiData.Quizz indexQuizz in quizzes)
         {
             selectQuizzScrollerController.AddDataToScroller(new QuizzData { title = indexQuizz.title, id = indexQuizz.id });
-        }*/
+        }
     }
 
     public void QuizzSelected(QuizzData quizz)

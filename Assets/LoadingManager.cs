@@ -18,6 +18,7 @@ public class LoadingManager : MonoBehaviour
         StartCoroutine(Loading());
     }
 
+
     string actualLoadingPoints = "";
     int numberOfLoadingsPoints = 0;
     bool continueLoading = true;
@@ -40,6 +41,5 @@ public class LoadingManager : MonoBehaviour
     public void StopLoading()
     {
         continueLoading = false;
-        //GameManager.Instance.pagesManager.ShowNext();
     }
 }

@@ -16,7 +16,10 @@ public class Pages : MonoBehaviour
     // Those 2 elements are only to have something "visual" in unity editor. They will be hidden when code is launched
     [Header("Destined to be hidden when code launched (only here for visual)")]
     public GameObject pageBaseUI;
-    public GameObject pageBaseText; 
+    public GameObject pageBaseText;
+
+    [Header("Index of Listof Ordered Object to Show page to go when return to menu is called")]
+    public int indexOfMenuPage = -1; // This must be defined to know 
 
     public void Start()
     {
@@ -41,10 +44,17 @@ public class Pages : MonoBehaviour
         lastShownId = index;
     }
 
-    public void ShowFirstPage()
+    public void ShowMenuPage()
     {
-        actualGameObjectShownIndex = 0;
-        Show(0);
+        if (this.indexOfMenuPage == -1)
+        {
+            Debug.LogError("[WARNING]: Please defined indexOfMenuPage variable in the editor. This value represents the main menu (quizz menu for example) to show when there is error or when quizz is finished");
+        }
+        else
+        {
+            actualGameObjectShownIndex = indexOfMenuPage;
+            Show(indexOfMenuPage);
+        }
     }
 
     private  void Hide(int index)

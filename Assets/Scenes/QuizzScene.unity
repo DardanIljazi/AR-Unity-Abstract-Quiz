@@ -266,7 +266,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingText: {fileID: 326863223}
-  continueLoading: 1
 --- !u!1 &84350262
 GameObject:
   m_ObjectHideFlags: 0
@@ -1175,6 +1174,7 @@ MonoBehaviour:
   respondQuizzManager: {fileID: 1673915548}
   finishQuizzManager: {fileID: 1957917583}
   popupManager: {fileID: 0}
+  loadingManager: {fileID: 0}
   pagesManager: {fileID: 1166214042}
   api: {fileID: 1670189865}
 --- !u!1 &409113331
@@ -2709,6 +2709,7 @@ MonoBehaviour:
   pageBase: {fileID: 1548621224}
   pageBaseUI: {fileID: 1875069880}
   pageBaseText: {fileID: 418138946}
+  indexOfMenuPage: 1
 --- !u!1 &778415746
 GameObject:
   m_ObjectHideFlags: 0
@@ -3655,6 +3656,7 @@ MonoBehaviour:
   pageBase: {fileID: 1834296137}
   pageBaseUI: {fileID: 250447793}
   pageBaseText: {fileID: 2112140210}
+  indexOfMenuPage: -1
 --- !u!1 &1208842290
 GameObject:
   m_ObjectHideFlags: 0
@@ -4062,7 +4064,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 6
+    m_FontSize: 4
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -6487,6 +6489,7 @@ MonoBehaviour:
   respondQuizzManager: {fileID: 432336160}
   finishQuizzManager: {fileID: 1613309803}
   popupManager: {fileID: 462974785}
+  loadingManager: {fileID: 77025762}
   pagesManager: {fileID: 753195262}
   api: {fileID: 685439561}
 --- !u!1 &2112140210

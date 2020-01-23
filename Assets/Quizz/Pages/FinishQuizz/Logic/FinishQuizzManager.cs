@@ -31,7 +31,7 @@ public class FinishQuizzManager : MonoBehaviour
 
     void ReturnMainMenuButtonClicked()
     {
-        GameManager.Instance.pagesManager.ShowFirstPage();
+        GameManager.Instance.pagesManager.ShowMenuPage();
     }
 
 }

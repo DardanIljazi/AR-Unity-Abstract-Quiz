@@ -103,7 +103,6 @@ public class Api : MonoBehaviour
 
     public void StartNewThread()
     {
-        Debug.Log("StartNewThread");
         blockCondition = false;
         _thread = new Thread(CheckConnection);
         _thread.Start();
@@ -113,7 +112,10 @@ public class Api : MonoBehaviour
     {
         if (!isConnected)
         {
-            (GameManager.Instance.popupManager.Clone() as PopupManager).PopupAlert("Error", "No connection to API", "Ressayer", StartNewThread);
+            (GameManager.Instance.popupManager.Clone() as PopupManager).PopupAlert("Error", "Connection impossible. Are you connected to internet ?", "Retry", StartNewThread);
+        } else
+        {
+            GameManager.Instance.pagesManager.ShowNext();
         }
     }
 
