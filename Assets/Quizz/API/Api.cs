@@ -12,7 +12,7 @@ using System;
 
 public class Api : MonoBehaviour
 {
-    private string api_URL = "http://127.0.0.1:8000/api/quizzes";            // Api url
+    private string api_URL = "http://192.168.1.111:8000/api/quizzes";            // Api url
     //private string api_URL = "https://awa-quizz.herokuapp.com/api/quizzes";            // Api url
     //public string api_URL = "http://www.api.carboni.ch/quizzes";                     // Api url for test 
     public string Api_URL { get => api_URL; set => api_URL = value; }
