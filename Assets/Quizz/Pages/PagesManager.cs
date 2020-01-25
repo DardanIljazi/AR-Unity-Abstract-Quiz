@@ -17,13 +17,11 @@ public class PagesManager : MonoBehaviour
     public Page loadingPage;
 
     [Header("Those elements will be hidden when game is played")]
-    public GameObject pageBaseUI;
-    public GameObject pageBaseText;
+    public GameObject examplePage;
 
     public void Start()
     {
-        pageBaseUI.SetActive(false);
-        pageBaseText.SetActive(false);
+        examplePage.SetActive(false);
     }
 
     public void Awake()
@@ -40,12 +38,13 @@ public class PagesManager : MonoBehaviour
     {
         listOfOrderedPagesToShow[lastShownPageId].gameObject.SetActive(false);
         listOfOrderedPagesToShow[index].gameObject.SetActive(true);
-        listOfOrderedPagesToShow[index].pageManager.ActionToDoWhenPageShowed();
+        listOfOrderedPagesToShow[index].pageLogic.ActionToDoWhenPageShowed();
         lastShownPageId = index;
     }
 
     public void ShowMenuPage()
     {
+        Debug.Log("ShowMenupage");
         if (this.indexOfMenuPage == -1)
         {
             Debug.LogError("[WARNING]: Please defined indexOfMenuPage variable in the editor. This value represents the main menu (quizz menu for example) to show when there is error or when quizz is finished");
@@ -59,7 +58,7 @@ public class PagesManager : MonoBehaviour
 
     private void Hide(int index)
     {
-        listOfOrderedPagesToShow[index].pageManager.ActionToDoWhenPageGoingToBeHidden();
+        listOfOrderedPagesToShow[index].pageLogic.ActionToDoWhenPageGoingToBeHidden();
         listOfOrderedPagesToShow[index].gameObject.SetActive(false);
     }
 
@@ -89,5 +88,25 @@ public class PagesManager : MonoBehaviour
     {
         listOfOrderedPagesToShow[actualShownPageIndex].gameObject.SetActive(true);
         loadingPage.gameObject.SetActive(false);
+    }
+
+    public void GoToPage(string pageName)
+    {
+        bool found = false;
+
+        for (int pageIndex = 0; pageIndex < listOfOrderedPagesToShow.Length; pageIndex++)
+        {
+            if (listOfOrderedPagesToShow[pageIndex].pageName == pageName)
+            {
+                Debug.Log("yeah" + pageIndex);
+                found = true;
+                Show(pageIndex);
+            }
+        }
+
+        if (!found)
+        {
+            Debug.LogError("[WARNING]: pageName was not found in the listOfOrderedPagesToShow");
+        }
     }
 }

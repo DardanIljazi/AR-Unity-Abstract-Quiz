@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /**
  * FinishQuizzManager is the manager for the FinishQuizz page (shows results (internal variables) of the quizz just finished)
  */
-public class FinishQuizzManager : PageManager
+public class FinishQuizzManager : PageLogic
 {
     public Text textObject;
     public Button returnMenuButton;

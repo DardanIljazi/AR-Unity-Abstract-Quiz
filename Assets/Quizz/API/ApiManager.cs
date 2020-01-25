@@ -71,13 +71,40 @@ public class ApiManager : MonoBehaviour
             Debug.LogError("[CRITICAL]: JSON_connection is null");
         }
 
-        ApiToken connectionQuizzData = JsonUtility.FromJson<ApiToken>(JSON_connection);
-        if (connectionQuizzData == null)
+        ApiToken connectionData = JsonUtility.FromJson<ApiToken>(JSON_connection);
+        if (connectionData == null)
         {
             Debug.LogError("[CRITICAL]: connectionQuizzData is null");
         }
 
-        return connectionQuizzData;
+        return connectionData;
+    }
+
+    // Register to api
+    public ApiToken RegisterToApi(string pseudo, string firstname, string lastname, string email, string password)
+    {
+        var post_key_values = new Dictionary<string, string>
+        {
+            { "pseudo", pseudo },
+            { "firstname", firstname },
+            { "lastname", lastname },
+            { "email", email },
+            { "password", password },
+        };
+
+        string JSON_register = HttpPostRequest(api_url + "/users", post_key_values);
+        if (JSON_register == null)
+        {
+            Debug.LogError("[CRITICAL]: JSON_register is null");
+        }
+
+        ApiToken registrationData = JsonUtility.FromJson<ApiToken>(JSON_register);
+        if (registrationData == null)
+        {
+            Debug.LogError("[CRITICAL]: registrationData is null");
+        }
+
+        return registrationData;
     }
 
     public string tryGetResponseFromAPI()
@@ -98,7 +125,7 @@ public class ApiManager : MonoBehaviour
             req.Method = "GET";
             req.Timeout = 2000;
 
-            if (GameManager.Instance.apiManager.apiTokenManager.IsApiTokenDataDefined()) // If Api token is defined
+            if (GameManager.Instance.apiManager.apiTokenManager.IsApiTokenDefined()) // If Api token is defined
             {
                 string postData = null; // Workaround to pass the ref postData (this make no sense in GET request) --> Has to be changed
                 SetTokenAccordingToEmplacement(ref req, "GET", ref postData, ApiToken.GetTokenHttpEmplacement());
@@ -112,7 +139,9 @@ public class ApiManager : MonoBehaviour
         }
         catch(WebException e)
         {
-            lastHttpWebRequestErrorMessage = e.Message;
+            var resp = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
+            Debug.LogError("[WebException]: " + e.Message + "\n" + resp);
+            lastHttpWebRequestErrorMessage = e.Message + "\n" + resp;
             return null;
         }
     }
@@ -141,7 +170,7 @@ public class ApiManager : MonoBehaviour
             req.Method = "POST";
             req.Timeout = 2000;
 
-            if (GameManager.Instance.apiManager.apiTokenManager.IsApiTokenDataDefined()) // If Api token is defined
+            if (GameManager.Instance.apiManager.apiTokenManager.IsApiTokenDefined()) // If Api token is defined
             {
                 SetTokenAccordingToEmplacement(ref req, "POST", ref postData, ApiToken.GetTokenHttpEmplacement());
             }
@@ -174,8 +203,9 @@ public class ApiManager : MonoBehaviour
         }
         catch (WebException e)
         {
-            Debug.LogError("[WebException]: " + e.Message);
-            lastHttpWebRequestErrorMessage = e.Message;
+            var resp = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
+            Debug.LogError("[WebException]: " + e.Message + "\n" + resp);
+            lastHttpWebRequestErrorMessage = e.Message + "\n" + resp;
             return null;
         }
     }
@@ -288,7 +318,6 @@ public class ApiManager : MonoBehaviour
 
     void CheckConnection()
     {
-
         count = 0;
         string res = null;
         bool loopForConnection = true;

@@ -5,5 +5,6 @@ using UnityEngine;
 
 public class Page : MonoBehaviour
 {
-    public PageManager pageManager;
+    public PageLogic pageLogic;
+    public string pageName = "PLEASE FILL THIS PAGE NAME";
 }

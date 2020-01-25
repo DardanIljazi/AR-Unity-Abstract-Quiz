@@ -7,7 +7,7 @@ using static ApiData;
 /**
  * SelectQuizzManager is the manager for the SelectQuizz page (shows the list of quizzes/manages data about list of quizzes and so on..)
  */
-public class SelectQuizzManager : PageManager
+public class SelectQuizzManager : PageLogic
 {
     [Header("Link to the instance of scroller (contains all cells of data)")]
     public SelectQuizzScrollerController selectQuizzScrollerController;

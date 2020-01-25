@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /**
  * LoadingManager is the manager for the Loading page (used when something has to be loaded/calculated...)
  */
-public class LoadingManager : PageManager
+public class LoadingManager : PageLogic
 {
     public Text loadingText;
     string originalText = "";

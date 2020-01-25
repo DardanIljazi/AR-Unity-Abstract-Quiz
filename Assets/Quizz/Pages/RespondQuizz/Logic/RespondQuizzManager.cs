@@ -9,7 +9,7 @@ using static ApiData;
 /**
  * RespondQuizzManager is the manager for the RespondQuizz page (shows a list of possible response and manages the response selected)
  */
-public class RespondQuizzManager : PageManager
+public class RespondQuizzManager : PageLogic
 {
     public RespondQuizzScrollerController respondQuizzScrollerController;
 

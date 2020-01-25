@@ -39,7 +39,6 @@ public class PopupManager : MonoBehaviour, ICloneable
     public void ButtonClicked()
     {
         onClickCallback?.Invoke();
-        Debug.Log(popupText.text);
         baseGameObject.gameObject.SetActive(false);
         Destroy(this);
     }

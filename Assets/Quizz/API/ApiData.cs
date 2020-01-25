@@ -19,11 +19,11 @@ using UnityEngine;
 public static class ApiData
 {
 
-    #region Connection
-    /** CONNECTION **/
+    #region User Data (Connection/Registration)
+    /** USER DATA **/
 
     [Serializable]
-    public class ConnectionData
+    public class UserData
     {
         public int id;
         public string email;
@@ -40,7 +40,7 @@ public static class ApiData
     }
 
     /**
-     * Inherit from Connection because that's the manner we use to get the api token with the actual API. 
+     * Inherit from UserData because that's the manner we use to get the api token with the actual API. 
      * If the token api is predefined (static) or not needed at all for the API it can be changed as follow:
      *  For static api token:
      *      - Delete the inheritance and return the token api as a string in GetApiToken()
@@ -49,7 +49,7 @@ public static class ApiData
      *      - Define the GetTokenHttpEmplacement() return as "return TokenHttpEmplacement.None;"
      */
     [Serializable]
-    public class ApiToken : ConnectionData
+    public class ApiToken : UserData
     {
         public string GetApiToken()
         {
@@ -83,7 +83,7 @@ public static class ApiData
         }
     }
 
-    /** -- END OF CONNECTION **/
+    /** -- END OF USER DATA **/
     #endregion
 
 

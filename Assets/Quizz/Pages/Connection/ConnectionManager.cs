@@ -7,15 +7,17 @@ using static ApiData;
 /**
  * ConnectionManager is the manager for the Connection page (used when user has to connect to the API and receive token API for example)
  */
-public class ConnectionManager : PageManager
+public class ConnectionManager : PageLogic
 {
     public Button connectButton;
+    public Button registerButton;
     public InputField pseudoInput;
     public InputField passwordInput;
 
     void Start()
     {
         connectButton.onClick.AddListener(ConnectButtonClicked);
+        registerButton.onClick.AddListener(RegisterButtonClicked);
     }
 
     void ConnectButtonClicked()
@@ -29,11 +31,11 @@ public class ConnectionManager : PageManager
         }
         else
         {
-            GameManager.Instance.apiManager.apiTokenManager.SetApiTokenData(apiTokenData);
+            GameManager.Instance.apiManager.apiTokenManager.SetApiToken(apiTokenData);
         }
 
 
-        if (!GameManager.Instance.apiManager.apiTokenManager.IsApiTokenDataDefined() && 
+        if (!GameManager.Instance.apiManager.apiTokenManager.IsApiTokenDefined() && 
             ApiManager.lastHttpWebRequestErrorMessage == null)
         {
             PopupManager.PopupAlert("Connection impossible", "Your login or password are not correct");
@@ -47,5 +49,10 @@ public class ConnectionManager : PageManager
         {
             GameManager.Instance.pagesManager.ShowNext();
         }
+    }
+
+    void RegisterButtonClicked()
+    {
+        GameManager.Instance.pagesManager.GoToPage("Register");
     }
 }

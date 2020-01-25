@@ -5,30 +5,25 @@ using static ApiData;
 
 public class ApiTokenManager : MonoBehaviour
 {
-    private ApiToken apiTokenData = null;
+    private ApiToken apiToken = null;
 
-    public bool IsApiTokenDataDefined()
+    public bool IsApiTokenDefined()
     {
-        return apiTokenData != null;
+        return apiToken != null;
     }
 
     public string GetApiToken()
     {
-        if (apiTokenData == null)
+        if (apiToken == null)
         {
             Debug.LogError("[WARNING]: apiTokenData is equal to null !");
         }
 
-        return apiTokenData.GetApiToken();
+        return apiToken.GetApiToken();
     }
 
-    public void SetApiToken(string apiToken)
+    public void SetApiToken(ApiToken apiToken)
     {
-        apiTokenData.SetApiToken(apiToken);
-    }
-
-    public void SetApiTokenData(ApiToken apiTokenData)
-    {
-        this.apiTokenData = apiTokenData;
+        this.apiToken = apiToken;
     }
 }
