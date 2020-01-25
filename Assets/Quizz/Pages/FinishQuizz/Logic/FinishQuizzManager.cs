@@ -5,14 +5,15 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-public class FinishQuizzManager : MonoBehaviour
+/**
+ * FinishQuizzManager is the manager for the FinishQuizz page (shows results (internal variables) of the quizz just finished)
+ */
+public class FinishQuizzManager : PageManager
 {
     public Text textObject;
     public Button returnMenuButton;
 
     private string originalText; // Contain the original text set to textObject
-
 
     void Start()
     {
@@ -33,5 +34,4 @@ public class FinishQuizzManager : MonoBehaviour
     {
         GameManager.Instance.pagesManager.ShowMenuPage();
     }
-
 }

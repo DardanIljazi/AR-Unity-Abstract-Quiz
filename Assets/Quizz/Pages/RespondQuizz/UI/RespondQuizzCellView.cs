@@ -11,11 +11,11 @@ using static ApiData;
 public class RespondQuizzCellView : EnhancedScrollerCellView, IPointerUpHandler, IPointerDownHandler, IPointerClickHandler
 {
     public BoxCollider boxCollider; // Used for the raycast
-    public AnswerQuizzData _data;
+    public AnswerData _data;
 
     public Text textObject;
 
-    public void SetData(AnswerQuizzData data)
+    public void SetData(AnswerData data)
     {
         Debug.Log("SETDATA");
         Debug.Log(JsonUtility.ToJson(_data));

@@ -6,7 +6,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using static ApiData;
 
-public class RespondQuizzManager : MonoBehaviour
+/**
+ * RespondQuizzManager is the manager for the RespondQuizz page (shows a list of possible response and manages the response selected)
+ */
+public class RespondQuizzManager : PageManager
 {
     public RespondQuizzScrollerController respondQuizzScrollerController;
 
@@ -19,21 +22,21 @@ public class RespondQuizzManager : MonoBehaviour
     private int rightResponses = 0;
     private int falseResponses = 0;
 
-    private QuestionsQuizzData questions;
-
+    private QuestionsData questions;
 
     public void LoadQuizz(QuizzData quizz)
     {
         this.Reset();
         respondQuizzScrollerController.Initialize();
 
-        questions = GameManager.Instance.api.GetQuestionsQuizzListFromAPI(quizz.GetQuizzId());
+        questions = GameManager.Instance.apiManager.GetQuestionsQuizzListFromAPI(quizz.GetQuizzId());
 
         // Error/Exception managing
         if (questions == null)
         {
             Debug.LogError("[WARNING]: questions is equal to null. Is your QuestionsQuizzData superclass class configured in the same way the API (json) data is ?");
-            PopupManager.PopupAlert("Error", "Question is equal to null (is data from API valid ?).\n" + Api.lastHttpWebRequestErrorMessage, "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
+            PopupManager.PopupAlert("Error", "Question is equal to null (is data from API valid ?).\n" + ApiManager.lastHttpWebRequestErrorMessage, "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
+            return;
         }
 
         numberOfQuestions = questions.GetQuestionsList().Count;
@@ -42,7 +45,8 @@ public class RespondQuizzManager : MonoBehaviour
         if (numberOfQuestions == 0)
         {
             Debug.LogError("[WARNING]: Number of questions is equal to 0, impossible to respond to this quizz.");
-            PopupManager.PopupAlert("Error", "There is no question in this quizz\n" + Api.lastHttpWebRequestErrorMessage, "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
+            PopupManager.PopupAlert("Error", "There is no question in this quizz\n" + ApiManager.lastHttpWebRequestErrorMessage, "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
+            return;
         }
 
         LoadQuestionAndPossibleResponses(0);
@@ -53,25 +57,26 @@ public class RespondQuizzManager : MonoBehaviour
         respondQuizzScrollerController.Reset();
         quizzQuestion.text = questions.GetQuestionsList()[arrayIndex].question;
 
-        QuestionQuizzData questionData = JsonUtility.FromJson<QuestionQuizzData>(JsonUtility.ToJson(questions.GetQuestionsList()[arrayIndex]));
+        QuestionData questionData = JsonUtility.FromJson<QuestionData>(JsonUtility.ToJson(questions.GetQuestionsList()[arrayIndex]));
 
         // Error/Exception managing
         if (questionData == null)
         {
             Debug.LogError("[WARNING]: questionData is null");
-            PopupManager.PopupAlert("Error", "QuestionData is null (is data from API valid ?).\n" + Api.lastHttpWebRequestErrorMessage, "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
+            PopupManager.PopupAlert("Error", "QuestionData is null (is data from API valid ?).\n" + ApiManager.lastHttpWebRequestErrorMessage, "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
+            return;
         }
 
         for (int answerIndex = 0; answerIndex < questionData.answers.Count; ++answerIndex)
         {
-            AnswerQuizzData answer = JsonUtility.FromJson<AnswerQuizzData>(JsonUtility.ToJson(questionData.answers[answerIndex])); ;
+            AnswerData answer = JsonUtility.FromJson<AnswerData>(JsonUtility.ToJson(questionData.answers[answerIndex])); ;
 
             Debug.Log(JsonUtility.ToJson(answer));
 
             if (answer.IsCorrectAnswer())
                 goodAnswer = answer.GetDataToShowAsPossibleAnswer();
 
-            respondQuizzScrollerController.AddDataToScroller(answer.Clone() as AnswerQuizzData);
+            respondQuizzScrollerController.AddDataToScroller(answer.Clone() as AnswerData);
         }
 
         // Error/Exception managing
@@ -79,6 +84,7 @@ public class RespondQuizzManager : MonoBehaviour
         {
             Debug.LogError("[WARNING]: No answer possible for this question");
             PopupManager.PopupAlert("Error", "No answer possible for this question", "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
+            return;
         }
 
         // Error/Exception managing
@@ -86,10 +92,11 @@ public class RespondQuizzManager : MonoBehaviour
         {
             Debug.LogError("[WARNING]: There is no good answer value");
             PopupManager.PopupAlert("Error", "There is no good answer value", "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
+            return;
         }
     }
 
-    public void SaveResponseAndGoToNext(AnswerQuizzData answer)
+    public void SaveResponseAndGoToNext(AnswerData answer)
     {
         if (goodAnswer.Equals(answer))
         {
@@ -112,7 +119,7 @@ public class RespondQuizzManager : MonoBehaviour
         }
     }
 
-    public void ResponseSelected(AnswerQuizzData answer)
+    public void ResponseSelected(AnswerData answer)
     {
         SaveResponseAndGoToNext(answer);
     }

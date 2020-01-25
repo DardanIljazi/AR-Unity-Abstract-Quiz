@@ -6,13 +6,13 @@ using static ApiData;
 
 public class RespondQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDelegate
 {
-    private List<AnswerQuizzData> _data;
+    private List<AnswerData> _data;
     public EnhancedScroller myScroller;
     public RespondQuizzCellView respondQuizzCellViewPrefab;
 
     public void Initialize()
     {
-        _data = new List<AnswerQuizzData>();
+        _data = new List<AnswerData>();
         myScroller.Delegate = this;
     }
 
@@ -42,7 +42,7 @@ public class RespondQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDe
         return cellView;
     }
 
-    public void AddDataToScroller(AnswerQuizzData data)
+    public void AddDataToScroller(AnswerData data)
     {
         this._data.Add(data);
         myScroller.ReloadData();

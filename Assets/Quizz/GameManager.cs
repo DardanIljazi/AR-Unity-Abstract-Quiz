@@ -14,13 +14,14 @@ public class GameManager : MonoBehaviour
     /**
      * Managers in the game (put them all here)
      */
+    public ConnectionManager    connectionManager;
     public SelectQuizzManager   selectQuizzManager;
     public RespondQuizzManager  respondQuizzManager;
     public FinishQuizzManager   finishQuizzManager;
     public PopupManager         popupManager;
     public LoadingManager       loadingManager;
-    public Pages                pagesManager;
-    public Api api;
+    public PagesManager                pagesManager;
+    public ApiManager           apiManager;
     /** -- END of managers **/
 
     public static GameManager Instance { get; private set; }

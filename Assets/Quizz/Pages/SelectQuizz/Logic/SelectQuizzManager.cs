@@ -4,23 +4,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using static ApiData;
 
-public class SelectQuizzManager : MonoBehaviour
+/**
+ * SelectQuizzManager is the manager for the SelectQuizz page (shows the list of quizzes/manages data about list of quizzes and so on..)
+ */
+public class SelectQuizzManager : PageManager
 {
     [Header("Link to the instance of scroller (contains all cells of data)")]
     public SelectQuizzScrollerController selectQuizzScrollerController;
 
-    public void Start()
+    public override void ActionToDoWhenPageShowed()
     {
+        GameManager.Instance.pagesManager.ShowLoadingPage();
+
         selectQuizzScrollerController.Initialize();
 
-        QuizzesData quizzes = GameManager.Instance.api.GetQuizzesListFromAPI();
-        
+        QuizzesData quizzes = GameManager.Instance.apiManager.GetQuizzesListFromAPI();
+
         if (quizzes == null)
         {
             Debug.LogError("[WARNING]: quizzes is equal to null. Is your QuizzesData superclass class configured in the same way the API (json) data is ?");
 
-            PopupManager.PopupAlert("Error", "Quizzes is equal to null (is data from API valid ?).\n" + Api.lastHttpWebRequestErrorMessage);
+            PopupManager.PopupAlert("Error", "Quizzes is equal to null (is data from API valid ?).\n" + ApiManager.lastHttpWebRequestErrorMessage);
         }
+
 
         // Get quizz list from API and put them into scroll list (SelectQuizzScrollerController)
         foreach (Quizz indexQuizz in quizzes)
@@ -29,6 +35,8 @@ public class SelectQuizzManager : MonoBehaviour
 
             selectQuizzScrollerController.AddDataToScroller(quizzData.Clone() as QuizzData);
         }
+
+        GameManager.Instance.pagesManager.HideLoadingPage();
     }
 
     public void QuizzSelected(QuizzData quizz)

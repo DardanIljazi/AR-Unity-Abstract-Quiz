@@ -32,8 +32,7 @@ public class SelectQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDel
     public EnhancedScrollerCellView GetCellView(EnhancedScroller scroller, int
     dataIndex, int cellIndex)
     {
-        SelectQuizzCellView cellView = scroller.GetCellView(selectQuizzCellView) as
-        SelectQuizzCellView;
+        SelectQuizzCellView cellView = scroller.GetCellView(selectQuizzCellView) as SelectQuizzCellView;
         cellView.SetData(_data[dataIndex]);
         return cellView;
     }

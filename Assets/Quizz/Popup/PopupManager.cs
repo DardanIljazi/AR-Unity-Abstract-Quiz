@@ -20,7 +20,7 @@ public class PopupManager : MonoBehaviour, ICloneable
     {
     }
 
-    public void ShowError(string title, string text, string buttonText = null, OnClickCallback callbackClickFunc=null)
+    void ShowError(string title, string text, string buttonText = null, OnClickCallback callbackClickFunc=null)
     {
         popupButton.onClick.AddListener(ButtonClicked);
 
@@ -34,12 +34,10 @@ public class PopupManager : MonoBehaviour, ICloneable
         if(callbackClickFunc != null)
             onClickCallback += callbackClickFunc;
 
-        Debug.Log(onClickCallback);
     }
 
     public void ButtonClicked()
     {
-        Debug.Log(onClickCallback);
         onClickCallback?.Invoke();
         Debug.Log(popupText.text);
         baseGameObject.gameObject.SetActive(false);
