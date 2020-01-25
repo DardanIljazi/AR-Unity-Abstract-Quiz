@@ -20,7 +20,7 @@ public class ConnectionManager : PageManager
 
     void ConnectButtonClicked()
     {
-        ApiTokenData apiTokenData = GameManager.Instance.apiManager.ConnectToQuizz(pseudoInput.text, passwordInput.text);
+        ApiToken apiTokenData = GameManager.Instance.apiManager.ConnectToQuizz(pseudoInput.text, passwordInput.text);
 
         if (apiTokenData == null)
         {

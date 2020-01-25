@@ -22,9 +22,9 @@ public class RespondQuizzManager : PageManager
     private int rightResponses = 0;
     private int falseResponses = 0;
 
-    private QuestionsData questions;
+    private Questions questions;
 
-    public void LoadQuizz(QuizzData quizz)
+    public void LoadQuizz(Quizz quizz)
     {
         this.Reset();
         respondQuizzScrollerController.Initialize();
@@ -57,7 +57,7 @@ public class RespondQuizzManager : PageManager
         respondQuizzScrollerController.Reset();
         quizzQuestion.text = questions.GetQuestionsList()[arrayIndex].question;
 
-        QuestionData questionData = JsonUtility.FromJson<QuestionData>(JsonUtility.ToJson(questions.GetQuestionsList()[arrayIndex]));
+        Question questionData = JsonUtility.FromJson<Question>(JsonUtility.ToJson(questions.GetQuestionsList()[arrayIndex]));
 
         // Error/Exception managing
         if (questionData == null)
@@ -69,14 +69,14 @@ public class RespondQuizzManager : PageManager
 
         for (int answerIndex = 0; answerIndex < questionData.answers.Count; ++answerIndex)
         {
-            AnswerData answer = JsonUtility.FromJson<AnswerData>(JsonUtility.ToJson(questionData.answers[answerIndex])); ;
+            Answer answer = JsonUtility.FromJson<Answer>(JsonUtility.ToJson(questionData.answers[answerIndex])); ;
 
             Debug.Log(JsonUtility.ToJson(answer));
 
             if (answer.IsCorrectAnswer())
                 goodAnswer = answer.GetDataToShowAsPossibleAnswer();
 
-            respondQuizzScrollerController.AddDataToScroller(answer.Clone() as AnswerData);
+            respondQuizzScrollerController.AddDataToScroller(answer.Clone() as Answer);
         }
 
         // Error/Exception managing
@@ -96,7 +96,7 @@ public class RespondQuizzManager : PageManager
         }
     }
 
-    public void SaveResponseAndGoToNext(AnswerData answer)
+    public void SaveResponseAndGoToNext(Answer answer)
     {
         if (goodAnswer.Equals(answer))
         {
@@ -119,7 +119,7 @@ public class RespondQuizzManager : PageManager
         }
     }
 
-    public void ResponseSelected(AnswerData answer)
+    public void ResponseSelected(Answer answer)
     {
         SaveResponseAndGoToNext(answer);
     }

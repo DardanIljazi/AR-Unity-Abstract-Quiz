@@ -5,7 +5,7 @@ using static ApiData;
 
 public class ApiTokenManager : MonoBehaviour
 {
-    private ApiTokenData apiTokenData = null;
+    private ApiToken apiTokenData = null;
 
     public bool IsApiTokenDataDefined()
     {
@@ -27,7 +27,7 @@ public class ApiTokenManager : MonoBehaviour
         apiTokenData.SetApiToken(apiToken);
     }
 
-    public void SetApiTokenData(ApiTokenData apiTokenData)
+    public void SetApiTokenData(ApiToken apiTokenData)
     {
         this.apiTokenData = apiTokenData;
     }

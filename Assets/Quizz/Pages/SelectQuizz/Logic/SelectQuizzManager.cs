@@ -18,7 +18,7 @@ public class SelectQuizzManager : PageManager
 
         selectQuizzScrollerController.Initialize();
 
-        QuizzesData quizzes = GameManager.Instance.apiManager.GetQuizzesListFromAPI();
+        Quizzes quizzes = GameManager.Instance.apiManager.GetQuizzesListFromAPI();
 
         if (quizzes == null)
         {
@@ -29,17 +29,17 @@ public class SelectQuizzManager : PageManager
 
 
         // Get quizz list from API and put them into scroll list (SelectQuizzScrollerController)
-        foreach (Quizz indexQuizz in quizzes)
+        foreach (QuizzData indexQuizz in quizzes)
         {
-            QuizzData quizzData = JsonUtility.FromJson<QuizzData>(JsonUtility.ToJson(indexQuizz)); ;
+            Quizz quizzData = JsonUtility.FromJson<Quizz>(JsonUtility.ToJson(indexQuizz)); ;
 
-            selectQuizzScrollerController.AddDataToScroller(quizzData.Clone() as QuizzData);
+            selectQuizzScrollerController.AddDataToScroller(quizzData.Clone() as Quizz);
         }
 
         GameManager.Instance.pagesManager.HideLoadingPage();
     }
 
-    public void QuizzSelected(QuizzData quizz)
+    public void QuizzSelected(Quizz quizz)
     {
         GameManager.Instance.pagesManager.ShowNext();
         GameManager.Instance.respondQuizzManager.LoadQuizz(quizz);

@@ -12,7 +12,7 @@ using static ApiData;
 public class SelectQuizzCellView : EnhancedScrollerCellView, IPointerUpHandler, IPointerDownHandler, IPointerClickHandler
 {
     public BoxCollider boxCollider; // Used for the raycast
-    public QuizzData _data;
+    public Quizz _data;
     
     /**
      * All elements to modify when new data come
@@ -20,7 +20,7 @@ public class SelectQuizzCellView : EnhancedScrollerCellView, IPointerUpHandler, 
     public Text textObject;
 
 
-    public void SetData(QuizzData data)
+    public void SetData(Quizz data)
     {
         _data = data;
         ReloadData();

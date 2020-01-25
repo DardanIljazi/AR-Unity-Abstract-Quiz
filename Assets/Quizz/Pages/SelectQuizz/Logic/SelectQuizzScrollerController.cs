@@ -11,11 +11,11 @@ public class SelectQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDel
     [Header("Link to the prefab to show for each data in scroller")]
     public SelectQuizzCellView selectQuizzCellView;
 
-    private List<QuizzData> _data;
+    private List<Quizz> _data;
 
     public void Initialize()
     {
-        _data = new List<QuizzData>();
+        _data = new List<Quizz>();
         enhancedScroller.Delegate = this;
     }
 
@@ -37,7 +37,7 @@ public class SelectQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDel
         return cellView;
     }
 
-    public void AddDataToScroller(QuizzData data)
+    public void AddDataToScroller(Quizz data)
     {
         _data.Add(data);
         enhancedScroller.ReloadData();

@@ -21,7 +21,7 @@ public class ApiManager : MonoBehaviour
     public ApiTokenManager apiTokenManager;
 
     // Get list of quizzes
-    public QuizzesData GetQuizzesListFromAPI()
+    public Quizzes GetQuizzesListFromAPI()
     {
         string JSON_quizzes = HttpGetRequest(api_url + "/quizzes");
         if (JSON_quizzes == null) // Exception/Error handling
@@ -29,7 +29,7 @@ public class ApiManager : MonoBehaviour
             Debug.LogError("[CRITICAL]: (GetQuizzesListFromAPI) The url response doesn't return anything");
         }
 
-        QuizzesData quizzesData = JsonUtility.FromJson<QuizzesData>(JSON_quizzes); // convert all data into defined classes 
+        Quizzes quizzesData = JsonUtility.FromJson<Quizzes>(JSON_quizzes); // convert all data into defined classes 
         if (quizzesData == null) // Exception/Error handling
         {
             Debug.LogError("[CRITICAL]: quizzesData is null");
@@ -39,7 +39,7 @@ public class ApiManager : MonoBehaviour
     }
 
     // Get the question for the quizz id
-    public QuestionsData GetQuestionsQuizzListFromAPI(int id)
+    public Questions GetQuestionsQuizzListFromAPI(int id)
     {
         string JSON_quizze = HttpGetRequest(api_url + "/quizzes/" + id.ToString() +"/questions");
         if (JSON_quizze == null)
@@ -47,7 +47,7 @@ public class ApiManager : MonoBehaviour
             Debug.LogError("[CRITICAL]: (GetQuestionsQuizzListFromAPI) The url response doesn't return anything");
         }
 
-        QuestionsData questionsQuizzData = JsonUtility.FromJson<QuestionsData>(JSON_quizze);
+        Questions questionsQuizzData = JsonUtility.FromJson<Questions>(JSON_quizze);
         if (questionsQuizzData == null)
         {
             Debug.LogError("[CRITICAL]: questionsQuizzData is null");
@@ -57,7 +57,7 @@ public class ApiManager : MonoBehaviour
     }
 
     // Connect to the api
-    public ApiTokenData ConnectToQuizz(string pseudo, string password)
+    public ApiToken ConnectToQuizz(string pseudo, string password)
     {
         var post_key_values = new Dictionary<string, string>
         {
@@ -71,7 +71,7 @@ public class ApiManager : MonoBehaviour
             Debug.LogError("[CRITICAL]: JSON_connection is null");
         }
 
-        ApiTokenData connectionQuizzData = JsonUtility.FromJson<ApiTokenData>(JSON_connection);
+        ApiToken connectionQuizzData = JsonUtility.FromJson<ApiToken>(JSON_connection);
         if (connectionQuizzData == null)
         {
             Debug.LogError("[CRITICAL]: connectionQuizzData is null");
@@ -101,7 +101,7 @@ public class ApiManager : MonoBehaviour
             if (GameManager.Instance.apiManager.apiTokenManager.IsApiTokenDataDefined()) // If Api token is defined
             {
                 string postData = null; // Workaround to pass the ref postData (this make no sense in GET request) --> Has to be changed
-                SetTokenAccordingToEmplacement(ref req, "GET", ref postData, ApiTokenData.GetTokenHttpEmplacement());
+                SetTokenAccordingToEmplacement(ref req, "GET", ref postData, ApiToken.GetTokenHttpEmplacement());
             }
 
             HttpWebResponse result = (HttpWebResponse)req.GetResponse();
@@ -143,7 +143,7 @@ public class ApiManager : MonoBehaviour
 
             if (GameManager.Instance.apiManager.apiTokenManager.IsApiTokenDataDefined()) // If Api token is defined
             {
-                SetTokenAccordingToEmplacement(ref req, "POST", ref postData, ApiTokenData.GetTokenHttpEmplacement());
+                SetTokenAccordingToEmplacement(ref req, "POST", ref postData, ApiToken.GetTokenHttpEmplacement());
             }
 
             byte[] data = Encoding.ASCII.GetBytes(postData);
@@ -180,10 +180,10 @@ public class ApiManager : MonoBehaviour
         }
     }
 
-    public void SetTokenAccordingToEmplacement(ref HttpWebRequest req, string method, ref string bodyData, ApiTokenData.TokenttpEmplacement tokenttpEmplacement)
+    public void SetTokenAccordingToEmplacement(ref HttpWebRequest req, string method, ref string bodyData, ApiToken.TokenttpEmplacement tokenttpEmplacement)
     {
-        if (tokenttpEmplacement == ApiTokenData.TokenttpEmplacement.BodyOrUrlParam || 
-            tokenttpEmplacement == ApiTokenData.TokenttpEmplacement.Everywhere)
+        if (tokenttpEmplacement == ApiToken.TokenttpEmplacement.BodyOrUrlParam || 
+            tokenttpEmplacement == ApiToken.TokenttpEmplacement.Everywhere)
         {
             if (method == "GET") // Put token in url
             {
@@ -199,8 +199,8 @@ public class ApiManager : MonoBehaviour
             }
         }
 
-        if (tokenttpEmplacement == ApiTokenData.TokenttpEmplacement.Header ||
-            tokenttpEmplacement == ApiTokenData.TokenttpEmplacement.Everywhere)
+        if (tokenttpEmplacement == ApiToken.TokenttpEmplacement.Header ||
+            tokenttpEmplacement == ApiToken.TokenttpEmplacement.Everywhere)
         {
             PutTokenInHeader(ref req);
         }
@@ -218,12 +218,12 @@ public class ApiManager : MonoBehaviour
         if (req.RequestUri.Query == null || req.RequestUri.Query.Length == 0) // There is no query (?param=value&param2=value2..) already set in the url
         {
             modifiedUrl += "?";
-            modifiedUrl += ApiTokenData.GetApiKeyParam() + "=" + GameManager.Instance.apiManager.apiTokenManager.GetApiToken();
+            modifiedUrl += ApiToken.GetApiKeyParam() + "=" + GameManager.Instance.apiManager.apiTokenManager.GetApiToken();
         }
         else
         {
             modifiedUrl += "&";
-            modifiedUrl += ApiTokenData.GetApiKeyParam() + "=" + GameManager.Instance.apiManager.apiTokenManager.GetApiToken();
+            modifiedUrl += ApiToken.GetApiKeyParam() + "=" + GameManager.Instance.apiManager.apiTokenManager.GetApiToken();
         }
 
         HttpWebRequest reqWithToken = WebRequestExtensions.CloneRequest(req, new Uri(modifiedUrl));
@@ -235,17 +235,17 @@ public class ApiManager : MonoBehaviour
         if (bodyData != null)
         {
             bodyData += "&";
-            bodyData += ApiTokenData.GetApiKeyParam() + "=" + GameManager.Instance.apiManager.apiTokenManager.GetApiToken();
+            bodyData += ApiToken.GetApiKeyParam() + "=" + GameManager.Instance.apiManager.apiTokenManager.GetApiToken();
         }
         else
         {
-            bodyData += ApiTokenData.GetApiKeyParam() + "=" + GameManager.Instance.apiManager.apiTokenManager.GetApiToken();
+            bodyData += ApiToken.GetApiKeyParam() + "=" + GameManager.Instance.apiManager.apiTokenManager.GetApiToken();
         }
     }
 
     void PutTokenInHeader(ref HttpWebRequest req)
     {
-        req.Headers[ApiTokenData.GetApiKeyParam()] = GameManager.Instance.apiManager.apiTokenManager.GetApiToken();
+        req.Headers[ApiToken.GetApiKeyParam()] = GameManager.Instance.apiManager.apiTokenManager.GetApiToken();
     }
 
     Thread _thread;

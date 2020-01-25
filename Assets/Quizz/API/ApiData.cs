@@ -5,19 +5,25 @@ using UnityEngine;
 
 
 /**
- * ApiData define classes that represents the Api response structure (json)
+ * ApiData define classes that represents: API data classes, Classes used over application logic from those API data classes
  * 
- * Because Api can change over time, the below classes that contain the word  "Data" at the end (like ApiTokenData, QuestionData, ...Data) should not be renamed
- * Those classes are used in the application logic and inherit from other classes that represent data from API (for example Connection, Quizzes, Questions, Question...)
- * This ensures that even if the API change, application logic (should) stay the same and has not to be changed.
+ * The 2 types of classes in this file:
+ *      [+] Classes that contains the word "Data" at the end (like ConnectionData, QuizzesData, ...Data)
+ *              - They represent the exact structure of json API data (response).
+ *              --> If they are not the same as the API response, the serialization won't work
+ *      
+ *      [+] The other classes (like ApiToken, Quizzes, Questions, Question...)
+ *              - Those classes inherits from "Data" classes and are used in application logic
+ *              --> This ensures that if the API changes, only the "Data" classes must be changed and the application logic stay the same
  */
 public static class ApiData
 {
+
     #region Connection
     /** CONNECTION **/
 
     [Serializable]
-    public class Connection
+    public class ConnectionData
     {
         public int id;
         public string email;
@@ -33,13 +39,15 @@ public static class ApiData
         public object deleted_at;
     }
 
-
     /**
      * Inherit from Connection because that's the manner we use to get the api token with the actual API. 
-     * If the token api is predefined (static) or not needed at all for the API, just delete the inheritance and return the token api as a string in GetApiToken()
+     * If the token api is predefined (static) or not needed at all for the API (if changed):
+     *      - Delete the inheritance and return the token api as a string in GetApiToken()
+     *      - Define the GetTokenHttpEmplacement() return as "return TokenHttpEmplacement.None;"
+     * 
      */
     [Serializable]
-    public class ApiTokenData : Connection
+    public class ApiToken : ConnectionData
     {
         public string GetApiToken()
         {
@@ -52,17 +60,19 @@ public static class ApiData
         }
 
         public static string GetApiKeyParam() // The parameter key that the server waits for the api
+                                              // For example in the url: www.example.com?api_token={API_TOKEN}
+                                              //                                         ^^^^^^^^^
         {
             return "api_token";
         }
 
-        public enum TokenttpEmplacement  // If a token is needed for to the api, there could be many possibilities of "emplacement" when doing HTTP request.
+        public enum TokenttpEmplacement  // If a token is needed for to the api, there could be many possibilities of "emplacement"/places where this can be defined in HTTP request.
                                          // We can put token in Url (GET), Body (POST), Header (both) or try to put them in all of them with Everywhere enum or not use a token at all with None 
         {
             None = 0, // No token
             Header = 1, // Token is put in header
             BodyOrUrlParam = 2, // Token is put as a param in the url (only for GET request) or in body (only for POST request)
-            Everywhere = 3, // Put the token in header (POST/GET), in body (only for POST request) and in url (only for GET request)
+            Everywhere = 3, // Put the token everywhere: in header (POST/GET), in body (only for POST request) and in url (only for GET request)
         }
 
         public static TokenttpEmplacement GetTokenHttpEmplacement()
@@ -70,17 +80,18 @@ public static class ApiData
             return TokenttpEmplacement.Everywhere;
         }
     }
+
     /** -- END OF CONNECTION **/
     #endregion
 
-    #region Quizzes (list)
 
+    #region Quizzes (list)
     /** QUIZZES **/
 
     [Serializable]
-    public class Quizzes : IEnumerable
+    public class QuizzesData : IEnumerable
     {
-        public List<Quizz> data = new List<Quizz>(); // List of quizz
+        public List<QuizzData> data = new List<QuizzData>(); // List of quizz
 
         public IEnumerator GetEnumerator()
         {
@@ -89,7 +100,7 @@ public static class ApiData
     }
 
     [Serializable]
-    public class QuizzesData : Quizzes
+    public class Quizzes : QuizzesData
     {
 
     }
@@ -97,12 +108,12 @@ public static class ApiData
     /** -- END OF QUIZZES **/
     #endregion
 
+
     #region Quizz
-    /**
-     * QUIZZ
-     */
+    /** QUIZZ **/
+
     [Serializable]
-    public class Quizz
+    public class QuizzData
     {
         public int id;
         public string title;
@@ -112,13 +123,9 @@ public static class ApiData
         public int user_id;
         public List<ImageQuizzs> image_quizzs;
     }
-    /**
-     * QuizzData should has to stay as a class over future versions. 
-     * It gives the possibility to change easily the API while keeping the working code intact
-     * Only the return types (int/string..) should be changed according to the API and what's inside the methods
-     */
+
     [Serializable]
-    public class QuizzData : Quizz, ICloneable
+    public class Quizz : QuizzData, ICloneable
     {
         public int GetQuizzId()
         {
@@ -138,17 +145,19 @@ public static class ApiData
         public string url;
         public int quizz_id;
     }
+
     /** -- END OF QUIZZ **/
     #endregion
 
+
     #region Quizz questions (list)
-    /**
+    /**/** QUIZZ**/
      * QUIZZ QUESTIONS
      */
     [Serializable]
-    public class Questions : IEnumerable
+    public class QuestionsData : IEnumerable
     {
-        public List<Question> data = new List<Question>(); // List of questions
+        public List<QuestionData> data = new List<QuestionData>(); // List of questions
 
         public IEnumerator GetEnumerator()
         {
@@ -156,9 +165,9 @@ public static class ApiData
         }
     }
     [Serializable]
-    public class QuestionsData : Questions, ICloneable
+    public class Questions : QuestionsData, ICloneable
     {
-        public List<Question> GetQuestionsList()
+        public List<QuestionData> GetQuestionsList()
         {
             return data;
         }
@@ -171,25 +180,21 @@ public static class ApiData
     /** -- END OF QUIZZ QUESTIONS **/
     #endregion
 
+
     #region Quizz question
-    /**
-     * QUIZZ QUESTION
-     */
+    /** QUIZZ QUESTION */
+
     [Serializable]
-    public class Question
+    public class QuestionData
     {
         public int id;
         public string question;
         public string image;
-        public List<Answer> answers;
+        public List<AnswerData> answers;
     }
-    /**
-     * QuestionQuizzData should has to stay as a class over future versions. 
-     * It gives the possibility to change easily the API while keeping the working code intact
-     * Only the return types (int/string..) should be changed according to the API and what's inside the methods
-     */
+    
     [Serializable]
-    public class QuestionData : Question, ICloneable
+    public class Question : QuestionData, ICloneable
     {
         public string GetDataToShowAsQuestion()
         {
@@ -201,15 +206,16 @@ public static class ApiData
             return this.MemberwiseClone();
         }
     }
+
     /** -- END OF QUIZZ QUESTIONS **/
     #endregion
 
+
     #region Quizz answer
-    /**
-     * QUIZZ ANSWER
-     */
+    /** QUIZZ ANSWER */
+
     [Serializable]
-    public class Answer
+    public class AnswerData
     {
         public int id;
         public string value;
@@ -218,7 +224,7 @@ public static class ApiData
     }
 
     [Serializable]
-    public class AnswerData : Answer, ICloneable // 
+    public class Answer : AnswerData, ICloneable 
     {
         public string GetDataToShowAsPossibleAnswer()
         {
@@ -235,6 +241,7 @@ public static class ApiData
             return this.MemberwiseClone();
         }
     }
+
     /** -- END OF QUIZZ ANSWER **/
     #endregion
 }
