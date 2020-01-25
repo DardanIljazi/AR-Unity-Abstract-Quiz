@@ -41,10 +41,12 @@ public static class ApiData
 
     /**
      * Inherit from Connection because that's the manner we use to get the api token with the actual API. 
-     * If the token api is predefined (static) or not needed at all for the API (if changed):
+     * If the token api is predefined (static) or not needed at all for the API it can be changed as follow:
+     *  For static api token:
      *      - Delete the inheritance and return the token api as a string in GetApiToken()
+     *      
+     *  To not use any token:
      *      - Define the GetTokenHttpEmplacement() return as "return TokenHttpEmplacement.None;"
-     * 
      */
     [Serializable]
     public class ApiToken : ConnectionData
@@ -151,9 +153,8 @@ public static class ApiData
 
 
     #region Quizz questions (list)
-    /**/** QUIZZ**/
-     * QUIZZ QUESTIONS
-     */
+    /** QUIZZ QUESTIONS **/
+
     [Serializable]
     public class QuestionsData : IEnumerable
     {
@@ -182,7 +183,7 @@ public static class ApiData
 
 
     #region Quizz question
-    /** QUIZZ QUESTION */
+    /** QUIZZ QUESTION **/
 
     [Serializable]
     public class QuestionData
@@ -212,7 +213,7 @@ public static class ApiData
 
 
     #region Quizz answer
-    /** QUIZZ ANSWER */
+    /** QUIZZ ANSWER **/
 
     [Serializable]
     public class AnswerData
