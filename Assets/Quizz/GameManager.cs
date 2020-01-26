@@ -14,7 +14,8 @@ public class GameManager : MonoBehaviour
     /**
      * Managers in the game (put them all here)
      */
-    public ConnectionManager    connectionManager;
+    public QuizzManager         quizzManager;
+    public LoginManager         loginManager;
     public SelectQuizzManager   selectQuizzManager;
     public RespondQuizzManager  respondQuizzManager;
     public FinishQuizzManager   finishQuizzManager;

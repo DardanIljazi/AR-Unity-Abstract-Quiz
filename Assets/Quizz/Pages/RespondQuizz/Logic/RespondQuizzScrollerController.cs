@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using EnhancedUI.EnhancedScroller;
-using static ApiData;
+using static ApiDataStructure;
 
 public class RespondQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDelegate
 {

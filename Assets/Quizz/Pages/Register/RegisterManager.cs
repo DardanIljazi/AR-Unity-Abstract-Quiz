@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static ApiData;
+using static ApiDataStructure;
 
 public class RegisterManager : PageLogic
 {
@@ -42,12 +42,12 @@ public class RegisterManager : PageLogic
         if (apiToken == null)
         {
             Debug.LogError("[WARNING]: apiToken is null");
-            PopupManager.PopupAlert("Error", ApiManager.lastHttpWebRequestErrorMessage);
+            PopupManager.PopupAlert("Error", NetworkRequestManager.lastHttpWebRequestErrorMessage);
             ShowRegisterButton();
             return;
         }
 
-        GameManager.Instance.apiManager.apiTokenManager.SetApiToken(apiToken);
+        GameManager.Instance.apiManager.SetApiToken(apiToken.GetApiToken());
         PopupManager.PopupAlert("Registered", "Successfully registered!", "Go", GameManager.Instance.pagesManager.ShowMenuPage);
     }
 

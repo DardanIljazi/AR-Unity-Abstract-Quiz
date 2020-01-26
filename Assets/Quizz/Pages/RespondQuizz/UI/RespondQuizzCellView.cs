@@ -6,7 +6,7 @@ using TMPro;
 using EnhancedScrollerDemos.GridSelection;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using static ApiData;
+using static ApiDataStructure;
 
 public class RespondQuizzCellView : EnhancedScrollerCellView, IPointerUpHandler, IPointerDownHandler, IPointerClickHandler
 {

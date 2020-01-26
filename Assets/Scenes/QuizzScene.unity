@@ -2548,7 +2548,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &505543220
 GameObject:
@@ -3288,6 +3288,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57a3fc9fdc80b3f45acec7a50c059a66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  apiUrl: 
+  apiQuizzesUrl: 
+  apiQuizzesQuestionUrl: 
+  apiLoginUrl: http://192.168.1.111:8000/api/users/login
+  hasToHaveTokenForApi: 0
+  hasToLoginToGetToken: 1
   apiTokenManager: {fileID: 1669436913}
   isStarted: 0
   isConnected: 0
@@ -3585,6 +3591,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 778415747}
+  - component: {fileID: 778415748}
   m_Layer: 0
   m_Name: Quizz
   m_TagString: Untagged
@@ -3604,11 +3611,22 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 685439562}
-  - {fileID: 2109816186}
   - {fileID: 1713849637}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &778415748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 778415746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51185524d502f144daab215d237ffe13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &789140722
 GameObject:
   m_ObjectHideFlags: 0
@@ -3726,7 +3744,7 @@ GameObject:
   - component: {fileID: 803837271}
   - component: {fileID: 803837270}
   m_Layer: 5
-  m_Name: Connection_Input:_Pseudo
+  m_Name: Login_Input:_Pseudo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3954,7 +3972,7 @@ GameObject:
   - component: {fileID: 870669005}
   - component: {fileID: 870669006}
   m_Layer: 5
-  m_Name: Connection_Manager
+  m_Name: Login_Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4890,7 +4908,7 @@ GameObject:
   - component: {fileID: 1223696112}
   - component: {fileID: 1223696113}
   m_Layer: 0
-  m_Name: Connection
+  m_Name: Login
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4925,7 +4943,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pageLogic: {fileID: 870669006}
-  pageName: Connection
+  pageName: Login
 --- !u!1 &1228891300
 GameObject:
   m_ObjectHideFlags: 0
@@ -5092,7 +5110,7 @@ GameObject:
   - component: {fileID: 1311563379}
   - component: {fileID: 1311563378}
   m_Layer: 5
-  m_Name: Connection_Text
+  m_Name: Login_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5684,7 +5702,7 @@ GameObject:
   - component: {fileID: 1460346634}
   - component: {fileID: 1460346633}
   m_Layer: 5
-  m_Name: Connection_Button_Connect
+  m_Name: Login_Button_Connect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5972,7 +5990,7 @@ GameObject:
   - component: {fileID: 1543190234}
   - component: {fileID: 1543190233}
   m_Layer: 5
-  m_Name: Connection_Button_Register
+  m_Name: Login_Button_Register
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6294,7 +6312,7 @@ Transform:
   - {fileID: 964125448}
   - {fileID: 753195261}
   m_Father: {fileID: 778415747}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1787999080
 GameObject:
@@ -7660,7 +7678,7 @@ GameObject:
   - component: {fileID: 2086255183}
   - component: {fileID: 2086255182}
   m_Layer: 5
-  m_Name: Connection_Input:_Password
+  m_Name: Login_Input:_Password
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8092,12 +8110,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2109816185}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 778415747}
-  m_RootOrder: 1
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2109816187
 MonoBehaviour:
@@ -8111,7 +8129,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5efe3125d7e7621478b64143fde77f63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectionManager: {fileID: 0}
+  quizzManager: {fileID: 778415748}
+  loginManager: {fileID: 870669006}
   selectQuizzManager: {fileID: 824299997}
   respondQuizzManager: {fileID: 432336160}
   finishQuizzManager: {fileID: 1613309803}

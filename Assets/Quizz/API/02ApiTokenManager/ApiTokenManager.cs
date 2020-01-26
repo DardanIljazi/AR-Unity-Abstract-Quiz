@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using static ApiData;
-
+/*
 public class ApiTokenManager : MonoBehaviour
 {
     private ApiToken apiToken = null;
@@ -27,3 +27,4 @@ public class ApiTokenManager : MonoBehaviour
         this.apiToken = apiToken;
     }
 }
+*/

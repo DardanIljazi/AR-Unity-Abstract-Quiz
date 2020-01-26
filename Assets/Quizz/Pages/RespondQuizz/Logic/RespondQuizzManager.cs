@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
-using static ApiData;
+using static ApiDataStructure;
 
 /**
  * RespondQuizzManager is the manager for the RespondQuizz page (shows a list of possible response and manages the response selected)
@@ -34,18 +34,18 @@ public class RespondQuizzManager : PageLogic
         
     }
 
-    public void LoadQuizz(Quizz quizz)
+    public void LoadQuizzQuestions(Quizz quizz)
     {
         this.Reset();
         respondQuizzScrollerController.Initialize();
 
-        questions = GameManager.Instance.apiManager.GetQuestionsQuizzListFromAPI(quizz.GetQuizzId());
+        questions = GameManager.Instance.apiManager.GetQuestionsListForQuizz(quizz.GetQuizzId());
 
         // Error/Exception managing
         if (questions == null)
         {
             Debug.LogError("[WARNING]: questions is equal to null. Is your QuestionsQuizzData superclass class configured in the same way the API (json) data is ?");
-            PopupManager.PopupAlert("Error", "Question is equal to null (is data from API valid ?).\n" + ApiManager.lastHttpWebRequestErrorMessage, "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
+            PopupManager.PopupAlert("Error", "Question is equal to null (is data from API valid ?).\n" + NetworkRequestManager.lastHttpWebRequestErrorMessage, "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
             return;
         }
 
@@ -55,31 +55,32 @@ public class RespondQuizzManager : PageLogic
         if (numberOfQuestions == 0)
         {
             Debug.LogError("[WARNING]: Number of questions is equal to 0, impossible to respond to this quizz.");
-            PopupManager.PopupAlert("Error", "There is no question in this quizz\n" + ApiManager.lastHttpWebRequestErrorMessage, "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
+            PopupManager.PopupAlert("Error", "There is no question in this quizz\n" + NetworkRequestManager.lastHttpWebRequestErrorMessage, "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
             return;
         }
 
-        LoadQuestionAndPossibleResponses(0);
+        LoadQuestionAndAnswersForIndex(0);
     }
 
-    public void LoadQuestionAndPossibleResponses(int arrayIndex)
+    public void LoadQuestionAndAnswersForIndex(int arrayIndex)
     {
         respondQuizzScrollerController.Reset();
-        quizzQuestion.text = questions.GetQuestionsList()[arrayIndex].question;
+        quizzQuestion.text = questions.GetQuestionsList()[arrayIndex].GetQuestion();
 
         Question questionData = JsonUtility.FromJson<Question>(JsonUtility.ToJson(questions.GetQuestionsList()[arrayIndex]));
+        Answers answers = GameManager.Instance.apiManager.GetAnswersForQuestion(questionData.GetQuestionId());
 
         // Error/Exception managing
         if (questionData == null)
         {
             Debug.LogError("[WARNING]: questionData is null");
-            PopupManager.PopupAlert("Error", "QuestionData is null (is data from API valid ?).\n" + ApiManager.lastHttpWebRequestErrorMessage, "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
+            PopupManager.PopupAlert("Error", "QuestionData is null (is data from API valid ?).\n" + NetworkRequestManager.lastHttpWebRequestErrorMessage, "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
             return;
         }
 
-        for (int answerIndex = 0; answerIndex < questionData.answers.Count; ++answerIndex)
+        for (int answerIndex = 0; answerIndex < answers.GetAnswersList().Count; ++answerIndex)
         {
-            Answer answer = JsonUtility.FromJson<Answer>(JsonUtility.ToJson(questionData.answers[answerIndex])); ;
+            Answer answer = JsonUtility.FromJson<Answer>(JsonUtility.ToJson(answers.GetAnswersList()[answerIndex])); ;
 
             Debug.Log(JsonUtility.ToJson(answer));
 
@@ -90,7 +91,7 @@ public class RespondQuizzManager : PageLogic
         }
 
         // Error/Exception managing
-        if (questionData.answers.Count == 0)
+        if (answers.GetAnswersList().Count == 0)
         {
             Debug.LogError("[WARNING]: No answer possible for this question");
             PopupManager.PopupAlert("Error", "No answer possible for this question", "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
@@ -121,7 +122,7 @@ public class RespondQuizzManager : PageLogic
             
         if (actualQuestionArrayIndex <= numberOfQuestions - 1)
         {
-            LoadQuestionAndPossibleResponses(actualQuestionArrayIndex);
+            LoadQuestionAndAnswersForIndex(actualQuestionArrayIndex);
         }
         else
         {

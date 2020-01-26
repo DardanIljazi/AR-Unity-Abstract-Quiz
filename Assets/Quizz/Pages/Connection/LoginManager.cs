@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static ApiData;
+using static ApiDataStructure;
 
 /**
  * ConnectionManager is the manager for the Connection page (used when user has to connect to the API and receive token API for example)
  */
-public class ConnectionManager : PageLogic
+public class LoginManager : PageLogic
 {
     public Button connectButton;
     public Button registerButton;
@@ -31,19 +31,19 @@ public class ConnectionManager : PageLogic
         }
         else
         {
-            GameManager.Instance.apiManager.apiTokenManager.SetApiToken(apiTokenData);
+            GameManager.Instance.apiManager.SetApiToken(apiTokenData.GetApiToken());
         }
 
 
-        if (!GameManager.Instance.apiManager.apiTokenManager.IsApiTokenDefined() && 
-            ApiManager.lastHttpWebRequestErrorMessage == null)
+        if (!GameManager.Instance.apiManager.IsTokenDefined() && 
+            NetworkRequestManager.lastHttpWebRequestErrorMessage == null)
         {
             PopupManager.PopupAlert("Connection impossible", "Your login or password are not correct");
             passwordInput.text = "";
         }
-        else if (GameManager.Instance.apiManager.apiTokenManager.GetApiToken() == null && ApiManager.lastHttpWebRequestErrorMessage != null)
+        else if (GameManager.Instance.apiManager.GetApiToken() == null && NetworkRequestManager.lastHttpWebRequestErrorMessage != null)
         {
-            PopupManager.PopupAlert("Connection impossible", "Error:" + ApiManager.lastHttpWebRequestErrorMessage);
+            PopupManager.PopupAlert("Connection impossible", "Error:" + NetworkRequestManager.lastHttpWebRequestErrorMessage);
         }
         else
         {
