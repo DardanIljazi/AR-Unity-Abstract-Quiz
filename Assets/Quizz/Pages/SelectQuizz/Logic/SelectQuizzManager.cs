@@ -41,7 +41,7 @@ public class SelectQuizzManager : PageLogic
 
     public void QuizzSelected(Quizz quizz)
     {
-        GameManager.Instance.pagesManager.ShowNext();
+        GameManager.Instance.pagesManager.GoToPage("RespondQuizz");
         GameManager.Instance.respondQuizzManager.LoadQuizz(quizz);
     }
 }

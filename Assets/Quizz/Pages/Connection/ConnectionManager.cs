@@ -47,7 +47,7 @@ public class ConnectionManager : PageLogic
         }
         else
         {
-            GameManager.Instance.pagesManager.ShowNext();
+            GameManager.Instance.pagesManager.GoToPage("ScanQrCodePlease");
         }
     }
 

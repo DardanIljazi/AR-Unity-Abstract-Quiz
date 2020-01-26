@@ -7,11 +7,13 @@ using static ApiData;
 public class RegisterManager : PageLogic
 {
     public Button registerButton;
+    public Button backButton;
     public InputField[] listOfInputs;
 
     public void Start()
     {
         registerButton.onClick.AddListener(RegisterButtonClicked);
+        backButton.onClick.AddListener(BackButtonClicked);
     }
 
     public void RegisterButtonClicked()
@@ -49,8 +51,6 @@ public class RegisterManager : PageLogic
         PopupManager.PopupAlert("Registered", "Successfully registered!", "Go", GameManager.Instance.pagesManager.ShowMenuPage);
     }
 
-
-
     void ShowRegisterButton()
     {
         registerButton.gameObject.SetActive(true);
@@ -59,5 +59,11 @@ public class RegisterManager : PageLogic
     void HideRegisterButton()
     {
         registerButton.gameObject.SetActive(false);
+    }
+
+    public void BackButtonClicked()
+    {
+        Debug.Log("BackButton");
+        GameManager.Instance.pagesManager.GoBack();
     }
 }

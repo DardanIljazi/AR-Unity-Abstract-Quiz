@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     public FinishQuizzManager   finishQuizzManager;
     public PopupManager         popupManager;
     public LoadingManager       loadingManager;
-    public PagesManager                pagesManager;
+    public PagesManager         pagesManager;
     public ApiManager           apiManager;
     /** -- END of managers **/
 

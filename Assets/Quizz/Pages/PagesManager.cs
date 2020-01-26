@@ -7,8 +7,8 @@ public class PagesManager : MonoBehaviour
 {
     [Header("All pages")]
     public Page[] listOfOrderedPagesToShow;
-    private static int actualShownPageIndex = 0;
-    private static int lastShownPageId = 0;
+    private static int actualShownPageIndex = -1;
+    private static int lastShownPageId = -1;
 
     [Header("Index of the page that represents the \"Menu\"")]
     public int indexOfMenuPage = -1; // This must be defined to know 
@@ -30,16 +30,21 @@ public class PagesManager : MonoBehaviour
         {
             listOfOrderedPagesToShow[i].gameObject.SetActive(false);
         }
-
-        Show(0);
     }
 
     private void Show(int index)
     {
-        listOfOrderedPagesToShow[lastShownPageId].gameObject.SetActive(false);
+        if (actualShownPageIndex != -1)
+        {
+            listOfOrderedPagesToShow[actualShownPageIndex].gameObject.SetActive(false);
+            lastShownPageId = actualShownPageIndex;
+        }
+
         listOfOrderedPagesToShow[index].gameObject.SetActive(true);
+        actualShownPageIndex = index;
+
         listOfOrderedPagesToShow[index].pageLogic.ActionToDoWhenPageShowed();
-        lastShownPageId = index;
+
     }
 
     public void ShowMenuPage()
@@ -51,31 +56,19 @@ public class PagesManager : MonoBehaviour
         }
         else
         {
-            actualShownPageIndex = indexOfMenuPage;
             Show(indexOfMenuPage);
         }
+    }
+
+    public void ShowFirstPage()
+    {
+        Show(0);
     }
 
     private void Hide(int index)
     {
         listOfOrderedPagesToShow[index].pageLogic.ActionToDoWhenPageGoingToBeHidden();
         listOfOrderedPagesToShow[index].gameObject.SetActive(false);
-    }
-
-    public void ShowPrevious()
-    {
-        if (actualShownPageIndex > 0)
-            actualShownPageIndex--;
-
-        Show(actualShownPageIndex);
-    }
-
-    public void ShowNext()
-    {
-        if (actualShownPageIndex < listOfOrderedPagesToShow.Length+1)
-            actualShownPageIndex++;
-
-        Show(actualShownPageIndex);
     }
 
     public void ShowLoadingPage()
@@ -93,20 +86,29 @@ public class PagesManager : MonoBehaviour
     public void GoToPage(string pageName)
     {
         bool found = false;
+        int index = 0;
 
         for (int pageIndex = 0; pageIndex < listOfOrderedPagesToShow.Length; pageIndex++)
         {
             if (listOfOrderedPagesToShow[pageIndex].pageName == pageName)
             {
-                Debug.Log("yeah" + pageIndex);
                 found = true;
-                Show(pageIndex);
+                index = pageIndex;
+                break;
             }
         }
 
         if (!found)
         {
             Debug.LogError("[WARNING]: pageName was not found in the listOfOrderedPagesToShow");
+            return;
         }
+
+        Show(index);
+    }
+
+    public void GoBack()
+    {
+        Show(lastShownPageId);
     }
 }

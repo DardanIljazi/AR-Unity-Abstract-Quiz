@@ -8,6 +8,7 @@ using static ApiData;
 using System;
 using System.Web;
 using System.Text;
+using System.Net.NetworkInformation;
 
 /**
  * ApiManager class contains all actions/methods that can be done to the api
@@ -41,7 +42,7 @@ public class ApiManager : MonoBehaviour
     // Get the question for the quizz id
     public Questions GetQuestionsQuizzListFromAPI(int id)
     {
-        string JSON_quizze = HttpGetRequest(api_url + "/quizzes/" + id.ToString() +"/questions");
+        string JSON_quizze = HttpGetRequest(api_url + "/quizzes/" + id.ToString() + "/questions");
         if (JSON_quizze == null)
         {
             Debug.LogError("[CRITICAL]: (GetQuestionsQuizzListFromAPI) The url response doesn't return anything");
@@ -107,9 +108,23 @@ public class ApiManager : MonoBehaviour
         return registrationData;
     }
 
-    public string tryGetResponseFromAPI()
+    public bool IsApiUp()
     {
-        return HttpGetRequest(api_url + "/quizzes");
+        try
+        {
+            using (var client = new WebClient())
+            using (client.OpenRead(api_url))
+                return true;
+        }
+        catch (WebException e)
+        {
+            if (e.Status == WebExceptionStatus.ProtocolError)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 
     private string HttpGetRequest(string url)
@@ -119,7 +134,7 @@ public class ApiManager : MonoBehaviour
         try
         {
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-            
+
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
             req.Accept = "text/xml,text/plain,text/html,application/json";
             req.Method = "GET";
@@ -137,7 +152,7 @@ public class ApiManager : MonoBehaviour
             StreamReader reader = new StreamReader(ReceiveStream, System.Text.Encoding.UTF8);
             return reader.ReadToEnd();
         }
-        catch(WebException e)
+        catch (WebException e)
         {
             var resp = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
             Debug.LogError("[WebException]: " + e.Message + "\n" + resp);
@@ -212,7 +227,7 @@ public class ApiManager : MonoBehaviour
 
     public void SetTokenAccordingToEmplacement(ref HttpWebRequest req, string method, ref string bodyData, ApiToken.TokenttpEmplacement tokenttpEmplacement)
     {
-        if (tokenttpEmplacement == ApiToken.TokenttpEmplacement.BodyOrUrlParam || 
+        if (tokenttpEmplacement == ApiToken.TokenttpEmplacement.BodyOrUrlParam ||
             tokenttpEmplacement == ApiToken.TokenttpEmplacement.Everywhere)
         {
             if (method == "GET") // Put token in url
@@ -290,14 +305,10 @@ public class ApiManager : MonoBehaviour
     {
         isStarted = true;
         actionAfterThread = FinishedThread;
+        StartApiDataQuerying();
     }
 
     public void StartApiDataQuerying()
-    {
-        StartNewThread();
-    }
-
-    public void StartNewThread()
     {
         blockCondition = false;
         _thread = new Thread(CheckConnection);
@@ -308,28 +319,23 @@ public class ApiManager : MonoBehaviour
     {
         if (!isConnected)
         {
-            PopupManager.PopupAlert("Error", "Connection impossible. Are you connected to internet ?", "Retry", StartNewThread);
+            PopupManager.PopupAlert("Error", "Connection impossible. Are you connected to internet ?\n\nOr maybe the API doesn't work?" + lastHttpWebRequestErrorMessage, "Retry", StartApiDataQuerying);
         }
         else
         {
-            GameManager.Instance.pagesManager.ShowNext();
+            GameManager.Instance.pagesManager.ShowFirstPage();
         }
     }
 
     void CheckConnection()
     {
         count = 0;
-        string res = null;
         bool loopForConnection = true;
         while (loopForConnection)
         {
             count++;
-            res = tryGetResponseFromAPI();
 
-            if (res != null)
-            {
-                isConnected = true;
-            }
+            isConnected = IsApiUp();
 
             if (count >= 2)
                 loopForConnection = false;

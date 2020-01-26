@@ -24,6 +24,16 @@ public class RespondQuizzManager : PageLogic
 
     private Questions questions;
 
+    public override void ActionToDoWhenPageGoingToBeHidden()
+    {
+        
+    }
+
+    public override void ActionToDoWhenPageShowed()
+    {
+        
+    }
+
     public void LoadQuizz(Quizz quizz)
     {
         this.Reset();
@@ -91,7 +101,7 @@ public class RespondQuizzManager : PageLogic
         if (goodAnswer == null)
         {
             Debug.LogError("[WARNING]: There is no good answer value");
-            PopupManager.PopupAlert("Error", "There is no good answer value", "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
+            PopupManager.PopupAlert("Error", "This question can't be responded, there is no good answer value returned by API", "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
             return;
         }
     }
@@ -134,7 +144,7 @@ public class RespondQuizzManager : PageLogic
 
     public void Finished()
     {
-        GameManager.Instance.pagesManager.ShowNext();
+        GameManager.Instance.pagesManager.GoToPage("FinishQuizz");
         GameManager.Instance.finishQuizzManager.SetFinalScore(rightResponses, falseResponses, numberOfQuestions);
     }
 }
