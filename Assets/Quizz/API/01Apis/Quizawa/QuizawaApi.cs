@@ -37,36 +37,11 @@ public class QuizawaApi : ApiManager
 
     #endregion
 
-    #region Quizz
-
-    // Serializes data received from API (json), maps it to Quizz class and returns it
-    /*public override Quizz SerializeQuizz(string json)
-    {
-        // We serialize data received from api to QuizzesData
-        QuizawaApiModel.QuizzData quizzData = JsonUtility.FromJson<QuizawaApiModel.QuizzData>(json);
-
-        // We map quizzesData values to Quizzes class (QuizzesData inherits from Quizzes).
-        quizzData.MapValuesFromAPIToApplicationLogicClass();
-
-
-        return quizzData;
-    }*/
-
-    #endregion
-
     #region Questions
 
     #endregion
 
-    #region Question
-
-    #endregion
-
     #region Answers
-
-    #endregion
-
-    #region Answer
 
     #endregion
 
