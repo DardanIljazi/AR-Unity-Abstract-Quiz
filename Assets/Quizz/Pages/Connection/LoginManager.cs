@@ -22,7 +22,9 @@ public class LoginManager : PageLogic
 
     void ConnectButtonClicked()
     {
-        ApiToken apiTokenData = GameManager.Instance.apiManager.ConnectToQuizz(pseudoInput.text, passwordInput.text);
+        ApiToken apiTokenData = GameManager.Instance.GetApiManager().ConnectToQuizz(pseudoInput.text, passwordInput.text);
+
+        Debug.Log(JsonUtility.ToJson(apiTokenData));
 
         if (apiTokenData == null)
         {
@@ -31,16 +33,16 @@ public class LoginManager : PageLogic
         }
         else
         {
-            GameManager.Instance.apiManager.SetApiToken(apiTokenData.GetApiToken());
+            GameManager.Instance.GetApiManager().SetApiToken(apiTokenData.GetApiToken());
         }
 
-        if (!GameManager.Instance.apiManager.IsApiTokenDefined() && 
+        if (!GameManager.Instance.GetApiManager().IsApiTokenDefined() && 
             NetworkRequestManager.lastHttpWebRequestErrorMessage == null)
         {
             PopupManager.PopupAlert("Connection impossible", "Your login or password are not correct");
             passwordInput.text = "";
         }
-        else if (GameManager.Instance.apiManager.GetApiToken() == null && NetworkRequestManager.lastHttpWebRequestErrorMessage != null)
+        else if (GameManager.Instance.GetApiManager().GetApiToken() == null && NetworkRequestManager.lastHttpWebRequestErrorMessage != null)
         {
             PopupManager.PopupAlert("Connection impossible", "Error:" + NetworkRequestManager.lastHttpWebRequestErrorMessage);
         }

@@ -25,10 +25,10 @@ public class NetworkRequestManager : MonoBehaviour
             req.Method = "GET";
             req.Timeout = 2000;
 
-            if (GameManager.Instance.apiManager.HasToHaveToken())
+            if (GameManager.Instance.GetApiManager().HasToHaveToken())
             {
                 string postData = null; // Workaround to pass the ref postData (this make no sense in GET request) --> Has to be changed later
-                SetTokenAccordingToEmplacement(ref req, "GET", ref postData, GameManager.Instance.apiManager.GetTokenttpEmplacement());
+                SetTokenAccordingToEmplacement(ref req, "GET", ref postData, GameManager.Instance.GetApiManager().GetTokenttpEmplacement());
             }
 
             HttpWebResponse result = (HttpWebResponse)req.GetResponse();
@@ -70,9 +70,9 @@ public class NetworkRequestManager : MonoBehaviour
             req.Method = "POST";
             req.Timeout = 2000;
 
-            if (GameManager.Instance.apiManager.IsApiTokenDefined()) // If Api token is defined
+            if (GameManager.Instance.GetApiManager().IsApiTokenDefined()) // If Api token is defined
             {
-                SetTokenAccordingToEmplacement(ref req, "POST", ref postData, GameManager.Instance.apiManager.GetTokenttpEmplacement());
+                SetTokenAccordingToEmplacement(ref req, "POST", ref postData, GameManager.Instance.GetApiManager().GetTokenttpEmplacement());
             }
 
             byte[] data = Encoding.ASCII.GetBytes(postData);
@@ -97,7 +97,6 @@ public class NetworkRequestManager : MonoBehaviour
 
             myHttpWebResponse.Close();
 
-            Debug.Log(pageContent);
             return pageContent;
         }
         catch (WebException e)
@@ -147,12 +146,12 @@ public class NetworkRequestManager : MonoBehaviour
         if (req.RequestUri.Query == null || req.RequestUri.Query.Length == 0) // There is no query (?param=value&param2=value2..) already set in the url
         {
             modifiedUrl += "?";
-            modifiedUrl += GameManager.Instance.apiManager.GetApiKeyParamName() + "=" + GameManager.Instance.apiManager.GetApiToken();
+            modifiedUrl += GameManager.Instance.GetApiManager().GetApiKeyParamName() + "=" + GameManager.Instance.GetApiManager().GetApiToken();
         }
         else
         {
             modifiedUrl += "&";
-            modifiedUrl += GameManager.Instance.apiManager.GetApiKeyParamName() + "=" + GameManager.Instance.apiManager.GetApiToken();
+            modifiedUrl += GameManager.Instance.GetApiManager().GetApiKeyParamName() + "=" + GameManager.Instance.GetApiManager().GetApiToken();
         }
 
         HttpWebRequest reqWithToken = WebRequestExtensions.CloneRequest(req, new Uri(modifiedUrl));
@@ -164,16 +163,16 @@ public class NetworkRequestManager : MonoBehaviour
         if (bodyData != null)
         {
             bodyData += "&";
-            bodyData += GameManager.Instance.apiManager.GetApiKeyParamName() + "=" + GameManager.Instance.apiManager.GetApiToken();
+            bodyData += GameManager.Instance.GetApiManager().GetApiKeyParamName() + "=" + GameManager.Instance.GetApiManager().GetApiToken();
         }
         else
         {
-            bodyData += GameManager.Instance.apiManager.GetApiKeyParamName() + "=" + GameManager.Instance.apiManager.GetApiToken();
+            bodyData += GameManager.Instance.GetApiManager().GetApiKeyParamName() + "=" + GameManager.Instance.GetApiManager().GetApiToken();
         }
     }
 
     public static void PutTokenInHeader(ref HttpWebRequest req)
     {
-        req.Headers[GameManager.Instance.apiManager.GetApiKeyParamName()] = GameManager.Instance.apiManager.GetApiToken();
+        req.Headers[GameManager.Instance.GetApiManager().GetApiKeyParamName()] = GameManager.Instance.GetApiManager().GetApiToken();
     }
 }

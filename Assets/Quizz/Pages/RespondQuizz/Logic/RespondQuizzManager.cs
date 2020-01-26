@@ -39,7 +39,7 @@ public class RespondQuizzManager : PageLogic
         this.Reset();
         respondQuizzScrollerController.Initialize();
 
-        questions = GameManager.Instance.apiManager.GetQuestionsListForQuizz(quizz.GetQuizzId());
+        questions = GameManager.Instance.GetApiManager().GetQuestionsListForQuizz(quizz.GetQuizzId());
 
         // Error/Exception managing
         if (questions == null)
@@ -68,7 +68,7 @@ public class RespondQuizzManager : PageLogic
         quizzQuestion.text = questions.GetQuestionsList()[arrayIndex].GetQuestion();
 
         Question questionData = JsonUtility.FromJson<Question>(JsonUtility.ToJson(questions.GetQuestionsList()[arrayIndex]));
-        Answers answers = GameManager.Instance.apiManager.GetAnswersForQuestion(questionData.GetQuestionId());
+        Answers answers = GameManager.Instance.GetApiManager().GetAnswersForQuestion(questionData.GetQuestionId());
 
         // Error/Exception managing
         if (questionData == null)

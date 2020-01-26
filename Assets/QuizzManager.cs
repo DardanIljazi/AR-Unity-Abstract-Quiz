@@ -12,31 +12,17 @@ using UnityEngine;
  */
 public class QuizzManager : MonoBehaviour
 {
-    public ApiManager[] apisList;
-    public int whichApiToUseFromList = 0;
-
     Thread _thread; // Is the thread used to check connection to the api
     bool blockCondition = false;
 
     bool isStarted = false;
     bool isConnected = false;
     int count = 0;
-    
 
     void Start()
     {
         isStarted = true;
         StartApiDataConnectionCheck();
-
-        Debug.Log($"Going to use API number {whichApiToUseFromList} from apisList");
-
-        if (whichApiToUseFromList > apisList.Length - 1)
-        {
-            Debug.LogError($"Can't use api from apisList at index {whichApiToUseFromList} because the maximum possible is {apisList.Length - 1}");
-            return;
-        }
-
-        GameManager.Instance.apiManager = apisList[whichApiToUseFromList];
     }
 
     public void StartApiDataConnectionCheck()
@@ -54,13 +40,13 @@ public class QuizzManager : MonoBehaviour
         }
         else
         {
-            if ( GameManager.Instance.apiManager.HasToHaveToken() && 
-                !GameManager.Instance.apiManager.IsApiTokenDefined())
+
+            if ( GameManager.Instance.GetApiManager().HasToHaveToken() && 
+                !GameManager.Instance.GetApiManager().IsApiTokenDefined())
             {
-                Debug.Log("Has to have token and token not defined yet");
 
                 // If no login is needed and we have not defined yet an api token --> error (something was not configured properly ?)
-                if (!GameManager.Instance.apiManager.HasToLoginToGetToken())
+                if (!GameManager.Instance.GetApiManager().HasToLoginToGetToken())
                 {
                     Debug.LogError(
                         "Impossible to go further. You configuration contains some incoherence. " +
@@ -73,7 +59,8 @@ public class QuizzManager : MonoBehaviour
                     GameManager.Instance.pagesManager.GoToPage("Login");
                 }
             }
-            //GameManager.Instance.pagesManager.ShowFirstPage();
+
+
         }
     }
 
@@ -99,7 +86,7 @@ public class QuizzManager : MonoBehaviour
         try
         {
             using (var client = new WebClient())
-            using (client.OpenRead(GameManager.Instance.apiManager.apiUrl))
+            using (client.OpenRead(GameManager.Instance.GetApiManager().apiUrl))
                 return true;
         }
         catch (WebException e)

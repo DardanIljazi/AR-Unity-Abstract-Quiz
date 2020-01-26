@@ -32,7 +32,7 @@ public class RegisterManager : PageLogic
             inputNameWithValue.Add(input.placeholder.GetComponent<Text>().text, input.text);
         }
 
-        ApiToken apiToken = GameManager.Instance.apiManager.RegisterToApi(
+        ApiToken apiToken = GameManager.Instance.GetApiManager().RegisterToApi(
             inputNameWithValue["Pseudo"], 
             inputNameWithValue["Firstname"], 
             inputNameWithValue["Lastname"],
@@ -47,7 +47,7 @@ public class RegisterManager : PageLogic
             return;
         }
 
-        GameManager.Instance.apiManager.SetApiToken(apiToken.GetApiToken());
+        GameManager.Instance.GetApiManager().SetApiToken(apiToken.GetApiToken());
         PopupManager.PopupAlert("Registered", "Successfully registered!", "Go", GameManager.Instance.pagesManager.ShowMenuPage);
     }
 

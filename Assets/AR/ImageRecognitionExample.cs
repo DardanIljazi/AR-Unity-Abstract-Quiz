@@ -10,7 +10,6 @@ public class ImageRecognitionExample : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("ImageRecognitionExample");
     }
 
     public void OnEnable()

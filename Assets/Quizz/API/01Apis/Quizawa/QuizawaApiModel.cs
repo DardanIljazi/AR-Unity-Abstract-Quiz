@@ -23,6 +23,7 @@ public class QuizawaApiModel : AbstractQuizzStructure
         {
             foreach (QuizzData quizzData in this.data)
             {
+                quizzData.MapValuesFromAPIToApplicationLogicClass(); // Map values for QuizzData to Quizz (QuizzData inherits from Quizz)
                 base.AddQuizz(quizzData);
             }
         }
@@ -73,6 +74,7 @@ public class QuizawaApiModel : AbstractQuizzStructure
         {
             foreach (QuestionData questionData in this.data)
             {
+                questionData.MapValuesFromAPIToApplicationLogicClass(); // Map values for QuestionData to Question (QuestionData inherits from Question)
                 base.AddQuestion(questionData);
             }
         }
@@ -116,6 +118,7 @@ public class QuizawaApiModel : AbstractQuizzStructure
         {
             foreach (AnswerData answerData in this.answers)
             {
+                answerData.MapValuesFromAPIToApplicationLogicClass(); // Map values for AnswerData to Answer (AnswerData inherits from Answer)
                 base.AddAnswer(answerData);
             }
         }

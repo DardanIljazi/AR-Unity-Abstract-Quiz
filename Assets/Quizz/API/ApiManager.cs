@@ -27,20 +27,32 @@ public class ApiManager : ApiManagerStructure
     public string apiQuizzesUrl;
     public string apiQuizzesQuestionUrl;
     public string apiLoginUrl;
+
     public bool hasToHaveTokenForApi;
     public bool hasToLoginToGetToken;
+
     public TokenHttpEmplacement tokenHttpEmplacement; // The place where token has to be put in HTTP (url, header, body)
+
     public string apiKeyParamName; // Define the key to use to assign token value in HTTP (f. ex: not_defined_api_paramname={API_TOKEN} in url/header/body). 
-                                                                 // This should be modified in the class that inherits from ApiManager. 
+                                   // This should be modified in the class that inherits from ApiManager. 
+
+    [Header("The api token can stay empty if user has to login to get it")]
     public string apiToken; // Should be defined into the class that inherits from APiManager (or later in the runtime) if token is used 
 
-    void Start()
+    private ApiManager child; // Contain a reference to the child that inherits from ApiManager. We give the task to serialize 
+
+
+    public ApiManager()
     {
         this.apiToken = Constants.Api_Token_Not_Defined;
         this.apiKeyParamName = Constants.Api_Param_Name_Not_Defined;
         this.tokenHttpEmplacement = TokenHttpEmplacement.Everywhere;
         this.hasToHaveTokenForApi = true;
         this.hasToLoginToGetToken = true;
+    }
+
+    void Start()
+    {
 
         if (apiUrl == null || apiUrl.Length == 0)
         {
@@ -57,8 +69,8 @@ public class ApiManager : ApiManagerStructure
             Debug.LogError("apiQuizzesQuestionUrl is empty or not defined. Please fill it");
             return;
         }
-
     }
+
 
     // Get list of quizzes
     public override Quizzes GetQuizzesList()
@@ -69,7 +81,8 @@ public class ApiManager : ApiManagerStructure
             Debug.LogError($"[WARNING]: Response for {GetActualMethodName()} is null");
         }
 
-        Quizzes quizzesData = JsonUtility.FromJson<Quizzes>(JSON_quizzes); // convert all data into defined classes 
+        Quizzes quizzesData = child.SerializeQuizzes(JSON_quizzes);
+
         if (quizzesData == null) // Exception/Error handling
         {
             Debug.LogError("[CRITICAL]: quizzesData is null");
@@ -77,6 +90,11 @@ public class ApiManager : ApiManagerStructure
 
         return quizzesData;
     }
+    public virtual Quizzes SerializeQuizzes(string json) // Child has to override this method so that data is serialized from child within GetQuizzesList
+    {
+        throw new NotImplementedException();
+    }
+
 
     public override Questions GetQuestionsListForQuizz(object quizzId)
     {
@@ -111,6 +129,7 @@ public class ApiManager : ApiManagerStructure
 
         return answersData;
     }
+
 
     // Register to api
     public ApiToken RegisterToApi(string pseudo, string firstname, string lastname, string email, string password)
@@ -148,19 +167,23 @@ public class ApiManager : ApiManagerStructure
             { "password", password }
         };
 
-        string JSON_connection = NetworkRequestManager.HttpPostRequest(apiUrl + "/users/login", post_key_values);
+        string JSON_connection = NetworkRequestManager.HttpPostRequest(apiLoginUrl, post_key_values);
         if (JSON_connection == null)
         {
             Debug.LogError("[CRITICAL]: JSON_connection is null");
         }
 
-        ApiToken connectionData = JsonUtility.FromJson<ApiToken>(JSON_connection);
+        ApiToken connectionData = child.SerializeApiToken(JSON_connection);
         if (connectionData == null)
         {
             Debug.LogError("[CRITICAL]: connectionQuizzData is null");
         }
 
         return connectionData;
+    }
+    public virtual ApiToken SerializeApiToken(string json) // Child has to override this method so that data is serialized from child within ConnectToQuizz
+    {
+        throw new NotImplementedException();
     }
 
     public override bool HasToHaveToken()
@@ -195,7 +218,7 @@ public class ApiManager : ApiManagerStructure
 
     public bool IsApiTokenDefined()
     {
-        return this.apiToken != Constants.Api_Token_Not_Defined;
+        return this.apiToken != null && this.apiToken != Constants.Api_Token_Not_Defined && this.apiToken.Length > 0;
     }
 
     public override Quizz GetQuizzFromQuizzesList(object quizzId)
@@ -211,6 +234,11 @@ public class ApiManager : ApiManagerStructure
     public override Answer GetAnswerFromAnswersList(object answerId)
     {
         throw new NotImplementedException();
+    }
+
+    public void SetChild(ApiManager child)
+    {
+        this.child = child;
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
