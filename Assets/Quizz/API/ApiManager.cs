@@ -8,30 +8,57 @@ using System;
 using System.Web;
 using System.Text;
 using System.Runtime.CompilerServices;
-using static ApiDataStructure;
+using static AbstractQuizzStructure;
+using static ApiManagerStructure;
 
 static class Constants
 {
     public const string Api_Token_Not_Defined = "api_token_not_defined";
     public const string Api_Param_Name_Not_Defined = "api_param_name_not_defined";
 }
+
 /**
  * ApiManager class contains all actions/methods that can be done to the api
  * Here must be define every action and return data according to ApiData class
  */
 public class ApiManager : ApiManagerStructure
 {
-
     public string apiUrl;
     public string apiQuizzesUrl;
     public string apiQuizzesQuestionUrl;
     public string apiLoginUrl;
-    public bool hasToHaveTokenForApi = true;
-    public bool hasToLoginToGetToken = true;
-    public TokenHttpEmplacement tokenHttpEmplacement = TokenHttpEmplacement.Everywhere; // The place where token has to be put in HTTP (url, header, body)
-    public string apiKeyParamName = Constants.Api_Param_Name_Not_Defined; // Define the key to use to assign token value in HTTP (f. ex: not_defined_api_paramname={API_TOKEN} in url/header/body). 
+    public bool hasToHaveTokenForApi;
+    public bool hasToLoginToGetToken;
+    public TokenHttpEmplacement tokenHttpEmplacement; // The place where token has to be put in HTTP (url, header, body)
+    public string apiKeyParamName; // Define the key to use to assign token value in HTTP (f. ex: not_defined_api_paramname={API_TOKEN} in url/header/body). 
                                                                  // This should be modified in the class that inherits from ApiManager. 
-    public string apiToken = Constants.Api_Token_Not_Defined; // Should be defined into the class that inherits from APiManager (or later in the runtime) if token is used 
+    public string apiToken; // Should be defined into the class that inherits from APiManager (or later in the runtime) if token is used 
+
+    void Start()
+    {
+        this.apiToken = Constants.Api_Token_Not_Defined;
+        this.apiKeyParamName = Constants.Api_Param_Name_Not_Defined;
+        this.tokenHttpEmplacement = TokenHttpEmplacement.Everywhere;
+        this.hasToHaveTokenForApi = true;
+        this.hasToLoginToGetToken = true;
+
+        if (apiUrl == null || apiUrl.Length == 0)
+        {
+            Debug.LogError("apiUrl is empty or not defined. Please fill it");
+            return;
+        }
+        if (apiQuizzesUrl == null || apiQuizzesUrl.Length == 0)
+        {
+            Debug.LogError("apiQuizzesUrl is empty or not defined. Please fill it");
+            return;
+        }
+        if (apiQuizzesQuestionUrl == null || apiQuizzesQuestionUrl.Length == 0)
+        {
+            Debug.LogError("apiQuizzesQuestionUrl is empty or not defined. Please fill it");
+            return;
+        }
+
+    }
 
     // Get list of quizzes
     public override Quizzes GetQuizzesList()
@@ -50,7 +77,7 @@ public class ApiManager : ApiManagerStructure
 
         return quizzesData;
     }
-    
+
     public override Questions GetQuestionsListForQuizz(object quizzId)
     {
         string JSON_quizze = NetworkRequestManager.HttpGetRequest(apiQuizzesQuestionUrl);
@@ -66,6 +93,74 @@ public class ApiManager : ApiManagerStructure
         }
 
         return questionsQuizzData;
+    }
+
+    public override Answers GetAnswersForQuestion(object questionId)
+    {
+        string JSON_answers = NetworkRequestManager.HttpGetRequest(apiQuizzesQuestionUrl);
+        if (JSON_answers == null)
+        {
+            Debug.LogError($"[WARNING]: Response for {GetActualMethodName()} is null");
+        }
+
+        Answers answersData = JsonUtility.FromJson<Answers>(JSON_answers);
+        if (answersData == null)
+        {
+            Debug.LogError("[CRITICAL]: questionsQuizzData is null");
+        }
+
+        return answersData;
+    }
+
+    // Register to api
+    public ApiToken RegisterToApi(string pseudo, string firstname, string lastname, string email, string password)
+    {
+        var post_key_values = new Dictionary<string, string>
+        {
+            { "pseudo", pseudo },
+            { "firstname", firstname },
+            { "lastname", lastname },
+            { "email", email },
+            { "password", password },
+        };
+
+        string JSON_register = NetworkRequestManager.HttpPostRequest(apiUrl + "/users", post_key_values);
+        if (JSON_register == null)
+        {
+            Debug.LogError("[CRITICAL]: JSON_register is null");
+        }
+
+        ApiToken registrationData = JsonUtility.FromJson<ApiToken>(JSON_register);
+        if (registrationData == null)
+        {
+            Debug.LogError("[CRITICAL]: registrationData is null");
+        }
+
+        return registrationData;
+    }
+
+    // Connect to the api
+    public ApiToken ConnectToQuizz(string pseudo, string password)
+    {
+        var post_key_values = new Dictionary<string, string>
+        {
+            { "pseudo", pseudo },
+            { "password", password }
+        };
+
+        string JSON_connection = NetworkRequestManager.HttpPostRequest(apiUrl + "/users/login", post_key_values);
+        if (JSON_connection == null)
+        {
+            Debug.LogError("[CRITICAL]: JSON_connection is null");
+        }
+
+        ApiToken connectionData = JsonUtility.FromJson<ApiToken>(JSON_connection);
+        if (connectionData == null)
+        {
+            Debug.LogError("[CRITICAL]: connectionQuizzData is null");
+        }
+
+        return connectionData;
     }
 
     public override bool HasToHaveToken()
@@ -98,60 +193,9 @@ public class ApiManager : ApiManagerStructure
         this.apiToken = token;
     }
 
-    public bool IsTokenDefined()
+    public bool IsApiTokenDefined()
     {
         return this.apiToken != Constants.Api_Token_Not_Defined;
-    }
-
-    // Connect to the api
-    public ApiToken ConnectToQuizz(string pseudo, string password)
-    {
-        var post_key_values = new Dictionary<string, string>
-        {
-            { "pseudo", pseudo },
-            { "password", password }
-        };
-
-        string JSON_connection = NetworkRequestManager.HttpPostRequest(apiUrl + "/users/login", post_key_values);
-        if (JSON_connection == null)
-        {
-            Debug.LogError("[CRITICAL]: JSON_connection is null");
-        }
-
-        ApiToken connectionData = JsonUtility.FromJson<ApiToken>(JSON_connection);
-        if (connectionData == null)
-        {
-            Debug.LogError("[CRITICAL]: connectionQuizzData is null");
-        }
-
-        return connectionData;
-    }
-
-    // Register to api
-    public ApiToken RegisterToApi(string pseudo, string firstname, string lastname, string email, string password)
-    {
-        var post_key_values = new Dictionary<string, string>
-        {
-            { "pseudo", pseudo },
-            { "firstname", firstname },
-            { "lastname", lastname },
-            { "email", email },
-            { "password", password },
-        };
-
-        string JSON_register = NetworkRequestManager.HttpPostRequest(apiUrl + "/users", post_key_values);
-        if (JSON_register == null)
-        {
-            Debug.LogError("[CRITICAL]: JSON_register is null");
-        }
-
-        ApiToken registrationData = JsonUtility.FromJson<ApiToken>(JSON_register);
-        if (registrationData == null)
-        {
-            Debug.LogError("[CRITICAL]: registrationData is null");
-        }
-
-        return registrationData;
     }
 
     public override Quizz GetQuizzFromQuizzesList(object quizzId)
@@ -162,23 +206,6 @@ public class ApiManager : ApiManagerStructure
     public override Question GetQuestionFromQuestionsList(object questionId)
     {
         throw new NotImplementedException();
-    }
-
-    public override Answers GetAnswersForQuestion(object questionId)
-    {
-        string JSON_answers = NetworkRequestManager.HttpGetRequest(apiQuizzesQuestionUrl);
-        if (JSON_answers == null)
-        {
-            Debug.LogError($"[WARNING]: Response for {GetActualMethodName()} is null");
-        }
-
-        Answers answersData = JsonUtility.FromJson<Answers>(JSON_answers);
-        if (answersData == null)
-        {
-            Debug.LogError("[CRITICAL]: questionsQuizzData is null");
-        }
-
-        return answersData;
     }
 
     public override Answer GetAnswerFromAnswersList(object answerId)

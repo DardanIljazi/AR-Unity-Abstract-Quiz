@@ -70,7 +70,7 @@ public class NetworkRequestManager : MonoBehaviour
             req.Method = "POST";
             req.Timeout = 2000;
 
-            if (GameManager.Instance.apiManager.IsTokenDefined()) // If Api token is defined
+            if (GameManager.Instance.apiManager.IsApiTokenDefined()) // If Api token is defined
             {
                 SetTokenAccordingToEmplacement(ref req, "POST", ref postData, GameManager.Instance.apiManager.GetTokenttpEmplacement());
             }
@@ -97,7 +97,6 @@ public class NetworkRequestManager : MonoBehaviour
 
             myHttpWebResponse.Close();
 
-            Debug.Log("pageContent: ");
             Debug.Log(pageContent);
             return pageContent;
         }

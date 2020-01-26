@@ -3288,15 +3288,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57a3fc9fdc80b3f45acec7a50c059a66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apiUrl: 
-  apiQuizzesUrl: 
-  apiQuizzesQuestionUrl: 
+  apiUrl: http://192.168.1.111:8000/api
+  apiQuizzesUrl: http://192.168.1.111:8000/api/quizzes
+  apiQuizzesQuestionUrl: http://192.168.1.111:8000/api/quizzes/questions
   apiLoginUrl: http://192.168.1.111:8000/api/users/login
   hasToHaveTokenForApi: 0
   hasToLoginToGetToken: 1
-  apiTokenManager: {fileID: 1669436913}
-  isStarted: 0
-  isConnected: 0
+  tokenHttpEmplacement: 3
+  apiKeyParamName: api_param_name_not_defined
+  apiToken: api_token_not_defined
 --- !u!4 &685439562
 Transform:
   m_ObjectHideFlags: 0
@@ -3307,8 +3307,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 16.039875, y: -14.452024, z: 62.15209}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1669436912}
+  m_Children: []
   m_Father: {fileID: 778415747}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3627,6 +3626,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51185524d502f144daab215d237ffe13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  apisList:
+  - {fileID: 685439561}
+  whichApiToUse: Quizawa
 --- !u!1 &789140722
 GameObject:
   m_ObjectHideFlags: 0
@@ -6203,49 +6205,6 @@ Transform:
   m_Father: {fileID: 2140007641}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1669436911
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1669436912}
-  - component: {fileID: 1669436913}
-  m_Layer: 0
-  m_Name: ApiTokenManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1669436912
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1669436911}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -16.039875, y: 14.452024, z: -62.15209}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 685439562}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1669436913
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1669436911}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1502fc43920647f4ea3dcfb71aea6940, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1678091463
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,14 +12,15 @@ using UnityEngine;
  */
 public class QuizzManager : MonoBehaviour
 {
-    public string whichApiToUse = "Quizawa";
+    public ApiManager[] apisList;
+    public int whichApiToUseFromList = 0;
 
     Thread _thread; // Is the thread used to check connection to the api
     bool blockCondition = false;
 
-    public bool isStarted = false;
-    public bool isConnected = false;
-    private int count = 0;
+    bool isStarted = false;
+    bool isConnected = false;
+    int count = 0;
     
 
     void Start()
@@ -27,14 +28,15 @@ public class QuizzManager : MonoBehaviour
         isStarted = true;
         StartApiDataConnectionCheck();
 
-        if (whichApiToUse == "Quizawa")
+        Debug.Log($"Going to use API number {whichApiToUseFromList} from apisList");
+
+        if (whichApiToUseFromList > apisList.Length - 1)
         {
-            GameManager.Instance.apiManager = new QuizawaApi();
+            Debug.LogError($"Can't use api from apisList at index {whichApiToUseFromList} because the maximum possible is {apisList.Length - 1}");
+            return;
         }
-        else
-        {
-            Debug.LogError($"The api {whichApiToUse} is not defined");
-        }
+
+        GameManager.Instance.apiManager = apisList[whichApiToUseFromList];
     }
 
     public void StartApiDataConnectionCheck()
@@ -52,6 +54,25 @@ public class QuizzManager : MonoBehaviour
         }
         else
         {
+            if ( GameManager.Instance.apiManager.HasToHaveToken() && 
+                !GameManager.Instance.apiManager.IsApiTokenDefined())
+            {
+                Debug.Log("Has to have token and token not defined yet");
+
+                // If no login is needed and we have not defined yet an api token --> error (something was not configured properly ?)
+                if (!GameManager.Instance.apiManager.HasToLoginToGetToken())
+                {
+                    Debug.LogError(
+                        "Impossible to go further. You configuration contains some incoherence. " +
+                        "You defined to need token for the api and this one is not defined. " +
+                        "Furthemore, you didn't set hasToLoginTOGetToken as true. Please configure your class inherited from ApiManager properly or read the doc.");
+                    return;
+                }
+                else // User has to login first to get token
+                {
+                    GameManager.Instance.pagesManager.GoToPage("Login");
+                }
+            }
             //GameManager.Instance.pagesManager.ShowFirstPage();
         }
     }

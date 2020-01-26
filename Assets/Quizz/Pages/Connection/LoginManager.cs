@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static ApiDataStructure;
+using static AbstractQuizzStructure;
 
 /**
  * ConnectionManager is the manager for the Connection page (used when user has to connect to the API and receive token API for example)
@@ -34,8 +34,7 @@ public class LoginManager : PageLogic
             GameManager.Instance.apiManager.SetApiToken(apiTokenData.GetApiToken());
         }
 
-
-        if (!GameManager.Instance.apiManager.IsTokenDefined() && 
+        if (!GameManager.Instance.apiManager.IsApiTokenDefined() && 
             NetworkRequestManager.lastHttpWebRequestErrorMessage == null)
         {
             PopupManager.PopupAlert("Connection impossible", "Your login or password are not correct");

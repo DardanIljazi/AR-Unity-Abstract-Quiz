@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static ApiDataStructure;
+using static AbstractQuizzStructure;
 
 /**
  * SelectQuizzManager is the manager for the SelectQuizz page (shows the list of quizzes/manages data about list of quizzes and so on..)
@@ -29,7 +29,7 @@ public class SelectQuizzManager : PageLogic
 
 
         // Get quizz list from API and put them into scroll list (SelectQuizzScrollerController)
-        foreach (Quizz indexQuizz in quizzes)
+        foreach (Quizz indexQuizz in quizzes.GetQuizzesList())
         {
             Quizz quizzData = JsonUtility.FromJson<Quizz>(JsonUtility.ToJson(indexQuizz)); ;
 

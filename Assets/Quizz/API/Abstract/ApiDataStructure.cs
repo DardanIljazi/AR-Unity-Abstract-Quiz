@@ -3,27 +3,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ApiDataStructure
+/**
+ *  Contains the abstract code that will be used everywhere in the application logic.
+ *  Api will 
+ */
+public abstract class AbstractQuizzStructure
 {
-    public class Quizzes : ICloneable
+    public class Quizzes : IMappeableClassFromAPIData, ICloneable
     {
-        public List<Quizz> quizzes = new List<Quizz>(); // List of quizz
+        List<Quizz> quizzes = new List<Quizz>(); // List of quizz
+
+        public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
+
+        public void AddQuizz(Quizz quizz)
+        {
+            quizzes.Add(quizz);
+        }
+
+        public List<Quizz> GetQuizzesList()
+        {
+            return quizzes;
+        }
 
         public object Clone()
         {
             return this.MemberwiseClone();
         }
-
-        public IEnumerator GetEnumerator()
-        {
-            return this.quizzes.GetEnumerator();
-        }
     }
 
-    public class Quizz : ICloneable
+    public class Quizz : IMappeableClassFromAPIData, ICloneable
     {
         string quizzTitle;
         object quizzId; // Can be string or id so we declare it as an object here
+
+        public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
 
         public string GetQuizzTitle()
         {
@@ -51,10 +64,12 @@ public abstract class ApiDataStructure
         }
     }
 
-    public class Questions : ICloneable
+    public class Questions : IMappeableClassFromAPIData, ICloneable
     {
         private string question;
         private List<Question> questionsList;
+
+        public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
 
         public void SetQuestion(string quest)
         {
@@ -77,10 +92,12 @@ public abstract class ApiDataStructure
         }
     }
 
-    public class Question : ICloneable
+    public class Question : IMappeableClassFromAPIData, ICloneable
     {
         string question;
         object questionId;
+
+        public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
 
         public object GetQuestionId()
         {
@@ -101,11 +118,14 @@ public abstract class ApiDataStructure
         {
             return this.MemberwiseClone();
         }
+
     }
 
-    public class Answers
+    public class Answers : IMappeableClassFromAPIData, ICloneable
     {
         List<Answer> answersList;
+
+        public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
 
         public List<Answer> GetAnswersList()
         {
@@ -118,10 +138,12 @@ public abstract class ApiDataStructure
         }
     }
 
-    public class Answer : ICloneable
+    public class Answer : IMappeableClassFromAPIData, ICloneable
     {
         string answer;
         bool isCorrectAnswer;
+
+        public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
 
         public bool IsCorrectAnswer()
         {
@@ -139,10 +161,12 @@ public abstract class ApiDataStructure
         }
     }
 
-    public class ApiToken : ICloneable
+    public class ApiToken : IMappeableClassFromAPIData, ICloneable 
     {
         string token;
         string apiKeyParamName;
+
+        public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
 
         public string GetApiToken()
         {
@@ -169,4 +193,9 @@ public abstract class ApiDataStructure
             return this.MemberwiseClone();
         }
     }
+}
+
+public interface IMappeableClassFromAPIData
+{
+    void MapValuesFromAPIToApplicationLogicClass();
 }

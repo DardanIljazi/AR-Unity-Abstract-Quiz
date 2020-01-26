@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
-using static ApiDataStructure;
+using static AbstractQuizzStructure;
 
 /**
  * RespondQuizzManager is the manager for the RespondQuizz page (shows a list of possible response and manages the response selected)

@@ -6,7 +6,7 @@ using TMPro;
 using EnhancedScrollerDemos.GridSelection;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using static ApiDataStructure;
+using static AbstractQuizzStructure;
 
 // For click: https://stackoverflow.com/questions/53517667/unity-ar-how-can-i-trigger-a-button-in-the-scene
 public class SelectQuizzCellView : EnhancedScrollerCellView, IPointerUpHandler, IPointerDownHandler, IPointerClickHandler
