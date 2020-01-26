@@ -6,11 +6,11 @@ using UnityEngine.XR.ARFoundation;
 
 public class ImageRecognitionExample : MonoBehaviour
 {
-    private ARTrackedImageManager aRTrackedImageManager;
+    public ARTrackedImageManager aRTrackedImageManager;
 
     void Start()
     {
-        aRTrackedImageManager = FindObjectOfType<ARTrackedImageManager>();
+        Debug.Log("ImageRecognitionExample");
     }
 
     public void OnEnable()
@@ -24,11 +24,13 @@ public class ImageRecognitionExample : MonoBehaviour
 
     public void OnImageChanged(ARTrackedImagesChangedEventArgs args)
     {
-        foreach (var trackedImage in args.added)
+        foreach (ARTrackedImage trackedImage in args.added)
         {
-            Debug.Log(trackedImage.name);
+            Debug.Log("name: " +trackedImage.referenceImage.name);
+            Debug.Log("transform:" + trackedImage.transform);
         }
     }
+
 
     void Update()
     {
