@@ -27,7 +27,6 @@ public class SelectQuizzManager : PageLogic
             PopupManager.PopupAlert("Error", "Quizzes is equal to null (is data from API valid ?).\n" + NetworkRequestManager.lastHttpWebRequestErrorMessage);
         }
 
-
         // Get quizz list from API and put them into scroll list (SelectQuizzScrollerController)
         foreach (Quizz indexQuizz in quizzes.GetQuizzesList())
         {

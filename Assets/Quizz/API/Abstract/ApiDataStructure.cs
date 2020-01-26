@@ -5,13 +5,15 @@ using UnityEngine;
 
 /**
  *  Contains the abstract code that will be used everywhere in the application logic.
- *  Api will 
+ *  Api classes will call MapValuesFromAPIToApplicationLogicClass to set which values (from API class) must be mapped to the values
  */
 public abstract class AbstractQuizzStructure
 {
+
+    #region Quizzes
     public class Quizzes : IMappeableClassFromAPIData, ICloneable
     {
-        List<Quizz> quizzes = new List<Quizz>(); // List of quizz
+        private List<Quizz> quizzes = new List<Quizz>(); // List of quizz
 
         public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
 
@@ -30,11 +32,13 @@ public abstract class AbstractQuizzStructure
             return this.MemberwiseClone();
         }
     }
+    #endregion
 
+    #region Quizz
     public class Quizz : IMappeableClassFromAPIData, ICloneable
     {
-        string quizzTitle;
-        object quizzId; // Can be string or id so we declare it as an object here
+        private string quizzTitle;
+        private object quizzId; // Can be string or int so we declare it as an object here
 
         public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
 
@@ -64,10 +68,13 @@ public abstract class AbstractQuizzStructure
         }
     }
 
+    #endregion
+
+    #region Questions
     public class Questions : IMappeableClassFromAPIData, ICloneable
     {
         private string question;
-        private List<Question> questionsList;
+        private List<Question> questionsList = new List<Question>();
 
         public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
 
@@ -81,21 +88,29 @@ public abstract class AbstractQuizzStructure
             return question;
         }
 
-        public object Clone()
-        {
-            return this.MemberwiseClone();
-        }
-
         public List<Question> GetQuestionsList()
         {
             return questionsList;
         }
+
+        public void AddQuestion(Question quesiont)
+        {
+            this.questionsList.Add(quesiont);
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
+    #endregion
+
+    #region Question
 
     public class Question : IMappeableClassFromAPIData, ICloneable
     {
-        string question;
-        object questionId;
+        private string question;
+        private object questionId;
 
         public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
 
@@ -114,16 +129,22 @@ public abstract class AbstractQuizzStructure
             return question;
         }
 
+        public void SetQuestionText(string questionValue)
+        {
+            this.question = questionValue;
+        }
+
         public object Clone()
         {
             return this.MemberwiseClone();
         }
-
     }
+    #endregion
 
+    #region Answers
     public class Answers : IMappeableClassFromAPIData, ICloneable
     {
-        List<Answer> answersList;
+        private List<Answer> answersList = new List<Answer>();
 
         public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
 
@@ -132,16 +153,23 @@ public abstract class AbstractQuizzStructure
             return answersList;
         }
 
+        public void AddAnswer(Answer answer)
+        {
+            this.answersList.Add(answer);
+        }
+
         public object Clone()
         {
             return this.MemberwiseClone();
         }
     }
+    #endregion
 
+    #region Answer
     public class Answer : IMappeableClassFromAPIData, ICloneable
     {
-        string answer;
-        bool isCorrectAnswer;
+        private string answer;
+        private bool isCorrectAnswer;
 
         public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
 
@@ -150,9 +178,19 @@ public abstract class AbstractQuizzStructure
             return this.isCorrectAnswer;
         }
 
+        public void SetIsCorrectAnswer(bool correct)
+        {
+            this.isCorrectAnswer = correct;
+        }
+
         public string GetDataToShowAsPossibleAnswer()
         {
             return answer;
+        }
+
+        public void SetDataToShowAsPossibleAnswer(string answerValue)
+        {
+            this.answer = answerValue;
         }
 
         public object Clone()
@@ -160,11 +198,13 @@ public abstract class AbstractQuizzStructure
             return this.MemberwiseClone();
         }
     }
+    #endregion
 
+    #region ApiToken
     public class ApiToken : IMappeableClassFromAPIData, ICloneable 
     {
-        string token;
-        string apiKeyParamName;
+        private string token;
+        private string apiKeyParamName;
 
         public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
 
@@ -193,6 +233,7 @@ public abstract class AbstractQuizzStructure
             return this.MemberwiseClone();
         }
     }
+    #endregion
 }
 
 public interface IMappeableClassFromAPIData
