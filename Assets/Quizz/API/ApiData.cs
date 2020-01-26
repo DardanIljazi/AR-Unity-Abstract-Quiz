@@ -212,6 +212,27 @@ public static class ApiData
     #endregion
 
 
+    #region Question answers
+    /** QUESTION ANSWERS **/
+
+    [Serializable]
+    public class AnswerData
+    {
+        public int id;
+        public string value;
+        public int correct;
+        public int question_id;
+    }
+
+    [Serializable]
+    public class Answers
+    {
+        
+    }
+
+    /** -- END OF QUIZZ ANSWER **/
+    #endregion
+
     #region Quizz answer
     /** QUIZZ ANSWER **/
 
