@@ -30,7 +30,7 @@ public class ImageRecognitionExample : MonoBehaviour
 
     public void SelectQuizzInIndex(object imageNameAsAQuizzId)
     {
-        // Here we create a new Quizz and define its id
+        // Here we create a new Quizz and define its id (
         Quizz quizzToShow = new Quizz();
         quizzToShow.SetQuizzId(imageNameAsAQuizzId);
 
