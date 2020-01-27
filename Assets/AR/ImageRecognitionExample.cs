@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.ARFoundation;
+using static AbstractQuizzStructure;
 
 public class ImageRecognitionExample : MonoBehaviour
 {
@@ -23,18 +24,16 @@ public class ImageRecognitionExample : MonoBehaviour
         {
             Debug.Log("name: " +trackedImage.referenceImage.name);
             Debug.Log("transform:" + trackedImage.transform);
-
-            Debug.Log("Entered !!");
             SelectQuizzInIndex(trackedImage.referenceImage.name);
-            
         }
     }
 
-    // Will be deleted lated, just for the show
-    public void SelectQuizzInIndex(string imageWithNumber)
+    public void SelectQuizzInIndex(object imageNameAsAQuizzId)
     {
-        Debug.Log("Selected quizz !!");
+        // Here we create a new Quizz and define its id
+        Quizz quizzToShow = new Quizz();
+        quizzToShow.SetQuizzId(imageNameAsAQuizzId);
 
-        GameManager.Instance.pagesManager.GoToPage("SelectQuizz");
+        GameManager.Instance.selectQuizzManager.SelectQuizzToShow(quizzToShow);
     }
 }

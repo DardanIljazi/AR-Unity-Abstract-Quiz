@@ -36,7 +36,7 @@ public class SelectQuizzManager : PageLogic
     }
 
     // Called from the cell view (inside SelectQuizzScrollerController) when a quizz is selected
-    public void QuizzSelected(Quizz quizz)
+    public void SelectQuizzToShow(Quizz quizz)
     {
         GameManager.Instance.pagesManager.GoToPage("RespondQuizz");
         GameManager.Instance.respondQuizzManager.LoadQuizzQuestions(quizz);

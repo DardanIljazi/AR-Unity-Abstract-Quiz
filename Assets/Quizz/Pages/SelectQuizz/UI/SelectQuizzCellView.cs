@@ -52,7 +52,7 @@ public class SelectQuizzCellView : EnhancedScrollerCellView, IPointerUpHandler, 
     public void OnPointerClick(PointerEventData eventData)
     {
         //Debug.Log("OnPointerClick");
-        GameManager.Instance.selectQuizzManager.QuizzSelected(_data);
+        GameManager.Instance.selectQuizzManager.SelectQuizzToShow(_data);
     }
 }
 
