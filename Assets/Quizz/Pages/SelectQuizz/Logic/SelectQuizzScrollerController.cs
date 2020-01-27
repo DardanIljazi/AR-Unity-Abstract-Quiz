@@ -10,7 +10,8 @@ public class SelectQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDel
     [Header("Link to the prefab to show for each data in scroller")]
     public SelectQuizzCellView selectQuizzCellView;
 
-    private List<Quizz> _data;
+    // Put public for the show, should be put private afterwards
+    public List<Quizz> _data;
 
     public void Initialize()
     {
