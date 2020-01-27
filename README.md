@@ -41,7 +41,7 @@ All you have to do is:
 
 ```
 You can find examples of implementation in Assets/Quizz/Api/01Apis/. 
-- Heroku api can work directly without any other component because it is already online (I am not the creator of this quiz). 
+- Heroku api can work directly without any other component because it is already online 
 - Quizawa api needs the backend (laravel) to be installed and launched according to the repo
 ```
 
