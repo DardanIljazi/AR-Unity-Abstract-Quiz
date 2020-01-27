@@ -175,7 +175,10 @@ public class HerokuApiModel : AbstractQuizzStructure
  *  [Serializable]
  *  public class QuizzData 
  *  {
- *      public List<QuizzData> data = new List<QuizzData>();
+ *      public int id;
+ *      public string title;
+ *      public string description;
+ *      public string image;
  *  }
  *  
  *  --> And used like this:

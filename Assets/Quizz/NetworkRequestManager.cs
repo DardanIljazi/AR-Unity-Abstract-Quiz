@@ -136,10 +136,6 @@ public class NetworkRequestManager : MonoBehaviour
 
     public static void PutTokenInUrl(ref HttpWebRequest req)
     {
-        // It is somethign tricky here: We can't modify url after creating HttpWebRequest but here we need it (because api token is not directly into the url "logic" but is appart)
-        // We create a new HttpWebRequest (reqWithToken) with the api token inside of it.
-        // We have to assign values of req to reqWithToken by cloning req with WebRequestExtensions.CloneRequest
-
         string actualUrl = req.RequestUri.ToString();
         string modifiedUrl = actualUrl;
 
@@ -154,6 +150,7 @@ public class NetworkRequestManager : MonoBehaviour
             modifiedUrl += GameManager.Instance.GetApiManager().GetApiKeyParamName() + "=" + GameManager.Instance.GetApiManager().GetApiToken();
         }
 
+        // We clone the actual request because we can't simply redefine uri after declaring HttpWebRequest
         HttpWebRequest reqWithToken = WebRequestExtensions.CloneRequest(req, new Uri(modifiedUrl));
         req = reqWithToken;
     }
