@@ -19,10 +19,10 @@ public abstract class ApiManagerStructure : MonoBehaviour
     
     public abstract TokenHttpEmplacement GetTokenttpEmplacement();
 
-    public abstract Quizzes     GetQuizzesList();
-    public abstract Quizz       GetQuizzFromQuizzesList(object quizzId);
-    public abstract Questions   GetQuestionsListForQuizz(object quizzId);
-    public abstract Question    GetQuestionFromQuestionsList(object questionId);
-    public abstract Answers     GetAnswersForQuestion(object questionId);
-    public abstract Answer      GetAnswerFromAnswersList(object answerId);
+    public abstract Quizzes     GetQuizzes();
+    public abstract Quizz       GetQuizz(object quizzId);
+    public abstract Questions   GetQuestionsForQuizz(object quizzId);
+    public abstract Question    GetQuestion(object quizzId, object questionId);
+    public abstract Answers     GetAnswersForQuestion(object quizzId, object questionId);
+    public abstract Answer      GetAnswer(object quizzId, object questionId, object answerId);
 }

@@ -8,10 +8,6 @@ public class ImageRecognitionExample : MonoBehaviour
 {
     public ARTrackedImageManager aRTrackedImageManager;
 
-    void Start()
-    {
-    }
-
     public void OnEnable()
     {
         aRTrackedImageManager.trackedImagesChanged += OnImageChanged;

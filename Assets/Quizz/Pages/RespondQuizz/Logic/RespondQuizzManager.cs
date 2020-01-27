@@ -22,6 +22,7 @@ public class RespondQuizzManager : PageLogic
     private int rightResponses = 0;
     private int falseResponses = 0;
 
+    private Quizz quizz;
     private Questions questions;
 
     public override void ActionToDoWhenPageGoingToBeHidden()
@@ -39,10 +40,11 @@ public class RespondQuizzManager : PageLogic
         this.Reset();
         respondQuizzScrollerController.Initialize();
 
-        questions = GameManager.Instance.GetApiManager().GetQuestionsListForQuizz(quizz.GetQuizzId());
+        this.quizz = quizz;
+        this.questions = GameManager.Instance.GetApiManager().GetQuestionsForQuizz(quizz.GetQuizzId());
 
         // Error/Exception managing
-        if (questions == null)
+        if (this.questions == null)
         {
             Debug.LogError("[WARNING]: questions is equal to null. Is your QuestionsQuizzData superclass class configured in the same way the API (json) data is ?");
             PopupManager.PopupAlert("Error", "Question is equal to null (is data from API valid ?).\n" + NetworkRequestManager.lastHttpWebRequestErrorMessage, "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
@@ -67,11 +69,13 @@ public class RespondQuizzManager : PageLogic
         respondQuizzScrollerController.Reset();
         quizzQuestion.text = questions.GetQuestionsList()[arrayIndex].GetQuestion();
 
-        Question questionData = JsonUtility.FromJson<Question>(JsonUtility.ToJson(questions.GetQuestionsList()[arrayIndex]));
-        Answers answers = GameManager.Instance.GetApiManager().GetAnswersForQuestion(questionData.GetQuestionId());
+        Question question = questions.GetQuestionsList()[arrayIndex];
+        Answers answers = GameManager.Instance.GetApiManager().GetAnswersForQuestion(this.quizz.GetQuizzId(), question.GetQuestionId());
+
+        Debug.Log($"answers: {JsonUtility.ToJson(answers)}");
 
         // Error/Exception managing
-        if (questionData == null)
+        if (question == null)
         {
             Debug.LogError("[WARNING]: questionData is null");
             PopupManager.PopupAlert("Error", "QuestionData is null (is data from API valid ?).\n" + NetworkRequestManager.lastHttpWebRequestErrorMessage, "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
@@ -80,9 +84,7 @@ public class RespondQuizzManager : PageLogic
 
         for (int answerIndex = 0; answerIndex < answers.GetAnswersList().Count; ++answerIndex)
         {
-            Answer answer = JsonUtility.FromJson<Answer>(JsonUtility.ToJson(answers.GetAnswersList()[answerIndex])); ;
-
-            Debug.Log(JsonUtility.ToJson(answer));
+            Answer answer = answers.GetAnswersList()[answerIndex];
 
             if (answer.IsCorrectAnswer())
                 goodAnswer = answer.GetDataToShowAsPossibleAnswer();

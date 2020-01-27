@@ -4814,13 +4814,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   apiUrl: http://192.168.1.111:8000/api
   apiQuizzesUrl: http://192.168.1.111:8000/api/quizzes
-  apiQuizzesQuestionUrl: http://192.168.1.111:8000/api/quizzes/questions
-  apiLoginUrl: http://192.168.1.111:8000/api/users/login
+  apiQuestionsUrl: http://192.168.1.111:8000/api/quizzes/{quizzId}/questions
+  apiAnswersUrl: 
   hasToHaveTokenForApi: 1
   hasToLoginToGetToken: 1
+  apiLoginUrl: http://192.168.1.111:8000/api/users/login
   tokenHttpEmplacement: 3
   apiKeyParamName: api_token
-  apiToken: 
+  apiToken: api_token_not_defined
 --- !u!1 &1200909292
 GameObject:
   m_ObjectHideFlags: 0

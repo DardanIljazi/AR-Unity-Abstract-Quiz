@@ -22,7 +22,7 @@ public class LoginManager : PageLogic
 
     void ConnectButtonClicked()
     {
-        ApiToken apiTokenData = GameManager.Instance.GetApiManager().ConnectToQuizz(pseudoInput.text, passwordInput.text);
+        ApiToken apiTokenData = GameManager.Instance.GetApiManager().ConnectToApi(pseudoInput.text, passwordInput.text);
 
         Debug.Log(JsonUtility.ToJson(apiTokenData));
 

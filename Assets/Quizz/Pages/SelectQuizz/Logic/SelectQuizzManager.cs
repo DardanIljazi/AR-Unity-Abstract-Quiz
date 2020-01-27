@@ -18,24 +18,24 @@ public class SelectQuizzManager : PageLogic
 
         selectQuizzScrollerController.Initialize();
 
-        Quizzes quizzes = GameManager.Instance.GetApiManager().GetQuizzesList();
+        Quizzes quizzes = GameManager.Instance.GetApiManager().GetQuizzes();
 
         if (quizzes == null)
         {
             Debug.LogError("[WARNING]: quizzes is equal to null. Is your QuizzesData superclass class configured in the same way the API (json) data is ?");
-
             PopupManager.PopupAlert("Error", "Quizzes is equal to null (is data from API valid ?).\n" + NetworkRequestManager.lastHttpWebRequestErrorMessage);
         }
 
-        // Get quizz list from API and put them into scroll list (SelectQuizzScrollerController)
-        foreach (Quizz indexQuizz in quizzes.GetQuizzesList())
+        // Put each quizz to the scroller
+        foreach (Quizz quizz in quizzes.GetQuizzesList())
         {
-            selectQuizzScrollerController.AddDataToScroller(indexQuizz.Clone() as Quizz);
+            selectQuizzScrollerController.AddDataToScroller(quizz.Clone() as Quizz);
         }
 
         GameManager.Instance.pagesManager.HideLoadingPage();
     }
 
+    // Called from the cell view (inside SelectQuizzScrollerController) when a quizz is selected
     public void QuizzSelected(Quizz quizz)
     {
         GameManager.Instance.pagesManager.GoToPage("RespondQuizz");
