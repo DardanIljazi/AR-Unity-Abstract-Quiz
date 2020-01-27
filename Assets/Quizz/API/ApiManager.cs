@@ -1,87 +1,139 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System.Threading;
-using static ApiData;
 using System;
-using System.Web;
-using System.Text;
-using System.Net.NetworkInformation;
+using System.Runtime.CompilerServices;
+using static AbstractQuizzStructure;
+
+
+static class Constants
+{
+    public const string Api_Token_Not_Defined = "api_token_not_defined";
+    public const string Api_Param_Name_Not_Defined = "api_param_name_not_defined";
+}
 
 /**
- * ApiManager class contains all actions/methods that can be done to the api
- * Here must be define every action and return data according to ApiData class
+ * ApiManager class contains all actions/methods that can be done to the api in a "generic" way
  */
-public class ApiManager : MonoBehaviour
+public class ApiManager : ApiManagerStructure
 {
-    public string api_url { get; set; } = "http://192.168.1.111:8000/api";
+    [Header("Url to the api")]
+    public string apiUrl;
 
-    public static string lastHttpWebRequestErrorMessage = null;
-    public ApiTokenManager apiTokenManager;
+    [Header("Url to the quizzes")]
+    public string apiQuizzesUrl;
+
+    [Help("\nUrl to the questions.\nIf any quizzId is in the link, write {quizzId} at that place. Let empty if not used")]
+    public string apiQuestionsUrl;
+    [NonSerialized]
+    public string _originalApiQuestionsUrl; // Copy of apiQuizzesQuestionUrl so that if it contains {quizzId} it will stay
+
+    [Help("\nUrl to answers. \nIf any questionId is in the link, write {questionid} at that place. Let empty if not used")]
+    public string apiAnswersUrl;
+    [NonSerialized]
+    public string _originalApiQuizzesQuestionAnswersList; // Copy of apiQuizzesQuestionUrl so that if it contains {quizzId} it will stay
+
+    public bool hasToHaveTokenForApi;
+    public bool hasToLoginToGetToken;
+
+    [Header("Url to the api endpoint for login. Let empty if not used")]
+    public string apiLoginUrl;
+
+    public TokenHttpEmplacement tokenHttpEmplacement; // The place where token has to be put in HTTP (url, header, body)
+
+    public string apiKeyParamName; // Define the key to use to assign token value in HTTP (f. ex: not_defined_api_paramname={API_TOKEN} in url/header/body). 
+                                   // This should be modified in the class that inherits from ApiManager. 
+
+    [Header("The api token can stay empty/not defined if user has to login to get it")]
+    public string apiToken; // Should be defined into the class that inherits from APiManager (or later in the runtime) if token is used 
+
+    private ApiManager child; // Contain a reference to the child that inherits from ApiManager. We give the task to serialize 
+
+
+    public ApiManager()
+    {
+        this.apiToken = Constants.Api_Token_Not_Defined;
+        this.apiKeyParamName = Constants.Api_Param_Name_Not_Defined;
+        this.tokenHttpEmplacement = TokenHttpEmplacement.Everywhere;
+        this.hasToHaveTokenForApi = true;
+        this.hasToLoginToGetToken = true;
+    }
+
+    void Start()
+    {
+        _originalApiQuestionsUrl = apiQuestionsUrl;
+        _originalApiQuizzesQuestionAnswersList = apiAnswersUrl;
+
+        CheckIfNullAndLog(apiUrl, $"apiUrl is empty or not defined. Did you forget to fill it ?. Value: {apiUrl}", 1);
+        CheckIfNullAndLog(apiQuizzesUrl, $"apiQuizzesUrl is empty or not defined. Did you forget to fill it ?. Value: {apiQuizzesUrl}", 1);
+    }
+
 
     // Get list of quizzes
-    public Quizzes GetQuizzesListFromAPI()
+    public override Quizzes GetQuizzes()
     {
-        string JSON_quizzes = HttpGetRequest(api_url + "/quizzes");
-        if (JSON_quizzes == null) // Exception/Error handling
-        {
-            Debug.LogError("[CRITICAL]: (GetQuizzesListFromAPI) The url response doesn't return anything");
-        }
+        string json_quizzes = NetworkRequestManager.HttpGetRequest(apiQuizzesUrl);
 
-        Quizzes quizzesData = JsonUtility.FromJson<Quizzes>(JSON_quizzes); // convert all data into defined classes 
-        if (quizzesData == null) // Exception/Error handling
-        {
-            Debug.LogError("[CRITICAL]: quizzesData is null");
-        }
+        CheckIfNullAndLog(json_quizzes, $"[WARNING]: Response for {GetActualMethodName()} is null");
+
+
+        Quizzes quizzesData = child.SerializeQuizzes(json_quizzes);
+
+        CheckIfNullAndLog(quizzesData, $"[WARNING]: quizzesData is null");
+
 
         return quizzesData;
     }
-
-    // Get the question for the quizz id
-    public Questions GetQuestionsQuizzListFromAPI(int id)
+    public virtual Quizzes SerializeQuizzes(string json) // Child has to override this method so that data is serialized from child within GetQuizzesList
     {
-        string JSON_quizze = HttpGetRequest(api_url + "/quizzes/" + id.ToString() + "/questions");
-        if (JSON_quizze == null)
-        {
-            Debug.LogError("[CRITICAL]: (GetQuestionsQuizzListFromAPI) The url response doesn't return anything");
-        }
+        throw new NotImplementedException();
+    }
 
-        Questions questionsQuizzData = JsonUtility.FromJson<Questions>(JSON_quizze);
-        if (questionsQuizzData == null)
-        {
-            Debug.LogError("[CRITICAL]: questionsQuizzData is null");
-        }
+
+    // Get list of questions for a quizz
+    public override Questions GetQuestionsForQuizz(object quizzId)
+    {
+        // Their could be {quizzId} in the link. In this case replace it with quizzId
+        apiQuestionsUrl = _originalApiQuestionsUrl.Replace("{quizzId}", quizzId.ToString());
+
+        string json_questions = NetworkRequestManager.HttpGetRequest(apiQuestionsUrl);
+
+        CheckIfNullAndLog(json_questions, $"[WARNING]: Response for {GetActualMethodName()} is null");
+
+
+        Questions questionsQuizzData = child.SerializeQuestions(json_questions);
+
+        CheckIfNullAndLog(questionsQuizzData, $"[WARNING]: questionsQuizzData is null");
+
 
         return questionsQuizzData;
     }
-
-    // Connect to the api
-    public ApiToken ConnectToQuizz(string pseudo, string password)
+    public virtual Questions SerializeQuestions(string json) // Child has to override this method so that data is serialized from child within GetQuestionsListForQuizz
     {
-        var post_key_values = new Dictionary<string, string>
-        {
-            { "pseudo", pseudo },
-            { "password", password }
-        };
-
-        string JSON_connection = HttpPostRequest(api_url + "/users/login", post_key_values);
-        if (JSON_connection == null)
-        {
-            Debug.LogError("[CRITICAL]: JSON_connection is null");
-        }
-
-        ApiToken connectionData = JsonUtility.FromJson<ApiToken>(JSON_connection);
-        if (connectionData == null)
-        {
-            Debug.LogError("[CRITICAL]: connectionQuizzData is null");
-        }
-
-        return connectionData;
+        throw new NotImplementedException();
     }
 
-    // Register to api
+    // Get list of answers for a question
+    public override Answers GetAnswersForQuestion(object quizzId, object questionId)
+    {
+        string json_answers = NetworkRequestManager.HttpGetRequest(apiQuestionsUrl);
+
+        CheckIfNullAndLog(json_answers, $"[WARNING]: Response for {GetActualMethodName()} is null");
+
+        Answers answersData = child.SerializeAnswers(json_answers);
+
+        CheckIfNullAndLog(answersData, $"[WARNING]: questionsQuizzData is null");
+
+
+        return answersData;
+    }
+    public virtual Answers SerializeAnswers(string json) // Child has to override this method so that data is serialized from child within GetAnswersForQuestion
+    {
+        throw new NotImplementedException();
+    }
+
+
+    // Register to the api
+    // TODO: This is a "generic" way to generate. Should be modified or put into QuizawaApi class
     public ApiToken RegisterToApi(string pseudo, string firstname, string lastname, string email, string password)
     {
         var post_key_values = new Dictionary<string, string>
@@ -93,263 +145,123 @@ public class ApiManager : MonoBehaviour
             { "password", password },
         };
 
-        string JSON_register = HttpPostRequest(api_url + "/users", post_key_values);
-        if (JSON_register == null)
-        {
-            Debug.LogError("[CRITICAL]: JSON_register is null");
-        }
+        string JSON_register = NetworkRequestManager.HttpPostRequest(apiUrl + "/users", post_key_values);
+
+        CheckIfNullAndLog(JSON_register, $"JSON_register is null");
+
 
         ApiToken registrationData = JsonUtility.FromJson<ApiToken>(JSON_register);
-        if (registrationData == null)
-        {
-            Debug.LogError("[CRITICAL]: registrationData is null");
-        }
+
+        CheckIfNullAndLog(registrationData, $"registrationData is null");
+
 
         return registrationData;
     }
 
-    public bool IsApiUp()
+    // Connect to the api
+    public ApiToken ConnectToApi(string pseudo, string password)
     {
-        try
+        var post_key_values = new Dictionary<string, string>
         {
-            using (var client = new WebClient())
-            using (client.OpenRead(api_url))
-                return true;
-        }
-        catch (WebException e)
-        {
-            if (e.Status == WebExceptionStatus.ProtocolError)
-            {
-                return true;
-            }
+            { "pseudo", pseudo },
+            { "password", password }
+        };
 
-            return false;
-        }
+        string JSON_connection = NetworkRequestManager.HttpPostRequest(apiLoginUrl, post_key_values);
+
+        CheckIfNullAndLog(JSON_connection, $"JSON_connection is null");
+
+
+        ApiToken connectionData = child.SerializeApiToken(JSON_connection);
+
+        CheckIfNullAndLog(JSON_connection, $"connectionQuizzData is null");
+
+
+        return connectionData;
+    }
+    public virtual ApiToken SerializeApiToken(string json) // Child has to override this method so that data is serialized from child within ConnectToQuizz
+    {
+        throw new NotImplementedException();
     }
 
-    private string HttpGetRequest(string url)
+
+    public override bool HasToHaveToken()
     {
-        lastHttpWebRequestErrorMessage = null;
-
-        try
-        {
-            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
-            req.Accept = "text/xml,text/plain,text/html,application/json";
-            req.Method = "GET";
-            req.Timeout = 2000;
-
-            if (GameManager.Instance.apiManager.apiTokenManager.IsApiTokenDefined()) // If Api token is defined
-            {
-                string postData = null; // Workaround to pass the ref postData (this make no sense in GET request) --> Has to be changed
-                SetTokenAccordingToEmplacement(ref req, "GET", ref postData, ApiToken.GetTokenHttpEmplacement());
-            }
-
-            HttpWebResponse result = (HttpWebResponse)req.GetResponse();
-
-            Stream ReceiveStream = result.GetResponseStream();
-            StreamReader reader = new StreamReader(ReceiveStream, System.Text.Encoding.UTF8);
-            return reader.ReadToEnd();
-        }
-        catch (WebException e)
-        {
-            var resp = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
-            Debug.LogError("[WebException]: " + e.Message + "\n" + resp);
-            lastHttpWebRequestErrorMessage = e.Message + "\n" + resp;
-            return null;
-        }
+        return hasToHaveTokenForApi;
     }
 
-    private string HttpPostRequest(string url, Dictionary<string, string> postParameters)
+    public override bool HasToLoginToGetToken()
     {
-        lastHttpWebRequestErrorMessage = null;
-
-        try
-        {
-            string postData = "";
-
-            int keyIndex = 0;
-            foreach (string key in postParameters.Keys)
-            {
-                postData += HttpUtility.UrlEncode(key) + "="
-                      + HttpUtility.UrlEncode(postParameters[key]);
-                if (keyIndex < postParameters.Keys.Count - 1)
-                    postData += "&";
-
-                keyIndex++;
-            }
-
-            HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(url);
-            req.Accept = "text/xml,text/plain,text/html,application/json";
-            req.Method = "POST";
-            req.Timeout = 2000;
-
-            if (GameManager.Instance.apiManager.apiTokenManager.IsApiTokenDefined()) // If Api token is defined
-            {
-                SetTokenAccordingToEmplacement(ref req, "POST", ref postData, ApiToken.GetTokenHttpEmplacement());
-            }
-
-            byte[] data = Encoding.ASCII.GetBytes(postData);
-
-            req.ContentType = "application/x-www-form-urlencoded";
-            req.ContentLength = data.Length;
-
-            Stream requestStream = req.GetRequestStream();
-            requestStream.Write(data, 0, data.Length);
-            requestStream.Close();
-
-            HttpWebResponse myHttpWebResponse = (HttpWebResponse)req.GetResponse();
-
-            Stream responseStream = myHttpWebResponse.GetResponseStream();
-
-            StreamReader myStreamReader = new StreamReader(responseStream, Encoding.Default);
-
-            string pageContent = myStreamReader.ReadToEnd();
-
-            myStreamReader.Close();
-            responseStream.Close();
-
-            myHttpWebResponse.Close();
-
-            Debug.Log("pageContent: ");
-            Debug.Log(pageContent);
-            return pageContent;
-        }
-        catch (WebException e)
-        {
-            var resp = new StreamReader(e.Response.GetResponseStream()).ReadToEnd();
-            Debug.LogError("[WebException]: " + e.Message + "\n" + resp);
-            lastHttpWebRequestErrorMessage = e.Message + "\n" + resp;
-            return null;
-        }
+        return hasToLoginToGetToken;
     }
 
-    public void SetTokenAccordingToEmplacement(ref HttpWebRequest req, string method, ref string bodyData, ApiToken.TokenttpEmplacement tokenttpEmplacement)
+    public override TokenHttpEmplacement GetTokenttpEmplacement()
     {
-        if (tokenttpEmplacement == ApiToken.TokenttpEmplacement.BodyOrUrlParam ||
-            tokenttpEmplacement == ApiToken.TokenttpEmplacement.Everywhere)
+        return tokenHttpEmplacement;
+    }
+
+    public string GetApiKeyParamName()
+    {
+        return apiKeyParamName;
+    }
+
+    public string GetApiToken()
+    {
+        return apiToken;
+    }
+
+    public void SetApiToken(string token)
+    {
+        this.apiToken = token;
+    }
+
+    public bool IsApiTokenDefined()
+    {
+        return this.apiToken != null && this.apiToken != Constants.Api_Token_Not_Defined && this.apiToken.Length > 0;
+    }
+
+    public override Quizz GetQuizz(object quizzId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override Question GetQuestion(object quizzId, object questionId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override Answer GetAnswer(object quizzId, object questionId, object answerId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetChild(ApiManager child)
+    {
+        this.child = child;
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public static string GetActualMethodName()
+    {
+        var st = new System.Diagnostics.StackTrace(new System.Diagnostics.StackFrame(1));
+        return st.GetFrame(0).GetMethod().Name;
+    }
+
+    public void CheckIfNullAndLog(object what, string log, int type=0)
+    {
+        if (what == null)
         {
-            if (method == "GET") // Put token in url
+            switch (type)
             {
-                PutTokenInUrl(ref req);
-            }
-            else if (method == "POST") // Put token in body
-            {
-                PutTokenInBody(ref bodyData);
-            }
-            else // Not "GET" or "POST"
-            {
-                Debug.LogError("[WARNING]: The parameter (method) passed to SetTokenAccordingToEmplacement is neither \"GET\" or \"POST\"");
+                case 0:
+                    Debug.LogError(log);
+                    break;
+                case 1:
+                    Debug.Log(log);
+                    break;
             }
         }
-
-        if (tokenttpEmplacement == ApiToken.TokenttpEmplacement.Header ||
-            tokenttpEmplacement == ApiToken.TokenttpEmplacement.Everywhere)
-        {
-            PutTokenInHeader(ref req);
-        }
     }
 
-    void PutTokenInUrl(ref HttpWebRequest req)
-    {
-        // It is somethign tricky here: We can't modify url after creating HttpWebRequest but here we need it (because api token is not directly into the url "logic" but is appart)
-        // We create a new HttpWebRequest (reqWithToken) with the api token inside of it.
-        // We have to assign values of req to reqWithToken by cloning req with WebRequestExtensions.CloneRequest
-
-        string actualUrl = req.RequestUri.ToString();
-        string modifiedUrl = actualUrl;
-
-        if (req.RequestUri.Query == null || req.RequestUri.Query.Length == 0) // There is no query (?param=value&param2=value2..) already set in the url
-        {
-            modifiedUrl += "?";
-            modifiedUrl += ApiToken.GetApiKeyParam() + "=" + GameManager.Instance.apiManager.apiTokenManager.GetApiToken();
-        }
-        else
-        {
-            modifiedUrl += "&";
-            modifiedUrl += ApiToken.GetApiKeyParam() + "=" + GameManager.Instance.apiManager.apiTokenManager.GetApiToken();
-        }
-
-        HttpWebRequest reqWithToken = WebRequestExtensions.CloneRequest(req, new Uri(modifiedUrl));
-        req = reqWithToken;
-    }
-
-    void PutTokenInBody(ref string bodyData)
-    {
-        if (bodyData != null)
-        {
-            bodyData += "&";
-            bodyData += ApiToken.GetApiKeyParam() + "=" + GameManager.Instance.apiManager.apiTokenManager.GetApiToken();
-        }
-        else
-        {
-            bodyData += ApiToken.GetApiKeyParam() + "=" + GameManager.Instance.apiManager.apiTokenManager.GetApiToken();
-        }
-    }
-
-    void PutTokenInHeader(ref HttpWebRequest req)
-    {
-        req.Headers[ApiToken.GetApiKeyParam()] = GameManager.Instance.apiManager.apiTokenManager.GetApiToken();
-    }
-
-    Thread _thread;
-    Action actionAfterThread;
-    bool blockCondition = false;
-
-    public bool isStarted = false;   // Api loaded state 
-    public bool isConnected = false; // Api connection state
-    private int count = 0; // Api number of try to access to it (when no connection)
-
-    void Start()
-    {
-        isStarted = true;
-        actionAfterThread = FinishedThread;
-        StartApiDataQuerying();
-    }
-
-    public void StartApiDataQuerying()
-    {
-        blockCondition = false;
-        _thread = new Thread(CheckConnection);
-        _thread.Start();
-    }
-
-    public void FinishedThread()
-    {
-        if (!isConnected)
-        {
-            PopupManager.PopupAlert("Error", "Connection impossible. Are you connected to internet ?\n\nOr maybe the API doesn't work?" + lastHttpWebRequestErrorMessage, "Retry", StartApiDataQuerying);
-        }
-        else
-        {
-            GameManager.Instance.pagesManager.ShowFirstPage();
-        }
-    }
-
-    void CheckConnection()
-    {
-        count = 0;
-        bool loopForConnection = true;
-        while (loopForConnection)
-        {
-            count++;
-
-            isConnected = IsApiUp();
-
-            if (count >= 2)
-                loopForConnection = false;
-        }
-
-        _thread.Abort();
-    }
-
-    void Update()
-    {
-        if (!blockCondition && isStarted && _thread != null && !_thread.IsAlive) // When the thread has terminated to do his work
-        {
-            blockCondition = true;
-            FinishedThread();
-        }
-    }
+    
 }

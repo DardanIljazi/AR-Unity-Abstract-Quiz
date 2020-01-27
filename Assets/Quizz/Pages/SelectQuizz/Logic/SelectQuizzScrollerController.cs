@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using EnhancedUI.EnhancedScroller;
-using static ApiData;
+using static AbstractQuizzStructure;
 
 public class SelectQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDelegate
 {
@@ -11,7 +10,8 @@ public class SelectQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDel
     [Header("Link to the prefab to show for each data in scroller")]
     public SelectQuizzCellView selectQuizzCellView;
 
-    private List<Quizz> _data;
+    // Put public for the show, should be put private afterwards
+    public List<Quizz> _data;
 
     public void Initialize()
     {

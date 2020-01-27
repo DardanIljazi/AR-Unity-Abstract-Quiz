@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static ApiData;
+using static AbstractQuizzStructure;
 
 /**
  * SelectQuizzManager is the manager for the SelectQuizz page (shows the list of quizzes/manages data about list of quizzes and so on..)
@@ -18,30 +18,27 @@ public class SelectQuizzManager : PageLogic
 
         selectQuizzScrollerController.Initialize();
 
-        Quizzes quizzes = GameManager.Instance.apiManager.GetQuizzesListFromAPI();
+        Quizzes quizzes = GameManager.Instance.GetApiManager().GetQuizzes();
 
         if (quizzes == null)
         {
             Debug.LogError("[WARNING]: quizzes is equal to null. Is your QuizzesData superclass class configured in the same way the API (json) data is ?");
-
-            PopupManager.PopupAlert("Error", "Quizzes is equal to null (is data from API valid ?).\n" + ApiManager.lastHttpWebRequestErrorMessage);
+            PopupManager.PopupAlert("Error", "Quizzes is equal to null (is data from API valid ?).\n" + NetworkRequestManager.lastHttpWebRequestErrorMessage);
         }
 
-
-        // Get quizz list from API and put them into scroll list (SelectQuizzScrollerController)
-        foreach (QuizzData indexQuizz in quizzes)
+        // Put each quizz to the scroller
+        foreach (Quizz quizz in quizzes.GetQuizzesList())
         {
-            Quizz quizzData = JsonUtility.FromJson<Quizz>(JsonUtility.ToJson(indexQuizz)); ;
-
-            selectQuizzScrollerController.AddDataToScroller(quizzData.Clone() as Quizz);
+            selectQuizzScrollerController.AddDataToScroller(quizz.Clone() as Quizz);
         }
 
         GameManager.Instance.pagesManager.HideLoadingPage();
     }
 
+    // Called from the cell view (inside SelectQuizzScrollerController) when a quizz is selected
     public void QuizzSelected(Quizz quizz)
     {
         GameManager.Instance.pagesManager.GoToPage("RespondQuizz");
-        GameManager.Instance.respondQuizzManager.LoadQuizz(quizz);
+        GameManager.Instance.respondQuizzManager.LoadQuizzQuestions(quizz);
     }
 }

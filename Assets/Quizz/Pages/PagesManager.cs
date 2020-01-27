@@ -73,13 +73,16 @@ public class PagesManager : MonoBehaviour
 
     public void ShowLoadingPage()
     {
-        listOfOrderedPagesToShow[actualShownPageIndex].gameObject.SetActive(true);
+        if (actualShownPageIndex > -1)
+            listOfOrderedPagesToShow[actualShownPageIndex].gameObject.SetActive(false);
+
         loadingPage.gameObject.SetActive(true);
     }
 
     public void HideLoadingPage()
     {
-        listOfOrderedPagesToShow[actualShownPageIndex].gameObject.SetActive(true);
+        if (actualShownPageIndex > -1)
+            listOfOrderedPagesToShow[actualShownPageIndex].gameObject.SetActive(true);
         loadingPage.gameObject.SetActive(false);
     }
 

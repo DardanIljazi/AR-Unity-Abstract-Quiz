@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static ApiData;
+using static AbstractQuizzStructure;
 
 public class RegisterManager : PageLogic
 {
@@ -25,14 +25,14 @@ public class RegisterManager : PageLogic
         {
             if (input.text == "" || input.text.Length == 0)
             {
-                PopupManager.PopupAlert("Empty input", "The input " + input.placeholder + " is empty, please fill it");
+                PopupManager.PopupAlert("Empty input", "The input " + input.placeholder.GetComponent<Text>().text + " is empty, please fill it");
                 return;
             }
 
             inputNameWithValue.Add(input.placeholder.GetComponent<Text>().text, input.text);
         }
 
-        ApiToken apiToken = GameManager.Instance.apiManager.RegisterToApi(
+        ApiToken apiToken = GameManager.Instance.GetApiManager().RegisterToApi(
             inputNameWithValue["Pseudo"], 
             inputNameWithValue["Firstname"], 
             inputNameWithValue["Lastname"],
@@ -42,12 +42,12 @@ public class RegisterManager : PageLogic
         if (apiToken == null)
         {
             Debug.LogError("[WARNING]: apiToken is null");
-            PopupManager.PopupAlert("Error", ApiManager.lastHttpWebRequestErrorMessage);
+            PopupManager.PopupAlert("Error", NetworkRequestManager.lastHttpWebRequestErrorMessage);
             ShowRegisterButton();
             return;
         }
 
-        GameManager.Instance.apiManager.apiTokenManager.SetApiToken(apiToken);
+        GameManager.Instance.GetApiManager().SetApiToken(apiToken.GetApiToken());
         PopupManager.PopupAlert("Registered", "Successfully registered!", "Go", GameManager.Instance.pagesManager.ShowMenuPage);
     }
 

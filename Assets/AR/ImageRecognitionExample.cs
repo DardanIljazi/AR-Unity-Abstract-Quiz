@@ -8,11 +8,6 @@ public class ImageRecognitionExample : MonoBehaviour
 {
     public ARTrackedImageManager aRTrackedImageManager;
 
-    void Start()
-    {
-        Debug.Log("ImageRecognitionExample");
-    }
-
     public void OnEnable()
     {
         aRTrackedImageManager.trackedImagesChanged += OnImageChanged;
@@ -28,12 +23,18 @@ public class ImageRecognitionExample : MonoBehaviour
         {
             Debug.Log("name: " +trackedImage.referenceImage.name);
             Debug.Log("transform:" + trackedImage.transform);
+
+            Debug.Log("Entered !!");
+            SelectQuizzInIndex(trackedImage.referenceImage.name);
+            
         }
     }
 
-
-    void Update()
+    // Will be deleted lated, just for the show
+    public void SelectQuizzInIndex(string imageWithNumber)
     {
-        
+        Debug.Log("Selected quizz !!");
+
+        GameManager.Instance.pagesManager.GoToPage("SelectQuizz");
     }
 }
