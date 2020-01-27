@@ -21,6 +21,7 @@ public class QuizzManager : MonoBehaviour
 
     void Start()
     {
+        GameManager.Instance.pagesManager.ShowLoadingPage();
         isStarted = true;
         StartApiDataConnectionCheck();
     }
@@ -34,6 +35,8 @@ public class QuizzManager : MonoBehaviour
 
     public void FinishedThread()
     {
+        GameManager.Instance.pagesManager.HideLoadingPage();
+
         if (!isConnected)
         {
             PopupManager.PopupAlert("Error", "Connection impossible. Are you connected to internet ?\n\nOr maybe the API doesn't work?" + NetworkRequestManager.lastHttpWebRequestErrorMessage, "Retry", StartApiDataConnectionCheck);
@@ -61,8 +64,6 @@ public class QuizzManager : MonoBehaviour
             {
                 GameManager.Instance.pagesManager.ShowMenuPage();
             } 
-
-
 
         }
     }

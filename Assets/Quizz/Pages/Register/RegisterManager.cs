@@ -25,7 +25,7 @@ public class RegisterManager : PageLogic
         {
             if (input.text == "" || input.text.Length == 0)
             {
-                PopupManager.PopupAlert("Empty input", "The input " + input.placeholder + " is empty, please fill it");
+                PopupManager.PopupAlert("Empty input", "The input " + input.placeholder.GetComponent<Text>().text + " is empty, please fill it");
                 return;
             }
 
