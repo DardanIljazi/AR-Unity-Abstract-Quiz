@@ -7,7 +7,7 @@ using UnityEngine;
  *  Contains the abstract code that will be used everywhere in the application logic.
  *  Api classes will call MapValuesFromAPIToApplicationLogicClass to set which values (from API class) must be mapped to the values
  */
-public abstract class AbstractQuizzStructure
+public abstract class AbstractQuizzStructure : MonoBehaviour
 {
 
     #region Quizzes

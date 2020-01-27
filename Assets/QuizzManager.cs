@@ -40,7 +40,6 @@ public class QuizzManager : MonoBehaviour
         }
         else
         {
-
             if ( GameManager.Instance.GetApiManager().HasToHaveToken() && 
                 !GameManager.Instance.GetApiManager().IsApiTokenDefined())
             {
@@ -58,7 +57,11 @@ public class QuizzManager : MonoBehaviour
                 {
                     GameManager.Instance.pagesManager.GoToPage("Login");
                 }
-            }
+            } else
+            {
+                GameManager.Instance.pagesManager.ShowMenuPage();
+            } 
+
 
 
         }
