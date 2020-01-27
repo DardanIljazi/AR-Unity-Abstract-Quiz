@@ -3502,7 +3502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 419ccb7a15698cb45b1acd9c017c0bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apiToUse: {fileID: 1184062772}
+  apiToUse: {fileID: 2031938807}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -3798,7 +3798,7 @@ GameObject:
   - component: {fileID: 753195261}
   - component: {fileID: 753195262}
   m_Layer: 0
-  m_Name: PagesManager
+  m_Name: Pages
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8818,12 +8818,12 @@ GameObject:
   - component: {fileID: 2110133536}
   - component: {fileID: 2110133537}
   m_Layer: 0
-  m_Name: ExamplePage
+  m_Name: Example
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2110133536
 Transform:
   m_ObjectHideFlags: 0
