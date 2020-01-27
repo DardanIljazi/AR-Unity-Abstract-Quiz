@@ -21,9 +21,8 @@ public class QuizawaApi : ApiManager
     }
 
 
-    // This is special here: The quizawa api doesn't give the opportunity to have answers in a separate endpoint/url. They are directly inside questions.
+    // This is special here: The quizawa api doesn't give the opportunity to have answers in a separate endpoint/url. They are directly inside questions (nested elements).
     // Here we override the ApiManager method and return the answers that are inside the question
-    // Because we are in QuizawaApi level, we can use the
     public override Answers GetAnswersForQuestion(object quizzId, object questionId)
     {
         // Their could be {quizzId} in the link. In this case replace it with quizzId
@@ -33,6 +32,7 @@ public class QuizawaApi : ApiManager
         if (json_questions_answers == null || json_questions_answers.Length == 0)
             return null;
 
+        // Parse the data questions (json_questions_answers) received from backend into questionData
         QuizawaApiModel.QuestionsData questionsData = JsonUtility.FromJson<QuizawaApiModel.QuestionsData>(json_questions_answers);
 
         if (questionsData == null)
