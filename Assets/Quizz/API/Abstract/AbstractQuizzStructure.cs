@@ -35,13 +35,6 @@ public abstract class AbstractQuizzStructure : MonoBehaviour
             throw new NotImplementedException();
         }
 
-        // Will Serialize raw data (json) to the Quizzes class
-        public virtual Quizzes SerializeJsonToQuizzes(string json)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public void AddQuizz(Quizz quizz)
         {
             _quizzes.Add(quizz);
@@ -70,13 +63,6 @@ public abstract class AbstractQuizzStructure : MonoBehaviour
         {
             throw new NotImplementedException();
         }
-
-        // Will Serialize raw data (json) to the Quizzes class
-        public virtual Quizz SerializeJsonToQuizz(string json)
-        {
-            throw new NotImplementedException();
-        }
-
 
         public string GetQuizzTitle()
         {
@@ -117,13 +103,6 @@ public abstract class AbstractQuizzStructure : MonoBehaviour
             throw new NotImplementedException();
         }
 
-        // Will Serialize raw data (json) to the Questions class
-        public virtual Questions SerializeJsonToQuestions(string json)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public List<Question> GetQuestionsList()
         {
             return _questionsList;
@@ -152,13 +131,6 @@ public abstract class AbstractQuizzStructure : MonoBehaviour
         {
             throw new NotImplementedException();
         }
-
-        // Will Serialize raw data (json) to the Question class
-        public virtual Question SerializeJsonToQuestion(string json)
-        {
-            throw new NotImplementedException();
-        }
-
 
         public object GetQuestionId()
         {
@@ -198,13 +170,6 @@ public abstract class AbstractQuizzStructure : MonoBehaviour
             throw new NotImplementedException();
         }
 
-        // Will Serialize raw data (json) to the Answers class
-        public virtual Answers SerializeJsonToAnswers(string json)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public List<Answer> GetAnswersList()
         {
             return _answersList;
@@ -234,13 +199,6 @@ public abstract class AbstractQuizzStructure : MonoBehaviour
             throw new NotImplementedException();
         }
 
-        // Will Serialize raw data (json) to the Answer class
-        public virtual Answer SerializeJsonToAnswer(string json)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public bool IsCorrectAnswer()
         {
             return this._isCorrectAnswer;
@@ -259,6 +217,46 @@ public abstract class AbstractQuizzStructure : MonoBehaviour
         public void SetDataToShowAsPossibleAnswer(string answerValue)
         {
             this._answerTitle = answerValue;
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+    }
+    #endregion
+
+
+    #region ApiToken
+    public class ApiToken : IMappeableAPIDataToAbstractClass, ICloneable
+    {
+        private string token;
+        private string apiKeyParamName;
+
+        // Api Model (that inherits from AbstractQuizzStructure) Will map the values of the API to the ones needed for Answer Class (_answerTitle, _isCorrectAnswer)
+        public virtual void MapAPIValuesToAbstractClass()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetApiToken()
+        {
+            return token;
+        }
+
+        public void SetApiToken(string apiToken)
+        {
+            token = apiToken;
+        }
+
+        public string GetApiKeyParamName()
+        {
+            return apiKeyParamName;
+        }
+
+        public void SetApiKeyParamName(string paramName)
+        {
+            this.apiKeyParamName = paramName;
         }
 
         public object Clone()

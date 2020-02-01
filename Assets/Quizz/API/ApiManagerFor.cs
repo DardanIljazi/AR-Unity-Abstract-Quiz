@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ApiManagerFor<ApiModel> : ApiManager  where ApiModel : AbstractQuizzStructure
+public class ApiManagerFor<GenericApiModel> : ApiManager  where GenericApiModel : ApiModel
 {
     [Header("The API Model attached to this API Manager")]
-    public ApiModel apiModel;
+    public GenericApiModel apiModel;
 
     public ApiManagerFor()
     {
+        base.SetModel(apiModel);
     }
 }
