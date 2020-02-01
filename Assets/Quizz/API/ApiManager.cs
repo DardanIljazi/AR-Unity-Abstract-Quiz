@@ -13,6 +13,7 @@ static class Constants
 
 /**
  * ApiManager class contains all actions/methods that can be done to the api in a "generic" way
+ * The <ApiModel> is a generic that is defined here like this for 2 reasons:
  */
 public class ApiManager : ApiManagerStructure
 {
@@ -46,7 +47,7 @@ public class ApiManager : ApiManagerStructure
     [Header("The api token can stay empty/not defined if user has to login to get it")]
     public string apiToken; // Should be defined into the class that inherits from APiManager (or later in the runtime) if token is used 
 
-    private ApiManager child; // Contain a reference to the child that inherits from ApiManager. We give the task to serialize 
+    private AbstractQuizzStructure apiModel;
 
 
     public ApiManager()
@@ -76,16 +77,11 @@ public class ApiManager : ApiManagerStructure
         CheckIfNullAndLog(json_quizzes, $"[WARNING]: Response for {GetActualMethodName()} is null");
 
 
-        Quizzes quizzesData = child.SerializeQuizzes(json_quizzes);
+        Quizzes quizzesData = apiModel.quizzes.SerializeJsonToQuizzes(json_quizzes);
 
         CheckIfNullAndLog(quizzesData, $"[WARNING]: quizzesData is null");
 
-
         return quizzesData;
-    }
-    public virtual Quizzes SerializeQuizzes(string json) // Child has to override this method so that data is serialized from child within GetQuizzesList
-    {
-        throw new NotImplementedException();
     }
 
 
@@ -100,17 +96,14 @@ public class ApiManager : ApiManagerStructure
         CheckIfNullAndLog(json_questions, $"[WARNING]: Response for {GetActualMethodName()} is null");
 
 
-        Questions questionsQuizzData = child.SerializeQuestions(json_questions);
+        Questions questionsQuizzData = apiModel.questions.SerializeJsonToQuestions(json_questions);
 
         CheckIfNullAndLog(questionsQuizzData, $"[WARNING]: questionsQuizzData is null");
 
 
         return questionsQuizzData;
     }
-    public virtual Questions SerializeQuestions(string json) // Child has to override this method so that data is serialized from child within GetQuestionsListForQuizz
-    {
-        throw new NotImplementedException();
-    }
+
 
     // Get list of answers for a question
     public override Answers GetAnswersForQuestion(object quizzId, object questionId)
@@ -119,22 +112,18 @@ public class ApiManager : ApiManagerStructure
 
         CheckIfNullAndLog(json_answers, $"[WARNING]: Response for {GetActualMethodName()} is null");
 
-        Answers answersData = child.SerializeAnswers(json_answers);
+        Answers answersData = apiModel.answers.SerializeJsonToAnswers(json_answers);
 
         CheckIfNullAndLog(answersData, $"[WARNING]: questionsQuizzData is null");
 
 
         return answersData;
     }
-    public virtual Answers SerializeAnswers(string json) // Child has to override this method so that data is serialized from child within GetAnswersForQuestion
-    {
-        throw new NotImplementedException();
-    }
 
 
     // Register to the api
     // TODO: This is a "generic" way to generate. Should be modified or put into QuizawaApi class
-    public ApiToken RegisterToApi(string pseudo, string firstname, string lastname, string email, string password)
+    /*public ApiToken RegisterToApi(string pseudo, string firstname, string lastname, string email, string password)
     {
         var post_key_values = new Dictionary<string, string>
         {
@@ -172,17 +161,14 @@ public class ApiManager : ApiManagerStructure
         CheckIfNullAndLog(JSON_connection, $"JSON_connection is null");
 
 
-        ApiToken connectionData = child.SerializeApiToken(JSON_connection);
+        ApiToken connectionData = apiModel.SerializeApiToken(JSON_connection);
 
         CheckIfNullAndLog(JSON_connection, $"connectionQuizzData is null");
 
 
         return connectionData;
     }
-    public virtual ApiToken SerializeApiToken(string json) // Child has to override this method so that data is serialized from child within ConnectToQuizz
-    {
-        throw new NotImplementedException();
-    }
+    */
 
 
     public override bool HasToHaveToken()
@@ -235,10 +221,10 @@ public class ApiManager : ApiManagerStructure
         throw new NotImplementedException();
     }
 
-    public void SetChild(ApiManager child)
+    /*public void SetModel(ApiModel apiModel)
     {
-        this.child = child;
-    }
+        this.apiModel = apiModel;
+    }*/
 
     [MethodImpl(MethodImplOptions.NoInlining)]
     public static string GetActualMethodName()

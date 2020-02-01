@@ -2,26 +2,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AbstractQuizzStructure;
 
 /**
- * HerokuApiModel is the model that defines what is returned by the API and make the mapping to the application logic classes (with MapValuesFromAPIToApplicationLogicClass)
- * Every class should be declared with member exactly with the same type and name as the json
+ *  HerokuApiModel is the class that defines how is structured the API data.
+ *  - It maps the data from API to the classes that are used everywhere in the application logic (Quizzes/Quizz/Questions/Question/Answers/Answer)
+ *  
  */
-
 public class HerokuApiModel : AbstractQuizzStructure
 {
-
     [Serializable]
-    public class GameQuizzes : Quizzes, IEnumerable
+    public class APIQuizzes : Quizzes, IEnumerable
     {
-        public List<IndexQuizz> quizzes = new List<IndexQuizz>();
+        public List<APIQuizz> quizzes = new List<APIQuizz>();
 
 
-        public override void MapValuesFromAPIToApplicationLogicClass()
+        // Will map the values of the API to the ones needed for Quizzes Class (_quizzes)
+        public override void MapAPIValuesToAbstractClass()
         {
-            foreach (IndexQuizz quizzData in this.quizzes)
+            foreach (APIQuizz quizzData in this.quizzes)
             {
-                quizzData.MapValuesFromAPIToApplicationLogicClass(); // Map values for QuizzData to Quizz (QuizzData inherits from Quizz)
+                quizzData.MapAPIValuesToAbstractClass();
                 base.AddQuizz(quizzData);
             }
         }
@@ -33,7 +34,26 @@ public class HerokuApiModel : AbstractQuizzStructure
     }
 
     [Serializable]
-    public class GameQuizzeForQuestions : Questions
+    public class APIQuizz : Quizz
+    {
+        public string title;
+        public string image;
+        public string description;
+        public Creator created_by = new Creator();
+        public int number_participants;
+        public string id;
+
+        public override void MapAPIValuesToAbstractClass()
+        {
+            base.SetQuizzId(id);
+            base.SetQuizzTitle(title);
+        }
+
+    }
+
+
+    [Serializable]
+    public class APIQuestions : Questions
     {
         public string id;
         public string title;
@@ -42,18 +62,41 @@ public class HerokuApiModel : AbstractQuizzStructure
         public List<QuestionData> questions = new List<QuestionData>();
         public int number_participants;
 
+
+
+        // Will Serialize raw data (json) to the Questions class
+        public override Questions SerializeJsonToQuestions(string json)
+        {
+            if (json == null || json.Length == 0)
+                return null;
+
+            // We serialize data received from api to QuizzesData
+            APIQuestions data = JsonUtility.FromJson<APIQuestions>(json);
+
+            if (data == null)
+                return null;
+
+            // We map quizzesData values to Quizzes class (QuizzesData inherits from Quizzes).
+            data.MapAPIValuesToAbstractClass();
+
+
+            return data;
+        }
+
+        // Will map the values of the API to the ones needed for Quizzes Class (_quizzes)
+        public override void MapAPIValuesToAbstractClass()
+        {
+            foreach (APIQuizz quizzData in this.quizzes)
+            {
+                quizzData.MapAPIValuesToAbstractClass();
+                base.AddQuizz(quizzData);
+            }
+        }
+
+
         public IEnumerator GetEnumerator()
         {
             return this.questions.GetEnumerator();
-        }
-
-        public override void MapValuesFromAPIToApplicationLogicClass()
-        {
-            foreach (QuestionData questionData in questions)
-            {
-                questionData.MapValuesFromAPIToApplicationLogicClass();
-                base.AddQuestion(questionData);
-            }
         }
     }
 
@@ -70,17 +113,18 @@ public class HerokuApiModel : AbstractQuizzStructure
         public List<QuestionData> questions = new List<QuestionData>();
         public int number_participants;
 
-        public override void MapValuesFromAPIToApplicationLogicClass()
+        public override void MapAPIValuesToAbstractClass()
         {
             foreach (QuestionData question in questions)
             {
                 foreach (Answer answer in question.answers) 
                 {
-                    answer.MapValuesFromAPIToApplicationLogicClass();
+                    answer.MapAPIValuesToAbstractClass();
                     base.AddAnswer(answer);
                 }
             }
         }
+
     }
 
     [Serializable]
@@ -89,7 +133,7 @@ public class HerokuApiModel : AbstractQuizzStructure
         public string name;
         public bool value;
 
-        public override void MapValuesFromAPIToApplicationLogicClass()
+        public override void MapAPIValuesToAbstractClass()
         {
             base.SetDataToShowAsPossibleAnswer(name);
             base.SetIsCorrectAnswer(value);
@@ -103,12 +147,11 @@ public class HerokuApiModel : AbstractQuizzStructure
         public string image;
         public List<AnswerData> answers = new List<AnswerData>();
 
-        public override void MapValuesFromAPIToApplicationLogicClass()
+        public override void MapAPIValuesToAbstractClass()
         {
             base.SetQuestionText(question);
         }
     }
-
 
 
     [Serializable]
@@ -118,25 +161,6 @@ public class HerokuApiModel : AbstractQuizzStructure
         string username;
     }
 
-    
-
-    [Serializable]
-    public class IndexQuizz : Quizz
-    {
-        public string title;
-        public string image;
-        public string description;
-        public Creator created_by = new Creator();
-        public int number_participants;
-        public string id;
-
-        public override void MapValuesFromAPIToApplicationLogicClass()
-        {
-            base.SetQuizzId(id);
-            base.SetQuizzTitle(title);
-        }
-
-    }
 }
 
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ApiManagerFor<ApiModel> : ApiManager  where ApiModel : AbstractQuizzStructure
 {
-
+    [Header("The API Model attached to this API Manager")]
     public ApiModel apiModel;
 
     public ApiManagerFor()
