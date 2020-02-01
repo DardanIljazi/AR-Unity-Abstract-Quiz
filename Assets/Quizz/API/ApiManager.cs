@@ -13,8 +13,11 @@ static class Constants
 
 /**
  * ApiManager class contains all actions/methods that can be done to the api in a "generic" way
+ * The <ApiModel> is a generic that is defined here like this for 2 reasons:
+ *  - Make the code readable for a human
+ *  - 
  */
-public class ApiManager : ApiManagerStructure
+public class ApiManagerFor<ApiModel> : ApiManagerStructure  where ApiModel: AbstractQuizzStructure
 {
     [Header("Url to the api")]
     public string apiUrl;
@@ -46,10 +49,10 @@ public class ApiManager : ApiManagerStructure
     [Header("The api token can stay empty/not defined if user has to login to get it")]
     public string apiToken; // Should be defined into the class that inherits from APiManager (or later in the runtime) if token is used 
 
-    private ApiManager child; // Contain a reference to the child that inherits from ApiManager. We give the task to serialize 
+    private ApiModel apiModel; // Contains a reference to the Api Model
 
 
-    public ApiManager()
+    public ApiManagerFor()
     {
         this.apiToken = Constants.Api_Token_Not_Defined;
         this.apiKeyParamName = Constants.Api_Param_Name_Not_Defined;
@@ -76,16 +79,11 @@ public class ApiManager : ApiManagerStructure
         CheckIfNullAndLog(json_quizzes, $"[WARNING]: Response for {GetActualMethodName()} is null");
 
 
-        Quizzes quizzesData = child.SerializeQuizzes(json_quizzes);
+        // Quizzes quizzesData = 
 
         CheckIfNullAndLog(quizzesData, $"[WARNING]: quizzesData is null");
 
-
         return quizzesData;
-    }
-    public virtual Quizzes SerializeQuizzes(string json) // Child has to override this method so that data is serialized from child within GetQuizzesList
-    {
-        throw new NotImplementedException();
     }
 
 
@@ -100,17 +98,14 @@ public class ApiManager : ApiManagerStructure
         CheckIfNullAndLog(json_questions, $"[WARNING]: Response for {GetActualMethodName()} is null");
 
 
-        Questions questionsQuizzData = child.SerializeQuestions(json_questions);
+        Questions questionsQuizzData = apiModel. SerializeQuestions(json_questions);
 
         CheckIfNullAndLog(questionsQuizzData, $"[WARNING]: questionsQuizzData is null");
 
 
         return questionsQuizzData;
     }
-    public virtual Questions SerializeQuestions(string json) // Child has to override this method so that data is serialized from child within GetQuestionsListForQuizz
-    {
-        throw new NotImplementedException();
-    }
+
 
     // Get list of answers for a question
     public override Answers GetAnswersForQuestion(object quizzId, object questionId)
@@ -119,16 +114,12 @@ public class ApiManager : ApiManagerStructure
 
         CheckIfNullAndLog(json_answers, $"[WARNING]: Response for {GetActualMethodName()} is null");
 
-        Answers answersData = child.SerializeAnswers(json_answers);
+        Answers answersData = apiModel.SerializeAnswers(json_answers);
 
         CheckIfNullAndLog(answersData, $"[WARNING]: questionsQuizzData is null");
 
 
         return answersData;
-    }
-    public virtual Answers SerializeAnswers(string json) // Child has to override this method so that data is serialized from child within GetAnswersForQuestion
-    {
-        throw new NotImplementedException();
     }
 
 
@@ -172,16 +163,12 @@ public class ApiManager : ApiManagerStructure
         CheckIfNullAndLog(JSON_connection, $"JSON_connection is null");
 
 
-        ApiToken connectionData = child.SerializeApiToken(JSON_connection);
+        ApiToken connectionData = apiModel.SerializeApiToken(JSON_connection);
 
         CheckIfNullAndLog(JSON_connection, $"connectionQuizzData is null");
 
 
         return connectionData;
-    }
-    public virtual ApiToken SerializeApiToken(string json) // Child has to override this method so that data is serialized from child within ConnectToQuizz
-    {
-        throw new NotImplementedException();
     }
 
 
@@ -235,9 +222,9 @@ public class ApiManager : ApiManagerStructure
         throw new NotImplementedException();
     }
 
-    public void SetChild(ApiManager child)
+    public void SetChild(ApiManagerFor child)
     {
-        this.child = child;
+        this.apiModel = child;
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]

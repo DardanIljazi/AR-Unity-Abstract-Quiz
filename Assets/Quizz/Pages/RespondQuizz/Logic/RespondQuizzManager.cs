@@ -67,7 +67,7 @@ public class RespondQuizzManager : PageLogic
     public void LoadQuestionAndAnswersForIndex(int arrayIndex)
     {
         respondQuizzScrollerController.Reset();
-        quizzQuestion.text = questions.GetQuestionsList()[arrayIndex].GetQuestion();
+        quizzQuestion.text = questions.GetQuestionsList()[arrayIndex].GetQuestionTitle();
 
         Question question = questions.GetQuestionsList()[arrayIndex];
         Answers answers = GameManager.Instance.GetApiManager().GetAnswersForQuestion(this.quizz.GetQuizzId(), question.GetQuestionId());

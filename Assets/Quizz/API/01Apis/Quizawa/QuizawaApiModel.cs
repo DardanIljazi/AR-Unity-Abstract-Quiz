@@ -19,11 +19,11 @@ public class QuizawaApiModel : AbstractQuizzStructure
         public List<QuizzData> data = new List<QuizzData>(); // List of quizz
 
         // Mapping between API (QuizawaApiModel) and application logic data (Quizzes)
-        public override void MapValuesFromAPIToApplicationLogicClass()
+        public override void MapAPIValuesToAbstractClass()
         {
             foreach (QuizzData quizzData in this.data)
             {
-                quizzData.MapValuesFromAPIToApplicationLogicClass(); // Map values for QuizzData to Quizz (QuizzData inherits from Quizz)
+                quizzData.MapAPIValuesToAbstractClass(); // Map values for QuizzData to Quizz (QuizzData inherits from Quizz)
                 base.AddQuizz(quizzData);
             }
         }
@@ -45,7 +45,7 @@ public class QuizawaApiModel : AbstractQuizzStructure
         public List<ImageQuizzsData> image_quizzs; // A list of images that can be used for AR tracking
 
         // Mapping between API (QuizzData) and application logic data (Quizz)
-        public override void MapValuesFromAPIToApplicationLogicClass()
+        public override void MapAPIValuesToAbstractClass()
         {
             base.SetQuizzId(this.id);
             base.SetQuizzTitle(this.title);
@@ -70,11 +70,11 @@ public class QuizawaApiModel : AbstractQuizzStructure
         public List<QuestionData> data = new List<QuestionData>(); // List of questions
 
         // Mapping between API (QuestionsData) and application logic data (Questions)
-        public override void MapValuesFromAPIToApplicationLogicClass()
+        public override void MapAPIValuesToAbstractClass()
         {
             foreach (QuestionData questionData in this.data)
             {
-                questionData.MapValuesFromAPIToApplicationLogicClass(); // Map values for QuestionData to Question (QuestionData inherits from Question)
+                questionData.MapAPIValuesToAbstractClass(); // Map values for QuestionData to Question (QuestionData inherits from Question)
                 base.AddQuestion(questionData);
             }
         }
@@ -93,7 +93,7 @@ public class QuizawaApiModel : AbstractQuizzStructure
         public List<AnswerData> answers; // Is mapped to Answers in AnswersFromQuestionData class 
 
         // Mapping between API (QuestionData) and application logic data (Question)
-        public override void MapValuesFromAPIToApplicationLogicClass()
+        public override void MapAPIValuesToAbstractClass()
         {
             base.SetQuestionid(this.id);
             base.SetQuestionText(question);
@@ -114,11 +114,11 @@ public class QuizawaApiModel : AbstractQuizzStructure
         public List<AnswerData> answers;
 
         // Mapping between API (AnswerData) and application logic data (Answer)
-        public override void MapValuesFromAPIToApplicationLogicClass()
+        public override void MapAPIValuesToAbstractClass()
         {
             foreach (AnswerData answerData in this.answers)
             {
-                answerData.MapValuesFromAPIToApplicationLogicClass(); // Map values for AnswerData to Answer (AnswerData inherits from Answer)
+                answerData.MapAPIValuesToAbstractClass(); // Map values for AnswerData to Answer (AnswerData inherits from Answer)
                 base.AddAnswer(answerData);
             }
         }
@@ -137,7 +137,7 @@ public class QuizawaApiModel : AbstractQuizzStructure
         public int question_id;
 
         // Mapping between API (AnswerData) and application logic data (Answer)
-        public override void MapValuesFromAPIToApplicationLogicClass()
+        public override void MapAPIValuesToAbstractClass()
         {
             base.SetIsCorrectAnswer(this.correct == 1); // Api return correct as 0 when not correct and 1 when correct
             base.SetDataToShowAsPossibleAnswer(this.value);
@@ -165,7 +165,7 @@ public class QuizawaApiModel : AbstractQuizzStructure
         public object deleted_at;
 
         // Mapping between API (UserData) and application logic data (ApiToken) --> Here we use it like this because API token is present in UserData
-        public override void MapValuesFromAPIToApplicationLogicClass()
+        public override void MapAPIValuesToAbstractClass()
         {
             base.SetApiToken(this.api_token);
         }

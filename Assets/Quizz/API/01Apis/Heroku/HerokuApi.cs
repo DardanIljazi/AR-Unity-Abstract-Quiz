@@ -4,7 +4,13 @@ using UnityEngine;
 using static AbstractQuizzStructure;
 
 
-public class HerokuApi : ApiManager
+/**
+ * HerokuApi does: 
+ *  - Define which model it is attached to (here it is HerokuApiModel)
+ *  - Configure/Set how the code should get data
+ *      --> Defines the link, if it should have a token to get data
+ */
+public class HerokuApi : ApiManagerFor<HerokuApiModel>
 {
     public HerokuApi()
     {
@@ -23,29 +29,6 @@ public class HerokuApi : ApiManager
     }
 
 
-    #region Quizzes
-
-    // Serializes data received from API (json), maps it to Quizzes class and returns it
-    public override Quizzes SerializeQuizzes(string json)
-    {
-        if (json == null || json.Length == 0)
-            return null;
-
-        // We serialize data received from api to QuizzesData
-        HerokuApiModel.GameQuizzes data = JsonUtility.FromJson<HerokuApiModel.GameQuizzes>(json);
-
-        if (data == null)
-            return null;
-
-        // We map quizzesData values to Quizzes class (QuizzesData inherits from Quizzes).
-        data.MapValuesFromAPIToApplicationLogicClass();
-
-
-        return data;
-    }
-
-    #endregion
-
     #region Questions
 
     // Serializes data received from API (json), maps it to Questions class and returns it
@@ -55,13 +38,13 @@ public class HerokuApi : ApiManager
             return null;
 
         // We serialize data received from api to QuizzesData
-        HerokuApiModel.GameQuizzeForQuestions data = JsonUtility.FromJson<HerokuApiModel.GameQuizzeForQuestions>(json);
+        HerokuApiModel.APIQuestions data = JsonUtility.FromJson<HerokuApiModel.APIQuestions>(json);
 
         if (data == null)
             return null;
 
         // We map quizzesData values to Quizzes class (QuizzesData inherits from Quizzes).
-        data.MapValuesFromAPIToApplicationLogicClass();
+        data.MapAPIValuesToAbstractClass();
 
 
         return data;
@@ -83,7 +66,7 @@ public class HerokuApi : ApiManager
             return null;
 
         // We map answersData values to Answers class (AnswerData inherits from Answers).
-        data.MapValuesFromAPIToApplicationLogicClass();
+        data.MapAPIValuesToAbstractClass();
 
 
         return data;

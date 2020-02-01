@@ -4,7 +4,7 @@ using UnityEngine;
 using static AbstractQuizzStructure;
 
 
-public class QuizawaApi : ApiManager
+public class QuizawaApi : ApiManagerFor
 {
     public QuizawaApi()
     {
@@ -55,7 +55,7 @@ public class QuizawaApi : ApiManager
         // Put all AnswerData into Answers
         foreach (QuizawaApiModel.AnswerData answerData in wantedQuestionData.answers)
         {
-            answerData.MapValuesFromAPIToApplicationLogicClass();
+            answerData.MapAPIValuesToAbstractClass();
             answersToReturn.AddAnswer(answerData);
         }
 
@@ -78,7 +78,7 @@ public class QuizawaApi : ApiManager
             return null;
 
         // We map quizzesData values to Quizzes class (QuizzesData inherits from Quizzes).
-        quizzesData.MapValuesFromAPIToApplicationLogicClass();
+        quizzesData.MapAPIValuesToAbstractClass();
 
 
         return quizzesData;
@@ -101,7 +101,7 @@ public class QuizawaApi : ApiManager
             return null;
 
         // We map quizzesData values to Quizzes class (QuizzesData inherits from Quizzes).
-        questionsData.MapValuesFromAPIToApplicationLogicClass();
+        questionsData.MapAPIValuesToAbstractClass();
 
 
         return questionsData;
@@ -123,7 +123,7 @@ public class QuizawaApi : ApiManager
             return null;
 
         // We map answersData values to Answers class (AnswerData inherits from Answers).
-        answersData.MapValuesFromAPIToApplicationLogicClass();
+        answersData.MapAPIValuesToAbstractClass();
 
 
         return answersData;
@@ -145,7 +145,7 @@ public class QuizawaApi : ApiManager
             return null;
 
         // We map userData values to ApiToken class (UserData inherits from ApiToken).
-        userData.MapValuesFromAPIToApplicationLogicClass();
+        userData.MapAPIValuesToAbstractClass();
 
 
         return userData;

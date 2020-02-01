@@ -4,27 +4,52 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /**
- *  Contains the abstract code that will be used everywhere in the application logic.
- *  Api classes will call MapValuesFromAPIToApplicationLogicClass to set which values (from API class) must be mapped to the values
+ *  Contains the classes/code that will be used everywhere in the application logic
+ *  Each Api Model will have to map the data from API to these classes you'll find below (Quizzes/Quizz/Questions/Question/Answers/Answer)
+ *  
+ *  For example:
+ *  - A Quizz can be represented as a title (For example: "Cat Quizz" / "Who Wants to Be a Millionaire?" aso..) 
+ *    and an identification (to diferentiate it from other quizzes).
+ *    
+ *  - A Question can be respresented as a title (For example: "How many lives does a cat have ?" / "Which of these U.S. Presidents appeared on the television series 'Laugh-In'" aso..)
+ *    and an identification (to diferentiate it from other questions).
+ *    
+ *  - ...
+ *    
+ *  --> All these abstractions are set in the classes below
+ *      They should already be set fine for a quiz.
+ *      It is not recommended to modify the code below
+ *      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  */
 public abstract class AbstractQuizzStructure : MonoBehaviour
 {
 
     #region Quizzes
-    public class Quizzes : IMappeableClassFromAPIData, ICloneable
+    public class Quizzes : IMappeableAPIDataToAbstractClass, ICloneable
     {
-        private List<Quizz> quizzes = new List<Quizz>(); // List of quizz
+        private List<Quizz> _quizzes = new List<Quizz>(); // List of quizz
 
-        public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
+        // Api Model (that inherits from AbstractQuizzStructure) Will map the values of the API to the ones needed for Quizzes Class (_quizzes)
+        public virtual void MapAPIValuesToAbstractClass()
+        {
+            throw new NotImplementedException();
+        }
+
+        // Will Serialize raw data (json) to the Quizzes class
+        public virtual Quizzes SerializeJsonToQuizzes(string json)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public void AddQuizz(Quizz quizz)
         {
-            quizzes.Add(quizz);
+            _quizzes.Add(quizz);
         }
 
         public List<Quizz> GetQuizzesList()
         {
-            return quizzes;
+            return _quizzes;
         }
 
         public object Clone()
@@ -35,31 +60,42 @@ public abstract class AbstractQuizzStructure : MonoBehaviour
     #endregion
 
     #region Quizz
-    public class Quizz : IMappeableClassFromAPIData, ICloneable
+    public class Quizz : IMappeableAPIDataToAbstractClass, ICloneable
     {
-        private string quizzTitle;
-        private object quizzId; // Can be string or int so we declare it as an object here
+        private string _quizzTitle;
+        private object _quizzId; // Can be string or int so we declare it as an object here
 
-        public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
+        // Api Model (that inherits from AbstractQuizzStructure) Will map the values of the API to the ones needed for Quizz Class (_quizzTitle, _quizzId)
+        public virtual void MapAPIValuesToAbstractClass()
+        {
+            throw new NotImplementedException();
+        }
+
+        // Will Serialize raw data (json) to the Quizzes class
+        public virtual Quizz SerializeJsonToQuizz(string json)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public string GetQuizzTitle()
         {
-            return quizzTitle;
+            return _quizzTitle;
         }
 
         public void SetQuizzTitle(string title)
         {
-            this.quizzTitle = title;
+            this._quizzTitle = title;
         }
 
         public void SetQuizzId(object id)
         {
-            this.quizzId = id;
+            this._quizzId = id;
         }
 
         public object GetQuizzId()
         {
-            return this.quizzId;
+            return this._quizzId;
         }
 
         public object Clone()
@@ -71,31 +107,31 @@ public abstract class AbstractQuizzStructure : MonoBehaviour
     #endregion
 
     #region Questions
-    public class Questions : IMappeableClassFromAPIData, ICloneable
+    public class Questions : IMappeableAPIDataToAbstractClass, ICloneable
     {
-        private string question;
-        private List<Question> questionsList = new List<Question>();
+        private List<Question> _questionsList = new List<Question>(); // List of question
 
-        public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
-
-        public void SetQuestion(string quest)
+        // Api Model (that inherits from AbstractQuizzStructure) Will map the values of the API to the ones needed for Questions Class (_questionsList)
+        public virtual void MapAPIValuesToAbstractClass()
         {
-            this.question = quest;
+            throw new NotImplementedException();
         }
 
-        public string GetDataToShowAsQuestion()
+        // Will Serialize raw data (json) to the Questions class
+        public virtual Questions SerializeJsonToQuestions(string json)
         {
-            return question;
+            throw new NotImplementedException();
         }
+
 
         public List<Question> GetQuestionsList()
         {
-            return questionsList;
+            return _questionsList;
         }
 
-        public void AddQuestion(Question quesiont)
+        public void AddQuestion(Question quesion)
         {
-            this.questionsList.Add(quesiont);
+            this._questionsList.Add(quesion);
         }
 
         public object Clone()
@@ -106,32 +142,42 @@ public abstract class AbstractQuizzStructure : MonoBehaviour
     #endregion
 
     #region Question
-
-    public class Question : IMappeableClassFromAPIData, ICloneable
+    public class Question : IMappeableAPIDataToAbstractClass, ICloneable
     {
-        private string question;
-        private object questionId;
+        private string _questionTitle;
+        private object _questionId; // The questionId can be in string or int format so we declare it as an object
 
-        public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
+        // Api Model (that inherits from AbstractQuizzStructure) Will map the values of the API to the ones needed for Question Class (_questionTitle, _questionId)
+        public virtual void MapAPIValuesToAbstractClass()
+        {
+            throw new NotImplementedException();
+        }
+
+        // Will Serialize raw data (json) to the Question class
+        public virtual Question SerializeJsonToQuestion(string json)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public object GetQuestionId()
         {
-            return questionId;
+            return _questionId;
         }
 
         public void SetQuestionid(object id)
         {
-            this.questionId = id;
+            this._questionId = id;
         }
 
-        public string GetQuestion()
+        public string GetQuestionTitle()
         {
-            return question;
+            return _questionTitle;
         }
 
         public void SetQuestionText(string questionValue)
         {
-            this.question = questionValue;
+            this._questionTitle = questionValue;
         }
 
         public object Clone()
@@ -142,20 +188,31 @@ public abstract class AbstractQuizzStructure : MonoBehaviour
     #endregion
 
     #region Answers
-    public class Answers : IMappeableClassFromAPIData, ICloneable
+    public class Answers : IMappeableAPIDataToAbstractClass, ICloneable
     {
-        private List<Answer> answersList = new List<Answer>();
+        private List<Answer> _answersList = new List<Answer>();
 
-        public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
+        // Api Model (that inherits from AbstractQuizzStructure) Will map the values of the API to the ones needed for Answers Class (_answersList)
+        public virtual void MapAPIValuesToAbstractClass()
+        {
+            throw new NotImplementedException();
+        }
+
+        // Will Serialize raw data (json) to the Answers class
+        public virtual Answers SerializeJsonToAnswers(string json)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public List<Answer> GetAnswersList()
         {
-            return answersList;
+            return _answersList;
         }
 
         public void AddAnswer(Answer answer)
         {
-            this.answersList.Add(answer);
+            this._answersList.Add(answer);
         }
 
         public object Clone()
@@ -166,31 +223,42 @@ public abstract class AbstractQuizzStructure : MonoBehaviour
     #endregion
 
     #region Answer
-    public class Answer : IMappeableClassFromAPIData, ICloneable
+    public class Answer : IMappeableAPIDataToAbstractClass, ICloneable
     {
-        private string answer;
-        private bool isCorrectAnswer;
+        private string _answerTitle;
+        private bool _isCorrectAnswer;
 
-        public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
+        // Api Model (that inherits from AbstractQuizzStructure) Will map the values of the API to the ones needed for Answer Class (_answerTitle, _isCorrectAnswer)
+        public virtual void MapAPIValuesToAbstractClass()
+        {
+            throw new NotImplementedException();
+        }
+
+        // Will Serialize raw data (json) to the Answer class
+        public virtual Answer SerializeJsonToAnswer(string json)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public bool IsCorrectAnswer()
         {
-            return this.isCorrectAnswer;
+            return this._isCorrectAnswer;
         }
 
         public void SetIsCorrectAnswer(bool correct)
         {
-            this.isCorrectAnswer = correct;
+            this._isCorrectAnswer = correct;
         }
 
         public string GetDataToShowAsPossibleAnswer()
         {
-            return answer;
+            return _answerTitle;
         }
 
         public void SetDataToShowAsPossibleAnswer(string answerValue)
         {
-            this.answer = answerValue;
+            this._answerTitle = answerValue;
         }
 
         public object Clone()
@@ -200,43 +268,9 @@ public abstract class AbstractQuizzStructure : MonoBehaviour
     }
     #endregion
 
-    #region ApiToken
-    public class ApiToken : IMappeableClassFromAPIData, ICloneable 
-    {
-        private string token;
-        private string apiKeyParamName;
-
-        public virtual void MapValuesFromAPIToApplicationLogicClass() { } // Will be called from API data to map their values to the actual ones
-
-        public string GetApiToken()
-        {
-            return token;
-        }
-
-        public void SetApiToken(string apiToken)
-        {
-            token = apiToken;
-        }
-
-        public string GetApiKeyParamName()
-        {
-            return apiKeyParamName;
-        }
-
-        public void SetApiKeyParamName(string paramName)
-        {
-            this.apiKeyParamName = paramName;
-        }
-
-        public object Clone()
-        {
-            return this.MemberwiseClone();
-        }
-    }
-    #endregion
 }
 
-public interface IMappeableClassFromAPIData
+public interface IMappeableAPIDataToAbstractClass
 {
-    void MapValuesFromAPIToApplicationLogicClass();
+    void MapAPIValuesToAbstractClass();
 }
