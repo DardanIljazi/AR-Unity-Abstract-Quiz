@@ -4,7 +4,7 @@ using UnityEngine;
 using static AbstractQuizzStructure;
 
 
-public class HerokuApi : ApiManager
+public class HerokuApi : ApiManagerFor<HerokuApiModel>
 {
     public HerokuApi()
     {
