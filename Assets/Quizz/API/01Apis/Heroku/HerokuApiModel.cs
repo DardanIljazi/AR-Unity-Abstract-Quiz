@@ -2,33 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AbstractQuizzStructure;
 
 /**
  *  HerokuApiModel is the class that defines how is structured the API data.
  *  - It maps the data from API to the classes that are used everywhere in the application logic (Quizzes/Quizz/Questions/Question/Answers/Answer)
  *  
  */
-public class HerokuApiModel : AbstractQuizzStructure
+public class HerokuApiModel : ApiModel
 {
     [Serializable]
-    public class APIQuizzes : Quizzes, IEnumerable
+    public class APIQuizzes : QuizzesStructureInAPI, IEnumerable
     {
         public List<APIQuizz> quizzes = new List<APIQuizz>();
 
-
-
-        // Will Serialize raw data (json) to the Quizzes class
-        public override Quizzes SerializeJsonToQuizzes(string json)
-        {
-            APIQuizzes data = JsonUtility.FromJson<APIQuizzes>(json);
-
-            if (data == null)
-                return null;
-
-            data.MapAPIValuesToAbstractClass();
-
-            return data;
-        }
 
         // Will map the values of the API to the ones needed for Quizzes Class (_quizzes)
         public override void MapAPIValuesToAbstractClass()
@@ -46,9 +33,27 @@ public class HerokuApiModel : AbstractQuizzStructure
         }
     }
 
+    [Serializable]
+    public class APIQuizz : QuizzStructureInAPI
+    {
+        public string title;
+        public string image;
+        public string description;
+        public Creator created_by = new Creator();
+        public int number_participants;
+        public string id;
+
+        public override void MapAPIValuesToAbstractClass()
+        {
+            base.SetQuizzId(id);
+            base.SetQuizzTitle(title);
+        }
+
+    }
+
 
     [Serializable]
-    public class APIQuestions : Questions
+    public class APIQuestions : QuestionsStructureInAPI
     {
         public string id;
         public string title;
@@ -62,12 +67,11 @@ public class HerokuApiModel : AbstractQuizzStructure
         // Will Serialize raw data (json) to the Questions class
         public override Questions SerializeJsonToQuestions(string json)
         {
-
             if (json == null || json.Length == 0)
                 return null;
 
             // We serialize data received from api to QuizzesData
-            HerokuApiModel.APIQuestions data = JsonUtility.FromJson<HerokuApiModel.APIQuestions>(json);
+            APIQuestions data = JsonUtility.FromJson<APIQuestions>(json);
 
             if (data == null)
                 return null;
@@ -90,7 +94,6 @@ public class HerokuApiModel : AbstractQuizzStructure
         }
 
 
-
         public IEnumerator GetEnumerator()
         {
             return this.questions.GetEnumerator();
@@ -101,7 +104,7 @@ public class HerokuApiModel : AbstractQuizzStructure
     [Serializable] // Exactly the same structure as GameQuizze (copied)
                    // This is because elements are nested. We need to take each elements separately (Quizz/Questions/Answers)
                    // Answers are inside questions so we make a loop to add them in Answers class
-    public class GameQuizzForAnswers : Answers
+    public class GameQuizzForAnswers : AnswersStructureInApi
     {
         public string id;
         public string title;
@@ -121,10 +124,11 @@ public class HerokuApiModel : AbstractQuizzStructure
                 }
             }
         }
+
     }
 
     [Serializable]
-    public class AnswerData : Answer
+    public class AnswerData : AnswerStructureInApi
     {
         public string name;
         public bool value;
@@ -150,7 +154,6 @@ public class HerokuApiModel : AbstractQuizzStructure
     }
 
 
-
     [Serializable]
     public class Creator
     {
@@ -158,25 +161,6 @@ public class HerokuApiModel : AbstractQuizzStructure
         string username;
     }
 
-    
-
-    [Serializable]
-    public class APIQuizz : Quizz
-    {
-        public string title;
-        public string image;
-        public string description;
-        public Creator created_by = new Creator();
-        public int number_participants;
-        public string id;
-
-        public override void MapAPIValuesToAbstractClass()
-        {
-            base.SetQuizzId(id);
-            base.SetQuizzTitle(title);
-        }
-
-    }
 }
 
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ApiSelectionManager : MonoBehaviour
 {
-    public ApiManagerFor apiToUse;
+    public ApiManager apiToUse;
 
     void Start()
     {

@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     public PopupManager         popupManager;
     public LoadingManager       loadingManager;
     public PagesManager         pagesManager;
-    private ApiManagerFor          apiManager;
+    private ApiManager          apiManager;
     /** -- END of managers **/
 
     public static GameManager Instance { get; private set; }
@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SetApiToUse(ApiManagerFor newApiManager)
+    public void SetApiToUse(ApiManager newApiManager)
     {
         if (apiManager != null)
         {
@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
         this.apiManager = newApiManager;
     }
 
-    public ApiManagerFor GetApiManager()
+    public ApiManager GetApiManager()
     {
         if (this.apiManager == null)
         {

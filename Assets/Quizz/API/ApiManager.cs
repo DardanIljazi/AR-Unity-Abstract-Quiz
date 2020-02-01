@@ -17,7 +17,7 @@ static class Constants
  *  - Make the code readable for a human
  *  - 
  */
-public class ApiManagerFor<ApiModel> : ApiManagerStructure  where ApiModel: AbstractQuizzStructure
+public class ApiManager : ApiManagerStructure
 {
     [Header("Url to the api")]
     public string apiUrl;
@@ -49,10 +49,10 @@ public class ApiManagerFor<ApiModel> : ApiManagerStructure  where ApiModel: Abst
     [Header("The api token can stay empty/not defined if user has to login to get it")]
     public string apiToken; // Should be defined into the class that inherits from APiManager (or later in the runtime) if token is used 
 
-    private ApiModel apiModel; // Contains a reference to the Api Model
+    private ApiModel apiModel;
 
 
-    public ApiManagerFor()
+    public ApiManager()
     {
         this.apiToken = Constants.Api_Token_Not_Defined;
         this.apiKeyParamName = Constants.Api_Param_Name_Not_Defined;
@@ -79,7 +79,7 @@ public class ApiManagerFor<ApiModel> : ApiManagerStructure  where ApiModel: Abst
         CheckIfNullAndLog(json_quizzes, $"[WARNING]: Response for {GetActualMethodName()} is null");
 
 
-        // Quizzes quizzesData = 
+        Quizzes quizzesData = apiModel.quizzes.SerializeJsonToQuizzes(json_quizzes);
 
         CheckIfNullAndLog(quizzesData, $"[WARNING]: quizzesData is null");
 
@@ -98,7 +98,7 @@ public class ApiManagerFor<ApiModel> : ApiManagerStructure  where ApiModel: Abst
         CheckIfNullAndLog(json_questions, $"[WARNING]: Response for {GetActualMethodName()} is null");
 
 
-        Questions questionsQuizzData = apiModel. SerializeQuestions(json_questions);
+        Questions questionsQuizzData = apiModel.questions.SerializeJsonToQuestions(json_questions);
 
         CheckIfNullAndLog(questionsQuizzData, $"[WARNING]: questionsQuizzData is null");
 
@@ -114,7 +114,7 @@ public class ApiManagerFor<ApiModel> : ApiManagerStructure  where ApiModel: Abst
 
         CheckIfNullAndLog(json_answers, $"[WARNING]: Response for {GetActualMethodName()} is null");
 
-        Answers answersData = apiModel.SerializeAnswers(json_answers);
+        Answers answersData = apiModel.answers.SerializeJsonToAnswers(json_answers);
 
         CheckIfNullAndLog(answersData, $"[WARNING]: questionsQuizzData is null");
 
@@ -125,7 +125,7 @@ public class ApiManagerFor<ApiModel> : ApiManagerStructure  where ApiModel: Abst
 
     // Register to the api
     // TODO: This is a "generic" way to generate. Should be modified or put into QuizawaApi class
-    public ApiToken RegisterToApi(string pseudo, string firstname, string lastname, string email, string password)
+    /*public ApiToken RegisterToApi(string pseudo, string firstname, string lastname, string email, string password)
     {
         var post_key_values = new Dictionary<string, string>
         {
@@ -170,6 +170,7 @@ public class ApiManagerFor<ApiModel> : ApiManagerStructure  where ApiModel: Abst
 
         return connectionData;
     }
+    */
 
 
     public override bool HasToHaveToken()
@@ -222,9 +223,9 @@ public class ApiManagerFor<ApiModel> : ApiManagerStructure  where ApiModel: Abst
         throw new NotImplementedException();
     }
 
-    public void SetChild(ApiManagerFor child)
+    public void SetModel(ApiModel apiModel)
     {
-        this.apiModel = child;
+        this.apiModel = apiModel;
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
