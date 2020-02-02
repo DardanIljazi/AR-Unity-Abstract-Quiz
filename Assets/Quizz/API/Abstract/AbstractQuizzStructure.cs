@@ -226,7 +226,6 @@ public abstract class AbstractQuizzStructure : MonoBehaviour
     }
     #endregion
 
-
     #region ApiToken
     public class ApiToken : IMappeableAPIDataToAbstractClass, ICloneable
     {

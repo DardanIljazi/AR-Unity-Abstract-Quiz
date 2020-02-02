@@ -58,7 +58,7 @@ public class QuizzManager : MonoBehaviour
                 }
                 else // User has to login first to get token
                 {
-                    GameManager.Instance.pagesManager.GoToPage("Login");
+                    GameManager.Instance.pagesManager.ShowLoginPage();
                 }
             } else
             {

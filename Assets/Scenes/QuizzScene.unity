@@ -488,7 +488,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Connect to Kuizawa
+  m_Text: Connect to Quiz
 --- !u!222 &55682324
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1747,7 +1747,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Chargement
+  m_Text: Loading
 --- !u!222 &326863224
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3623,6 +3623,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2031938806}
+  - {fileID: 919001469}
   m_Father: {fileID: 690631468}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4445,6 +4446,65 @@ Transform:
   m_Father: {fileID: 679937668}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &919001468
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 919001469}
+  - component: {fileID: 919001470}
+  m_Layer: 0
+  m_Name: DardiNestedApi
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &919001469
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919001468}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1657891369}
+  m_Father: {fileID: 719161358}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &919001470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919001468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a8cde4c9195f2c479d1114c1c4a2ed5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  apiName: Quiz
+  apiUrl: https://awa-quizz.herokuapp.com/api
+  apiQuizzesUrl: https://awa-quizz.herokuapp.com/api/quizzes
+  apiQuestionsUrl: https://awa-quizz.herokuapp.com/api/quizzes/{quizzId}
+  apiAnswersUrl: https://awa-quizz.herokuapp.com/api/quizzes/{quizzId}
+  hasToHaveTokenForApi: 1
+  hasToLoginToGetToken: 0
+  canRegisterAsUserToApi: 0
+  apiLoginUrl: 
+  apiRegisteringUrl: 
+  apiRegisterUrl: 
+  tokenHttpEmplacement: 3
+  apiKeyParamName: quizz-token
+  apiToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0IiwicGFzc3dvcmQiOiIkcGJrZGYyLXNoYTI1NiQyMDAwMCRjNjRWd3RnN0IuQThKeVJrN1AzL1h3JG9BRDloUnVEQTVkWVpKR1Y2cDNpdDBzYVFqdlFBemFZbi9wNW1kSGRDbDQifQ.P-KfTO8nq5oQNC_bIAY5VKOeNLyNbGE-gGrf0oIKQjc
+  herokuApiModel: {fileID: 1657891370}
 --- !u!1 &964125447
 GameObject:
   m_ObjectHideFlags: 0
@@ -4890,7 +4950,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Retour au menu
+  m_Text: Go back to menu
 --- !u!222 &1095506010
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5442,7 +5502,13 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Votre score:\n%1 r\xE9ponses justes\n%2 r\xE9ponses fausses\n"
+  m_Text: 'Your score:
+
+    %1 right answers
+
+    %2 wrong answers
+
+'
 --- !u!1 &1254758875
 GameObject:
   m_ObjectHideFlags: 0
@@ -6719,6 +6785,49 @@ Transform:
   m_Father: {fileID: 2140007641}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1657891368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1657891369}
+  - component: {fileID: 1657891370}
+  m_Layer: 0
+  m_Name: DardiNestedApiModel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1657891369
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657891368}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 919001469}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1657891370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657891368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fdc4e44b768d7e4888d4f809620b407, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1678091463
 GameObject:
   m_ObjectHideFlags: 0
@@ -6932,7 +7041,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Veuillez s\xE9lectionner un quizz"
+  m_Text: Please select a quiz
 --- !u!222 &1808301276
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8014,17 +8123,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a8cde4c9195f2c479d1114c1c4a2ed5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  apiName: Quiz
   apiUrl: https://awa-quizz.herokuapp.com/api
   apiQuizzesUrl: https://awa-quizz.herokuapp.com/api/quizzes
   apiQuestionsUrl: https://awa-quizz.herokuapp.com/api/quizzes/{quizzId}
   apiAnswersUrl: https://awa-quizz.herokuapp.com/api/quizzes/{quizzId}
   hasToHaveTokenForApi: 1
   hasToLoginToGetToken: 0
+  canRegisterAsUserToApi: 0
   apiLoginUrl: 
+  apiRegisteringUrl: 
+  apiRegisterUrl: 
   tokenHttpEmplacement: 3
   apiKeyParamName: quizz-token
   apiToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0IiwicGFzc3dvcmQiOiIkcGJrZGYyLXNoYTI1NiQyMDAwMCRjNjRWd3RnN0IuQThKeVJrN1AzL1h3JG9BRDloUnVEQTVkWVpKR1Y2cDNpdDBzYVFqdlFBemFZbi9wNW1kSGRDbDQifQ.P-KfTO8nq5oQNC_bIAY5VKOeNLyNbGE-gGrf0oIKQjc
-  apiModel: {fileID: 0}
+  herokuApiModel: {fileID: 1821714892}
 --- !u!1 &2054256513
 GameObject:
   m_ObjectHideFlags: 0

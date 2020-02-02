@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using static AbstractQuizzStructure;
 
 /**
- * ConnectionManager is the manager for the Connection page (used when user has to connect to the API and receive token API for example)
+ * LoginManager is the manager for the Login page (used when user has to connect to the API and receive token API for example)
  */
 public class LoginManager : PageLogic
 {
@@ -20,11 +20,32 @@ public class LoginManager : PageLogic
         registerButton.onClick.AddListener(RegisterButtonClicked);
     }
 
+    public override void ActionToDoWhenPageShowed()
+    {
+        if (!GameManager.Instance.GetApiManager().CanRegisterAsUserToApi())
+        {
+            registerButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            registerButton.gameObject.SetActive(true);
+        }
+    }
+
     void ConnectButtonClicked()
     {
-        ApiToken apiTokenData = GameManager.Instance.GetApiManager().ConnectToApi(pseudoInput.text, passwordInput.text);
+        // The parameters name that are sent over http. for example pseudo={xxx}&password={xxx}. --> pseudo and password are parameters name. 
+        // They have to be set in class inherited from Apimanager if the default param name doesn't correspond to what API waits
+        string pseudoOrEmailParamName   = GameManager.Instance.GetApiManager().GetPseudoParamName(); // By default it's "pseudo".
+        string passwordParamName        = GameManager.Instance.GetApiManager().GetPasswordParamName(); // By default it's "password".
 
-        Debug.Log(JsonUtility.ToJson(apiTokenData));
+        var post_key_values = new Dictionary<string, string>
+        {
+            { pseudoOrEmailParamName , pseudoInput.text },
+            { passwordParamName, passwordInput.text }
+        };
+
+        ApiToken apiTokenData = GameManager.Instance.GetApiManager().LoginToGetApiToken(post_key_values);
 
         if (apiTokenData == null)
         {

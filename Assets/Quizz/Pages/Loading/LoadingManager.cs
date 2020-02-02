@@ -19,6 +19,9 @@ public class LoadingManager : PageLogic
 
     public override void ActionToDoWhenPageShowed()
     {
+        numberOfLoadingsPoints = 0;
+        actualLoadingPoints = "";
+        continueLoading = true;
         StartLoading();
     }
 

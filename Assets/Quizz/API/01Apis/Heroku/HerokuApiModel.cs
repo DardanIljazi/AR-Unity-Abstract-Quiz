@@ -1,127 +1,31 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static AbstractQuizzStructure;
 
 /**
- *  HerokuApiModel is the class that defines how is structured the API data.
+ *  HerokuApiModel is the class that defines how is structured the API data for Heroku Api
  *  - It maps the data from API to the classes that are used everywhere in the application logic (Quizzes/Quizz/Questions/Question/Answers/Answer)
- *  
  */
-public class HerokuApiModel : ApiModel
+public class HerokuApiModel : MonoBehaviour
 {
-
     [Serializable]
-    public class GameQuizzes : Quizzes, IEnumerable
+    public class QuizzesInAPI : Quizzes
     {
-        public List<IndexQuizz> quizzes = new List<IndexQuizz>();
+        public List<QuizzInAPI> quizzes = new List<QuizzInAPI>();
 
         public override void MapAPIValuesToAbstractClass()
         {
-            foreach (IndexQuizz quizzData in this.quizzes)
+            foreach (QuizzInAPI quizzData in this.quizzes)
             {
                 quizzData.MapAPIValuesToAbstractClass(); // Map values for QuizzData to Quizz (QuizzData inherits from Quizz)
                 base.AddQuizz(quizzData);
             }
         }
-
-        public IEnumerator GetEnumerator()
-        {
-            return this.quizzes.GetEnumerator();
-        }
     }
 
     [Serializable]
-    public class GameQuizzeForQuestions : Questions
-    {
-        public string id;
-        public string title;
-        public string description;
-        public string created_by;
-        public List<QuestionData> questions = new List<QuestionData>();
-        public int number_participants;
-
-        public IEnumerator GetEnumerator()
-        {
-            return this.questions.GetEnumerator();
-        }
-
-        public override void MapAPIValuesToAbstractClass()
-        {
-            foreach (QuestionData questionData in questions)
-            {
-                questionData.MapAPIValuesToAbstractClass();
-                base.AddQuestion(questionData);
-            }
-        }
-    }
-
-
-    [Serializable] // Exactly the same structure as GameQuizze (copied)
-                   // This is because elements are nested. We need to take each elements separately (Quizz/Questions/Answers)
-                   // Answers are inside questions so we make a loop to add them in Answers class
-    public class GameQuizzForAnswers : Answers
-    {
-        public string id;
-        public string title;
-        public string description;
-        public string created_by;
-        public List<QuestionData> questions = new List<QuestionData>();
-        public int number_participants;
-
-        public override void MapAPIValuesToAbstractClass()
-        {
-            foreach (QuestionData question in questions)
-            {
-                foreach (Answer answer in question.answers)
-                {
-                    answer.MapAPIValuesToAbstractClass();
-                    base.AddAnswer(answer);
-                }
-            }
-        }
-    }
-
-    [Serializable]
-    public class AnswerData : Answer
-    {
-        public string name;
-        public bool value;
-
-        public override void MapAPIValuesToAbstractClass()
-        {
-            base.SetDataToShowAsPossibleAnswer(name);
-            base.SetIsCorrectAnswer(value);
-        }
-    }
-
-    [Serializable]
-    public class QuestionData : Question
-    {
-        public string question;
-        public string image;
-        public List<AnswerData> answers = new List<AnswerData>();
-
-        public override void MapAPIValuesToAbstractClass()
-        {
-            base.SetQuestionText(question);
-        }
-    }
-
-
-
-    [Serializable]
-    public class Creator
-    {
-        string id;
-        string username;
-    }
-
-
-
-    [Serializable]
-    public class IndexQuizz : Quizz
+    public class QuizzInAPI : Quizz
     {
         public string title;
         public string image;
@@ -135,7 +39,87 @@ public class HerokuApiModel : ApiModel
             base.SetQuizzId(id);
             base.SetQuizzTitle(title);
         }
+    }
 
+
+    [Serializable]
+    public class QuestionsInAPI : Questions
+    {
+        public string id;
+        public string title;
+        public string description;
+        public string created_by;
+        public List<QuestionInAPI> questions = new List<QuestionInAPI>();
+        public int number_participants;
+
+        public override void MapAPIValuesToAbstractClass()
+        {
+            foreach (QuestionInAPI questionData in questions)
+            {
+                questionData.MapAPIValuesToAbstractClass();
+                base.AddQuestion(questionData);
+            }
+        }
+    }
+
+    [Serializable]
+    public class QuestionInAPI : Question
+    {
+        public string question;
+        public string image;
+        public List<AnswerInAPI> answers = new List<AnswerInAPI>();
+
+        public override void MapAPIValuesToAbstractClass()
+        {
+            base.SetQuestionText(question);
+        }
+    }
+
+
+    [Serializable] // Exactly the same structure as GameQuizze (copied)
+                   // This is because elements are nested. We need to take each elements separately (Quizz/Questions/Answers)
+                   // Answers are inside questions so we make a loop to add them in Answers class
+    public class AnswersInAPI : Answers
+    {
+        public string id;
+        public string title;
+        public string description;
+        public string created_by;
+        public List<QuestionInAPI> questions = new List<QuestionInAPI>();
+        public int number_participants;
+
+        public override void MapAPIValuesToAbstractClass()
+        {
+            foreach (QuestionInAPI question in questions)
+            {
+                foreach (Answer answer in question.answers)
+                {
+                    answer.MapAPIValuesToAbstractClass();
+                    base.AddAnswer(answer);
+                }
+            }
+        }
+    }
+
+    [Serializable]
+    public class AnswerInAPI : Answer
+    {
+        public string name;
+        public bool value;
+
+        public override void MapAPIValuesToAbstractClass()
+        {
+            base.SetDataToShowAsPossibleAnswer(name);
+            base.SetIsCorrectAnswer(value);
+        }
+    }
+
+
+    [Serializable]
+    public class Creator
+    {
+        string id;
+        string username;
     }
 }
 

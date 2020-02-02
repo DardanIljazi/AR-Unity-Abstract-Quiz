@@ -13,6 +13,10 @@ public class PagesManager : MonoBehaviour
     [Header("Index of the page that represents the \"Menu\"")]
     public int indexOfMenuPage = -1; // This must be defined to know 
 
+    [Header("Index of the page that represents the \"Login\"")]
+    public int indexOfLoginPage = -1; // This must be defined to know 
+
+
     [Header("The page that is called when loading/work is processed in between pages")]
     public Page loadingPage;
 
@@ -57,6 +61,19 @@ public class PagesManager : MonoBehaviour
         else
         {
             Show(indexOfMenuPage);
+        }
+    }
+
+    public void ShowLoginPage()
+    {
+        Debug.Log("ShowLoginPage");
+        if (this.indexOfLoginPage == -1)
+        {
+            Debug.LogError("[WARNING]: Please defined indexOfLoginPage variable in the editor. This value represents the login page to show when user has to log in when launching the software or after registering");
+        }
+        else
+        {
+            Show(indexOfLoginPage);
         }
     }
 

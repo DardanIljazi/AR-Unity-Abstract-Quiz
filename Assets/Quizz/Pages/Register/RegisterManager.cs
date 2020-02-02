@@ -32,23 +32,34 @@ public class RegisterManager : PageLogic
             inputNameWithValue.Add(input.placeholder.GetComponent<Text>().text, input.text);
         }
 
-        ApiToken apiToken = GameManager.Instance.GetApiManager().RegisterToApi(
-            inputNameWithValue["Pseudo"], 
-            inputNameWithValue["Firstname"], 
-            inputNameWithValue["Lastname"],
-            inputNameWithValue["Email"],
-            inputNameWithValue["Password"]);
 
-        if (apiToken == null)
+        // The parameters name that are sent over http. for example pseudo={xxx}&password={xxx}. --> pseudo and password are parameters name. 
+        // They have to be set in class inherited from Apimanager if the default param name doesn't correspond to what API waits
+        string pseudoOrEmailParamName   = GameManager.Instance.GetApiManager().GetPseudoParamName(); // By default it's "pseudo".
+        string passwordParamName        = GameManager.Instance.GetApiManager().GetPasswordParamName(); // By default it's "password".
+        string firstNameParamName       = GameManager.Instance.GetApiManager().GetFirstNameParamName(); // By default it's "firstname".
+        string lastNameParamName        = GameManager.Instance.GetApiManager().GetLastNameParamName(); // By default it's "lastname".
+        string emailParamName           = GameManager.Instance.GetApiManager().GetEmailParamName(); // By default it's "email".
+
+        // These pairs of key and values are the 
+        var post_key_values = new Dictionary<string, string>
         {
-            Debug.LogError("[WARNING]: apiToken is null");
+            { pseudoOrEmailParamName, inputNameWithValue["Pseudo"] },
+            { firstNameParamName, inputNameWithValue["Firstname"] },
+            { lastNameParamName, inputNameWithValue["Lastname"] },
+            { emailParamName, inputNameWithValue["Email"] },
+            { passwordParamName, inputNameWithValue["Password"] },
+        };
+
+        if (!GameManager.Instance.GetApiManager().RegisterUserToGetApiToken(post_key_values))
+        {
+            Debug.LogError("[WARNING]: registration did not work !");
             PopupManager.PopupAlert("Error", NetworkRequestManager.lastHttpWebRequestErrorMessage);
             ShowRegisterButton();
             return;
         }
 
-        GameManager.Instance.GetApiManager().SetApiToken(apiToken.GetApiToken());
-        PopupManager.PopupAlert("Registered", "Successfully registered!", "Go", GameManager.Instance.pagesManager.ShowMenuPage);
+        PopupManager.PopupAlert("Registered", "Successfully registered! Now go to connection page", "Go to login", GameManager.Instance.pagesManager.ShowLoginPage);
     }
 
     void ShowRegisterButton()

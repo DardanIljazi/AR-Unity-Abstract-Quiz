@@ -10,7 +10,7 @@ public class RandomColor : MonoBehaviour
     System.Random rnd;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         rnd = new System.Random();
         listOfColor.Add(new Color32(26, 188, 156, 255));

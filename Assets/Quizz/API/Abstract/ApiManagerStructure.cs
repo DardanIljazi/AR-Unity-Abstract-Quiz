@@ -7,6 +7,7 @@ public abstract class ApiManagerStructure : MonoBehaviour
 {
     public abstract bool HasToHaveToken();
     public abstract bool HasToLoginToGetToken();
+    public abstract bool CanRegisterAsUserToApi();
 
     public enum TokenHttpEmplacement  // If a token is needed for to the api, there could be many possibilities of "emplacement"/places where this can be defined in HTTP request.
                                       // We can put token in Url (GET), Body (POST), Header (both) or try to put them in all of them with Everywhere enum or not use a token at all with None 

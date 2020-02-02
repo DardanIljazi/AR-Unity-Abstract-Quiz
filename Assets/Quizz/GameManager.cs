@@ -1,6 +1,4 @@
-﻿// Davide Carboni
-// Game Manager: Class to manwge the game
-//
+﻿// By Dardan Iljazi
 
 using System.Collections;
 using System.Collections.Generic;
@@ -54,7 +52,7 @@ public class GameManager : MonoBehaviour
     {
         if (this.apiManager == null)
         {
-            Debug.LogError("[CRITICAL]: The apiManager is not yet defined or you try to access it");
+            Debug.LogError("[CRITICAL]: The apiManager is not yet defined and you try to access it");
         }
 
         return this.apiManager;

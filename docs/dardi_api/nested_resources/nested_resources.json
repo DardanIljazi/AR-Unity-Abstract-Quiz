@@ -1,0 +1,87 @@
+{
+    "quizzes": [
+        {
+            "id": 1,
+            "title": "Additions",
+            "description": "Do you know to make additions ?",
+            "questions" : [
+                {
+                    "id": 1,
+                    "question": "How many do 1+1 equal ?",
+                    "answers" : [
+                        {
+                            "id" : 1,
+                            "answer" : "It's equal to 3, you dumb !",
+                            "rightAnswer": false
+                        },
+                        {
+                            "id": 2,
+                            "answer" : "It's equal to 2, you crazy !",
+                            "rightAnswer": true
+                        }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "question": "How many do 1+0 equal ?",
+                    "answers" : [
+                        {
+                            "id" : 3,
+                            "answer" : "It's equal to 10, how can you ?",
+                            "rightAnswer": false
+                        },
+                        {
+                            "id": 4,
+                            "answer" : "It's equal to 1",
+                            "rightAnswer": true
+                        },
+                        {
+                            "id": 5,
+                            "answer" : "This is undefined",
+                            "rightAnswer": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "title": "Multiplication",
+            "description": "Are multiplications as easy as you thought ?",
+            "questions" : [
+                {
+                    "id": 3,
+                    "question": "How many do 10*10*256*1.25 equal ?",
+                    "answers" : [
+                        {
+                            "id" : 6,
+                            "answer" : "Are you kidding me ?",
+                            "rightAnswer": false
+                        },
+                        {
+                            "id": 7,
+                            "answer" : "It's equal to 32'000",
+                            "rightAnswer": true
+                        },
+                        {
+                            "id": 8,
+                            "answer" : "I'm bad at Maths",
+                            "rightAnswer": false
+                        }
+                    ]
+                },
+                {
+                    "id": 4,
+                    "question": "How many do 1'000 * 2.56 * 45 * 0 equal ?",
+                    "answers" : [
+                        {
+                            "id" : 9,
+                            "answer" : "I'm lucky there is only 1 answer: it's 0 !",
+                            "rightAnswer": true
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
