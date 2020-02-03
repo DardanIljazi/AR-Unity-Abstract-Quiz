@@ -23,31 +23,36 @@
             "id" : 1,
             "answer" : "It's equal to 3, you dumb !",
             "rightAnswer": false,
-            "questionId": 1
+            "questionId": 1,
+            "quizzId": 1
         },
         {
             "id": 2,
             "answer" : "It's equal to 2, you crazy !",
             "rightAnswer": true,
-            "questionId": 1
+            "questionId": 1,
+            "quizzId": 1
         },
         {
             "id" : 3,
             "answer" : "It's equal to 10, how can you ?",
             "rightAnswer": false,
-            "questionId": 2
+            "questionId": 2,
+            "quizzId": 1
         },
         {
             "id": 4,
             "answer" : "It's equal to 1",
             "rightAnswer": true,
-            "questionId": 2
+            "questionId": 2,
+            "quizzId": 1
         },
         {
             "id": 5,
             "answer" : "This is undefined",
             "rightAnswer": false,
-            "questionId": 2
+            "questionId": 2,
+            "quizzId": 1
         }
     ]
 }
