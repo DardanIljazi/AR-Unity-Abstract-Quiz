@@ -50,51 +50,6 @@
                     ]
                 }
             ]
-        },
-        {
-            "id": 2,
-            "title": "Multiplication",
-            "description": "Are multiplications as easy as you thought ?",
-            "questions" : [
-                {
-                    "id": 3,
-                    "quizzId" : 2,
-                    "question": "How many do 10*10*256*1.25 equal ?",
-                    "answers" : [
-                        {
-                            "id" : 6,
-                            "answer" : "Are you kidding me ?",
-                            "questionId": 3,
-                            "rightAnswer": false
-                        },
-                        {
-                            "id": 7,
-                            "answer" : "It's equal to 32'000",
-                            "questionId": 3,
-                            "rightAnswer": true
-                        },
-                        {
-                            "id": 8,
-                            "answer" : "I'm bad at Maths",
-                            "questionId": 3,
-                            "rightAnswer": false
-                        }
-                    ]
-                },
-                {
-                    "id": 4,
-                    "question": "How many do 1'000 * 2.56 * 45 * 0 equal ?",
-                    "quizzId" : 2,
-                    "answers" : [
-                        {
-                            "id" : 9,
-                            "answer" : "I'm lucky there is only 1 answer: it's 0 !",
-                            "questionId": 4,
-                            "rightAnswer": true
-                        }
-                    ]
-                }
-            ]
         }
     ]
 }
