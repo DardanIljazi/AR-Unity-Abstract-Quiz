@@ -22,14 +22,14 @@
         {
             "id" : 1,
             "answer" : "It's equal to 3, you dumb !",
-            "questionId": 1,
-            "rightAnswer": false
+            "rightAnswer": false,
+            "questionId": 1
         },
         {
             "id": 2,
             "answer" : "It's equal to 2, you crazy !",
-            "questionId": 1,
-            "rightAnswer": true
+            "rightAnswer": true,
+            "questionId": 1
         },
         {
             "id" : 3,
