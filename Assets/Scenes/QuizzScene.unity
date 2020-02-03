@@ -3803,6 +3803,7 @@ MonoBehaviour:
   - {fileID: 560195194}
   - {fileID: 2140007642}
   indexOfMenuPage: 1
+  indexOfLoginPage: -1
   loadingPage: {fileID: 182741568}
   examplePage: {fileID: 2110133535}
 --- !u!1 &778415746
@@ -4491,10 +4492,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   apiName: Quiz
-  apiUrl: https://awa-quizz.herokuapp.com/api
+  rootApiUrl: https://awa-quizz.herokuapp.com/api
   apiQuizzesUrl: https://awa-quizz.herokuapp.com/api/quizzes
   apiQuestionsUrl: https://awa-quizz.herokuapp.com/api/quizzes/{quizzId}
   apiAnswersUrl: https://awa-quizz.herokuapp.com/api/quizzes/{quizzId}
+  apiDataModelEndpointType: 0
   hasToHaveTokenForApi: 1
   hasToLoginToGetToken: 0
   canRegisterAsUserToApi: 0
@@ -8124,10 +8126,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   apiName: Quiz
-  apiUrl: https://awa-quizz.herokuapp.com/api
+  rootApiUrl: https://awa-quizz.herokuapp.com/api
   apiQuizzesUrl: https://awa-quizz.herokuapp.com/api/quizzes
   apiQuestionsUrl: https://awa-quizz.herokuapp.com/api/quizzes/{quizzId}
   apiAnswersUrl: https://awa-quizz.herokuapp.com/api/quizzes/{quizzId}
+  apiDataModelEndpointType: 1
   hasToHaveTokenForApi: 1
   hasToLoginToGetToken: 0
   canRegisterAsUserToApi: 0

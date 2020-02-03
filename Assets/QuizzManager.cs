@@ -90,7 +90,7 @@ public class QuizzManager : MonoBehaviour
         try
         {
             using (var client = new WebClient())
-            using (client.OpenRead(GameManager.Instance.GetApiManager().apiUrl))
+            using (client.OpenRead(GameManager.Instance.GetApiManager().rootApiUrl))
                 return true;
         }
         catch (WebException e)

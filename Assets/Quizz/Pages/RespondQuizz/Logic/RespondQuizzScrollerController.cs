@@ -6,20 +6,18 @@ using static AbstractQuizzStructure;
 
 public class RespondQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDelegate
 {
-    private List<Answer> _data;
+    private List<Answer> _data = new List<Answer>();
     public EnhancedScroller myScroller;
     public RespondQuizzCellView respondQuizzCellViewPrefab;
 
     public void Initialize()
     {
-        _data = new List<Answer>();
         myScroller.Delegate = this;
     }
 
     public void Reset()
     {
         myScroller.ClearAll();
-
         _data.Clear();
     }
 

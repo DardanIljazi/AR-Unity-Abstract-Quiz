@@ -15,18 +15,28 @@ public class DardiNestedApi : ApiManager
     public DardiNestedApi()
     {
         // Set the configuration needed to get data for Quizzes/Questions/Ansers. 
-        base.apiUrl = "https://dardi.ch/nested_api/api/";
-        base.apiQuizzesUrl = apiUrl + "/quizzes";
-        base.apiQuestionsUrl = apiUrl + "/quizzes";
-        base.apiAnswersUrl = apiUrl + "/quizzes";
+        base.rootApiUrl = "https://dardi.ch/nested_api/api/";
+        base.apiQuizzesUrl = rootApiUrl + "/quizzes";
+        base.apiQuestionsUrl = rootApiUrl + "/quizzes";
+        base.apiAnswersUrl = rootApiUrl + "/quizzes";
 
         // Set the configuration needed for the API token.
         base.hasToHaveTokenForApi = false;
         base.hasToLoginToGetToken = false;
+    }
 
-        // Define which class the ApiManager will use to serialize json data when code will call GetQuizzes() / GetQuestions() / GetAnswers()
-        /*base.SetClassToUseForQuizzesSerialization(new DardiNestedApiModel.QuizzesInAPI());
-        base.SetClassToUseForQuestionsSerialization(new DardiNestedApiModel.QuestionsInAPI());
-        base.SetClassToUseForAnswersSerialization(new DardiNestedApiModel.AnswersInAPI());*/
+    public override AbstractQuizzStructure.Answers SerializeAnswers(string jsonData)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override AbstractQuizzStructure.Questions SerializeQuestions(string jsonData)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override AbstractQuizzStructure.Quizzes SerializeQuizzes(string jsonData)
+    {
+        throw new System.NotImplementedException();
     }
 }

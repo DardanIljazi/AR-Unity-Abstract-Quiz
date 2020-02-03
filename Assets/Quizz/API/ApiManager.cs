@@ -14,12 +14,25 @@ static class Constants
  * ApiManager class contains all actions/methods that can be done to the api in a "generalized/generic" way (scenario cases have been thought and generalized here)
  * For example, some apis need a token, some not, some even need login to get an api token. All these cases have been implemented here.
  * 
- * INFO:    The quizz has been thought to work with "lists". For example you will see a list of Quizz (Quizzes) and have to select one, 
- *          you will have a list of Question (Questions) that will appear one after an other (after responding to an Answer, itself contained in a list of Answer = Answers)
+ * 
+ * INFO:    The quizz has been thought to work with restful api where each resource has an endpoint
+ *          For example 
+ *              - Resource (Quizzes)    :> Endpoint (www.example.com/api/quizzes)
+ *              - Resource (Questions)  :> Endpoint (www.example.com/api/{quizzId}/questions)
+ *              - Resource (Answers)    :> Endpoint (www.example.com/api/{quizzId/questions/{questionId}/answers)
  *          
- *          For this reason, you only have to set the link containing those elements (apiQuizzesUrl, apiQuestionsUrl, apiAnswersUrl)
+ *          The code works too for 
+ *              - Partially nested resources, for example:
+ *                  - Resource (Quizzes)                :> Endpoint (www.example.com/api/quizzes)
+ *                  - Resources (Questions + Answers)   :> Endpoint (www.example.com/api/quizzes/{quizzId})
+ *                  
+ *              - Fully nested resources, for example:
+ *                  - Resources (Quizzes + Questions + Answers) :> Endpoint (www.example.com/api/quizzes)
+ *             
+ *              --> Those 2 last cases work but the code has to do more operations and rely on cache to get data, so it could be slower.
+ *          
  */
-public class ApiManager : ApiManagerStructure
+public abstract class ApiManager: ApiManagerStructure
 {
     [Header("The api name. Can be used in view/pages to show the application/api/software name")]
     public string apiName;
@@ -27,19 +40,23 @@ public class ApiManager : ApiManagerStructure
     /**
      * Variables for endpoints (url) to get data
      */
-    [Header("Url to the api")]
-    public string apiUrl;
+    [Header("Root url to the api")]
+    public string rootApiUrl;
 
     [Header("Url to the quizzes")]
     public string apiQuizzesUrl;
 
-    [Help("\nUrl to the questions.\nIf any quizzId is in the link, write {quizzId} at that place. Let empty if not used")]
+    [Help("\nUrl to the questions.\nIf any quizzId is in the link, write {quizzId} at that place.\nLet empty if not used")]
     public string apiQuestionsUrl;
     private string _originalApiQuestionsUrl; // Copy of apiQuizzesQuestionUrl so that if it contains {quizzId} it will stay
 
-    [Help("\nUrl to answers. \nIf any questionId is in the link, write {questionid} at that place. Let empty if not used")]
+    [Help("\nUrl to answers. \nIf any quizz id is in the link, write {quizzId} in that place.\nIf any questionId is in the link, write {questionid} at that place.\nLet empty if not used")]
     public string apiAnswersUrl;
-    private string _originalApiQuizzesQuestionAnswersList; // Copy of apiQuizzesQuestionUrl so that if it contains {quizzId} it will stay
+    private string _originalApiAnswersUrl; // Copy of apiQuizzesQuestionUrl so that if it contains {quizzId} it will stay
+
+    // The type of 
+    public ApiDataModelEndpointType apiDataModelEndpointType;
+
 
     /**
      * Variables for token management
@@ -70,20 +87,31 @@ public class ApiManager : ApiManagerStructure
      * These are related to the Login page (LoginManager) and Register page (RegisterManager).
      */
     private string pseudoParamNameForApiLoginOrRegistering;
-    private string passwordParamNameForApiLoginOrRegistering; 
-    private string firstnameParamNameForApiRegistering; 
+    private string passwordParamNameForApiLoginOrRegistering;
+    private string firstnameParamNameForApiRegistering;
     private string lastNameParamNameForApiRegistering;
     private string emailParamNameForApiRegistering;
 
-    /**
-     * Variables used to store the class that serializes and maps data to classes (Quizzes/Quizz/Questions/Question/Answers/Answer)
-     * These are defined in the class inherited from ApiManager as this: base.apiModelClassForQuizzesSerialization = new ... (where ... is the api model to use to serialize data)
-     */
-    private object apiModelClassForQuizzesSerialization;
-    private object apiModelClassForQuestionsSerialization;
-    private object apiModelClassForAnswersSerialization;
     private object apiModelClassForApiTokeAfterLoginSerialization; // Will contain api model class that serializes the data returned to get an api token. This can be null as the api could not use any token
 
+    /**
+     * Cached variables used when api may not be restful (the code is intended to work with resources that have all a endpoint
+     * for example: 
+     * - Resource (Quizzes) : Endpoint (www.example.com/api/quizzes)
+     * - Resource (Questions) : Endpoint (www.example.com/api/{quizzId}/questions)
+     * - Resource (Answers) : Endpoint (www.example.com/api/{quizzId/questions/{questionId}/answers)
+     * 
+     * Because api could not be structured like this, but for example partially or fully nested data, we keep cached elements so we can find Questions or Answers based on {quizzId} or {questionId}.
+     */
+    private Quizzes cachedQuizzes;
+    private Questions cachedQuestions;
+    private Answers cachedAnswers;
+
+
+    /**
+     * Reference to the child that inherits from this class
+     */
+    ApiManager child;
 
     public ApiManager()
     {
@@ -96,6 +124,7 @@ public class ApiManager : ApiManagerStructure
         this.hasToHaveTokenForApi = false;
         this.hasToLoginToGetToken = false;
         this.canRegisterAsUserToApi = false;
+        this.apiDataModelEndpointType = ApiDataModelEndpointType.FullyNested; // Use "worst" case scenario by default
         // Default values for Login/Register page parameters name
         this.pseudoParamNameForApiLoginOrRegistering = "pseudo";
         this.passwordParamNameForApiLoginOrRegistering = "password";
@@ -104,33 +133,36 @@ public class ApiManager : ApiManagerStructure
         this.emailParamNameForApiRegistering = "email";
     }
 
+    public void SetChild(ApiManager actualApiManagerChild)
+    {
+        this.child = actualApiManagerChild;
+    }
+
 
     void Start()
     {
         _originalApiQuestionsUrl = apiQuestionsUrl;
-        _originalApiQuizzesQuestionAnswersList = apiAnswersUrl;
+        _originalApiAnswersUrl = apiAnswersUrl;
 
-        CheckIfNullAndLog(apiUrl, $"apiUrl is empty or not defined. Did you forget to fill it ?. Value: {apiUrl}", 1);
+        CheckIfNullAndLog(rootApiUrl, $"apiUrl is empty or not defined. Did you forget to fill it ?. Value: {rootApiUrl}", 1);
         CheckIfNullAndLog(apiQuizzesUrl, $"apiQuizzesUrl is empty or not defined. Did you forget to fill it ?. Value: {apiQuizzesUrl}", 1);
     }
 
 
-    // Get list of quizzes
+    /**
+     * Get quizzes
+     */
     public override Quizzes GetQuizzes()
     {
-        CheckIfNullAndLog(apiModelClassForQuizzesSerialization, $"[CRITICAL]: apiModelClassForQuizzesSerialization is not set. Set it from the class that inherits ApiManager with SetClassToUseForQuizzesSerialization() like in example codes.");
-
         string json_quizzes = NetworkRequestManager.HttpGetRequest(apiQuizzesUrl);
 
         CheckIfNullAndLog(json_quizzes, $"[WARNING]: Response for {GetActualMethodName()} is null");
 
-        // Serialize the json data to the class used in api model for Quizzes (because only api model knows how json data is structured and how to map these values)
-        // apiModelClassForQuizzesSerialization is defined in the class inherited from ApiManager as base.apiModelClassForQuizzesSerialization = new ...)
-        JsonUtility.FromJsonOverwrite(json_quizzes, apiModelClassForQuizzesSerialization);
 
-        Quizzes quizzesData = apiModelClassForQuizzesSerialization as Quizzes;
+        Quizzes quizzesData = child.SerializeQuizzes(json_quizzes);
         quizzesData.MapAPIValuesToAbstractClass(); // Maps the values from ApiModel to Quizzes. The mapping is defined in api model class that inherits from Quizzes
 
+        cachedQuizzes = quizzesData;
 
         CheckIfNullAndLog(quizzesData, $"[WARNING]: quizzesData is null");
 
@@ -139,25 +171,36 @@ public class ApiManager : ApiManagerStructure
     }
 
 
-    // Get list of questions for a quizz
+    /** 
+     * Get questions for a quizz.
+     */
     public override Questions GetQuestionsForQuizz(object quizzId)
     {
-        CheckIfNullAndLog(apiModelClassForQuestionsSerialization, $"[CRITICAL]: apiModelClassForQuestionsSerialization is not set. Set it from the class that inherits ApiManager with SetClassToUseForQuestionsSerialization() like in example codes.");
+        // If Api was set as FullyNested or PartiallyNested or that link don't contain {quizzId} and {questionId}, this method should not be called at all but should be overriden in the class that inherits from Api Manager
+        if (apiDataModelEndpointType == ApiDataModelEndpointType.FullyNested ||
+            apiDataModelEndpointType == ApiDataModelEndpointType.PartiallyNested ||
+            !DoUrlsHaveQuizzIdAndQuestionIdInThem())
+        {
+            Debug.LogError(
+                $"[WARNING]: Your api seems to be Fully or Partially nested because you set it like this or you didn't define {{quizzId}} and {{questionId}} in api urls\n" +
+                $"In this case GetQuestionsForQuizz method should be overriden in the class that inherits from ApiManager. There, you should implement how questions are retrieved and return them. Look at documentation for examples"
+                );
+            return null;
+        }
 
-        // Their could be {quizzId} in the link. In this case replace it with quizzId
+
+        // Replace {quizzId} in the link
         apiQuestionsUrl = _originalApiQuestionsUrl.Replace("{quizzId}", quizzId.ToString());
 
         string json_questions = NetworkRequestManager.HttpGetRequest(apiQuestionsUrl);
 
         CheckIfNullAndLog(json_questions, $"[WARNING]: Response for {GetActualMethodName()} is null");
 
-        // Serialize the json data to the class used in api model for Questions (because only api model knows how json data is structured and how to map these values)
-        // apiModelClassForQuestionsSerialization is defined in the class inherited from ApiManager as base.apiModelClassForQuestionsSerialization = new ...)
-        JsonUtility.FromJsonOverwrite(json_questions, apiModelClassForQuestionsSerialization);
 
-        Questions questionsData = apiModelClassForQuestionsSerialization as Questions;
+        Questions questionsData = child.SerializeQuestions(json_questions);
         questionsData.MapAPIValuesToAbstractClass(); // Maps the values from ApiModel to Questions. The mapping is defined in api model class that inherits from Questions
 
+        cachedQuestions = questionsData;
 
         CheckIfNullAndLog(questionsData, $"[WARNING]: questionsData is null");
 
@@ -166,21 +209,33 @@ public class ApiManager : ApiManagerStructure
     }
 
 
-    // Get list of answers for a question
+    /** 
+     * Get answers for a quizz and a question.
+     */
     public override Answers GetAnswersForQuestion(object quizzId, object questionId)
     {
-        CheckIfNullAndLog(apiModelClassForAnswersSerialization, $"[CRITICAL]: apiModelClassForAnswersSerialization is not set. Set it from the class that inherits ApiManager with SetClassToUseForAnswersSerialization() like in example codes.");
+        // If Api was set as FullyNested or PartiallyNested or that link don't contain {quizzId} and {questionId}, this method should not be called at all but should be overriden in the class that inherits from Api Manager
+        if (apiDataModelEndpointType == ApiDataModelEndpointType.FullyNested ||
+            apiDataModelEndpointType == ApiDataModelEndpointType.PartiallyNested ||
+            !DoUrlsHaveQuizzIdAndQuestionIdInThem())
+        {
+            Debug.LogError(
+                $"[WARNING]: Your api seems to be Fully or Partially nested because you set it like this or you didn't define {{quizzId}} and {{questionId}} in api urls\n" +
+                $"In this case GetAnswersForQuestion method should be overriden in the class that inherits from ApiManager. There, you should implement how questions are retrieved and return them. Look at documentation for examples"
+                );
+            return null;
+        }
 
-        string json_answers = NetworkRequestManager.HttpGetRequest(apiQuestionsUrl);
+        // Replace {quizzId} and {questionid} in the link
+        apiAnswersUrl = _originalApiAnswersUrl.Replace("{quizzId}", quizzId.ToString());
+        apiAnswersUrl = _originalApiAnswersUrl.Replace("{questionId}", questionId.ToString());
+
+        string json_answers = NetworkRequestManager.HttpGetRequest(apiAnswersUrl);
 
         CheckIfNullAndLog(json_answers, $"[WARNING]: Response for {GetActualMethodName()} is null");
 
 
-        // Serialize the json data to the class used in api model for Answers (because only api model knows how json data is structured and how to map these values)
-        // apiModelClassForAnswersSerialization is defined in the class inherited from ApiManager as base.apiModelClassForAnswersSerialization = new ...)
-        JsonUtility.FromJsonOverwrite(json_answers, apiModelClassForAnswersSerialization);
-
-        Answers answersData = apiModelClassForAnswersSerialization as Answers;
+        Answers answersData = child.SerializeAnswers(json_answers);
         answersData.MapAPIValuesToAbstractClass(); // Maps the values from ApiModel to Answers. The mapping is defined in api model class that inherits from Answers
 
 
@@ -238,6 +293,19 @@ public class ApiManager : ApiManagerStructure
         return json_register != null && NetworkRequestManager.lastHttpWebRequestErrorMessage == null;
     }
 
+    
+    public bool DoUrlsHaveQuizzIdAndQuestionIdInThem()
+    {
+        if (apiQuestionsUrl.Contains("{quizzId}") && 
+            apiAnswersUrl.Contains("{quizzId}") && apiAnswersUrl.Contains("{questionId}")) 
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     public override bool HasToHaveToken()
     {
@@ -329,21 +397,6 @@ public class ApiManager : ApiManagerStructure
         return this.apiToken != null && this.apiToken != Constants.Api_Token_Not_Defined && this.apiToken.Length > 0;
     }
 
-    public void SetClassToUseForQuizzesSerialization(object classToUseForSerialization)
-    {
-        this.apiModelClassForQuizzesSerialization = classToUseForSerialization;
-    }
-
-    public void SetClassToUseForQuestionsSerialization(object classToUseForSerialization)
-    {
-        this.apiModelClassForQuestionsSerialization = classToUseForSerialization;
-    }
-
-    public void SetClassToUseForAnswersSerialization(object classToUseForSerialization)
-    {
-        this.apiModelClassForAnswersSerialization = classToUseForSerialization;
-    }
-
     public void SetClassToUseForApiTokenSerialization(object classToUseForSerialization)
     {
         this.apiModelClassForApiTokeAfterLoginSerialization = classToUseForSerialization;
@@ -371,9 +424,13 @@ public class ApiManager : ApiManagerStructure
         return st.GetFrame(0).GetMethod().Name;
     }
 
-    public void CheckIfNullAndLog(object what, string log, int type=0)
+    public abstract Quizzes SerializeQuizzes(string jsonData);
+    public abstract Questions SerializeQuestions(string jsonData);
+    public abstract Answers SerializeAnswers(string jsonData);
+
+    public void CheckIfNullAndLog(object whatToCheckForNull, string log, int type = 0)
     {
-        if (what == null)
+        if (whatToCheckForNull == null)
         {
             switch (type)
             {

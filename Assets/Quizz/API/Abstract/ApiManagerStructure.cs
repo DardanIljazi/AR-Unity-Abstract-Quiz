@@ -17,7 +17,14 @@ public abstract class ApiManagerStructure : MonoBehaviour
         BodyOrUrlParam = 2, // Token is put as a param in the url (only for GET request) or in body (only for POST request)
         Everywhere = 3, // Put the token everywhere: in header (POST/GET), in body (only for POST request) and in url (only for GET request)
     }
-    
+
+    public enum ApiDataModelEndpointType
+    {
+        FullyNested = 0, // For example www.example.com/api/quizzes (contains Quizzes/Questions/Answers all in one place)
+        PartiallyNested = 1, // For example www.example.com/api/quizzes (contains Quizzes) and www.example.com/api/quizzes/{quizzId} (contains Questions + Answers in one place)
+        EachModelHasAnEndpoint = 2, // For example www.example.com/api/quizzes (contains Quizzes), www.example.com/api/quizzes/{quizzId}/questions (contains Questions),  www.example.com/api/quizzes/{quizzId}/questions/{questionId}/answers (contains Answers)
+    }
+
     public abstract TokenHttpEmplacement GetTokenttpEmplacement();
 
     public abstract Quizzes     GetQuizzes();

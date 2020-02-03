@@ -40,6 +40,27 @@ public class DardiNestedApiModel : MonoBehaviour
     }
 
     [Serializable]
+    public class QuestionsInAPI : Questions // Because we are in nested resources case, we have access to questions only by going from "top to bottom". 
+                                            // So we must go on each quizz and go again inside of them to have questions
+    {
+        public List<QuizzInAPI> quizzes { get; set; }
+
+        public override void MapAPIValuesToAbstractClass()
+        {
+            // Go over quizzes
+            foreach (QuizzInAPI quizzData in this.quizzes)
+            {
+                // Go over questions in quizz
+                foreach (QuestionInAPI questionData in quizzData.questions)
+                {
+                    questionData.MapAPIValuesToAbstractClass();
+                    base.AddQuestion(questionData);
+                }
+            }
+        }
+    }
+
+    [Serializable]
     public class QuestionInAPI : Question
     {
         public int id { get; set; }
@@ -53,16 +74,29 @@ public class DardiNestedApiModel : MonoBehaviour
         }
     }
 
+
     [Serializable]
-    public class AnswersInAPI : Answers
+    public class AnswersInAPI : Answers // Because we are in nested resources case, we have access to questions only by going from "top to bottom". 
+                                        // So we must go on each quizz and go again inside of them to have questions, and again to have answers
     {
-        public int id { get; set; }
-        public string answer { get; set; }
-        public bool rightAnswer { get; set; }
+        public List<QuizzInAPI> quizzes { get; set; }
 
         public override void MapAPIValuesToAbstractClass()
         {
-            
+            // Go over quizzes
+            foreach (QuizzInAPI quizzData in this.quizzes)
+            {
+                // Go over questions in quizz
+                foreach (QuestionInAPI questionData in quizzData.questions)
+                {
+                    // Go over answers in question
+                    foreach (AnswerInAPI answerInAPI in questionData.answers)
+                    {
+                        answerInAPI.MapAPIValuesToAbstractClass();
+                        base.AddAnswer(answerInAPI);
+                    }
+                }
+            }
         }
     }
 

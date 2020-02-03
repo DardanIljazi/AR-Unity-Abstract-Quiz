@@ -53,7 +53,6 @@ public class PagesManager : MonoBehaviour
 
     public void ShowMenuPage()
     {
-        Debug.Log("ShowMenupage");
         if (this.indexOfMenuPage == -1)
         {
             Debug.LogError("[WARNING]: Please defined indexOfMenuPage variable in the editor. This value represents the main menu (quizz menu for example) to show when there is error or when quizz is finished");

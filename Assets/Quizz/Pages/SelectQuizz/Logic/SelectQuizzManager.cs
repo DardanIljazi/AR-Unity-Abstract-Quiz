@@ -15,10 +15,12 @@ public class SelectQuizzManager : PageLogic
     public override void ActionToDoWhenPageShowed()
     {
         GameManager.Instance.pagesManager.ShowLoadingPage();
-
+        selectQuizzScrollerController.Reset();
         selectQuizzScrollerController.Initialize();
 
+
         Quizzes quizzes = GameManager.Instance.GetApiManager().GetQuizzes();
+
 
         if (quizzes == null)
         {

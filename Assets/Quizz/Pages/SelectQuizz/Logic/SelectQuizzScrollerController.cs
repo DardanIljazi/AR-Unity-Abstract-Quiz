@@ -11,12 +11,17 @@ public class SelectQuizzScrollerController : MonoBehaviour, IEnhancedScrollerDel
     public SelectQuizzCellView selectQuizzCellView;
 
     // Put public for the show, should be put private afterwards
-    public List<Quizz> _data;
+    public List<Quizz> _data = new List<Quizz>();
 
     public void Initialize()
     {
-        _data = new List<Quizz>();
         enhancedScroller.Delegate = this;
+    }
+
+    public void Reset()
+    {
+        enhancedScroller.ClearAll();
+        _data.Clear();
     }
 
     public int GetNumberOfCells(EnhancedScroller scroller)

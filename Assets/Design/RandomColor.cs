@@ -33,5 +33,4 @@ public class RandomColor : MonoBehaviour
     {
         this.objectToRandomizeColorWhenEnable.GetComponent<Renderer>().material.color = listOfColor[rnd.Next(0, listOfColor.Capacity-1)]; 
     }
-
 }

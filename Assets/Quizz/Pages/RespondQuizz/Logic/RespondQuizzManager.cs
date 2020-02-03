@@ -22,8 +22,8 @@ public class RespondQuizzManager : PageLogic
     private int rightResponses = 0;
     private int falseResponses = 0;
 
-    private Quizz quizz;
-    private Questions questions;
+    private Quizz _quizz;
+    private Questions _questions;
 
     public override void ActionToDoWhenPageGoingToBeHidden()
     {
@@ -38,20 +38,22 @@ public class RespondQuizzManager : PageLogic
     public void LoadQuizzQuestions(Quizz quizz)
     {
         this.Reset();
+        respondQuizzScrollerController.Reset();
         respondQuizzScrollerController.Initialize();
 
-        this.quizz = quizz;
-        this.questions = GameManager.Instance.GetApiManager().GetQuestionsForQuizz(quizz.GetQuizzId());
+        this._quizz = quizz;
+        this._questions = GameManager.Instance.GetApiManager().GetQuestionsForQuizz(quizz.GetQuizzId());
+
 
         // Error/Exception managing
-        if (this.questions == null)
+        if (this._questions == null)
         {
             Debug.LogError("[WARNING]: questions is equal to null. Is your QuestionsQuizzData superclass class configured in the same way the API (json) data is ?");
             PopupManager.PopupAlert("Error", "Question is equal to null (is data from API valid ?).\n" + NetworkRequestManager.lastHttpWebRequestErrorMessage, "Return to menu", GameManager.Instance.pagesManager.ShowMenuPage);
             return;
         }
 
-        numberOfQuestions = questions.GetQuestionsList().Count;
+        numberOfQuestions = _questions.GetQuestionsList().Count;
 
         // Error/Exception managing
         if (numberOfQuestions == 0)
@@ -67,12 +69,11 @@ public class RespondQuizzManager : PageLogic
     public void LoadQuestionAndAnswersForIndex(int arrayIndex)
     {
         respondQuizzScrollerController.Reset();
-        quizzQuestion.text = questions.GetQuestionsList()[arrayIndex].GetQuestionTitle();
+        quizzQuestion.text = _questions.GetQuestionsList()[arrayIndex].GetQuestionTitle();
 
-        Question question = questions.GetQuestionsList()[arrayIndex];
-        Answers answers = GameManager.Instance.GetApiManager().GetAnswersForQuestion(this.quizz.GetQuizzId(), question.GetQuestionId());
+        Question question = _questions.GetQuestionsList()[arrayIndex];
+        Answers answers = GameManager.Instance.GetApiManager().GetAnswersForQuestion(this._quizz.GetQuizzId(), question.GetQuestionId());
 
-        Debug.Log($"answers: {JsonUtility.ToJson(answers)}");
 
         // Error/Exception managing
         if (question == null)
@@ -139,6 +140,9 @@ public class RespondQuizzManager : PageLogic
 
     public void Reset()
     {
+        
+        _quizz = null;
+        _questions = null;
         numberOfQuestions = 0;
         actualQuestionArrayIndex = 0;
         rightResponses = 0;

@@ -56,7 +56,7 @@ public abstract class AbstractQuizzStructure : MonoBehaviour
     public class Quizz : IMappeableAPIDataToAbstractClass, ICloneable
     {
         private string _quizzTitle;
-        private object _quizzId; // Can be string or int so we declare it as an object here
+        private object _quizzId; // Can be string or int so we declare it as an object herë
 
         // Api Model (that inherits from AbstractQuizzStructure) Will map the values of the API to the ones needed for Quizz Class (_quizzTitle, _quizzId)
         public virtual void MapAPIValuesToAbstractClass()
