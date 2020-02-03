@@ -4,52 +4,50 @@
             "id": 1,
             "title": "Additions",
             "description": "Do you know to make additions ?",
-            "questions" : [
-                {
-                    "id": 1,
-                    "question": "How many do 1+1 equal ?",
-                    "quizzId" : 1,
-                    "answers" : [
-                        {
-                            "id" : 1,
-                            "answer" : "It's equal to 3, you dumb !",
-                            "questionId": 1,
-                            "rightAnswer": false
-                        },
-                        {
-                            "id": 2,
-                            "answer" : "It's equal to 2, you crazy !",
-                            "questionId": 1,
-                            "rightAnswer": true
-                        }
-                    ]
-                },
-                {
-                    "id": 2,
-                    "question": "How many do 1+0 equal ?",
-                    "quizzId" : 1,
-                    "answers" : [
-                        {
-                            "id" : 3,
-                            "answer" : "It's equal to 10, how can you ?",
-                            "questionId": 2,
-                            "rightAnswer": false
-                        },
-                        {
-                            "id": 4,
-                            "answer" : "It's equal to 1",
-                            "questionId": 2,
-                            "rightAnswer": true
-                        },
-                        {
-                            "id": 5,
-                            "answer" : "This is undefined",
-                            "questionId": 2,
-                            "rightAnswer": false
-                        }
-                    ]
-                }
-            ]
+        }
+    ],
+    "questions" : [
+        {
+            "id": 1,
+            "question": "How many do 1+1 equal ?",
+            "quizzId" : 1
+        },
+        {
+            "id": 2,
+            "question": "How many do 1+0 equal ?",
+            "quizzId" : 1
+        }
+    ],
+    "answers" : [
+        {
+            "id" : 1,
+            "answer" : "It's equal to 3, you dumb !",
+            "questionId": 1,
+            "rightAnswer": false
+        },
+        {
+            "id": 2,
+            "answer" : "It's equal to 2, you crazy !",
+            "questionId": 1,
+            "rightAnswer": true
+        },
+        {
+            "id" : 3,
+            "answer" : "It's equal to 10, how can you ?",
+            "rightAnswer": false,
+            "questionId": 2
+        },
+        {
+            "id": 4,
+            "answer" : "It's equal to 1",
+            "rightAnswer": true,
+            "questionId": 2
+        },
+        {
+            "id": 5,
+            "answer" : "This is undefined",
+            "rightAnswer": false,
+            "questionId": 2
         }
     ]
 }
