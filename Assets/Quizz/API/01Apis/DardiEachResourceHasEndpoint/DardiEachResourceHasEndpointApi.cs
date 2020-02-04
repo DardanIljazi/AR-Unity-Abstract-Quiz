@@ -33,7 +33,7 @@ public class DardiEachResourceHasEndpointApi : ApiManager
 
     public override Quizzes SerializeQuizzes(string jsonData)
     {
-        return (Quizzes)JsonUtility.FromJson<DardiEachResourceHasEndpointApiModel.QuizzesInAPI>(jsonData) as Quizzes;
+        return (Quizzes)JsonUtility.FromJson<DardiEachResourceHasEndpointApiModel.QuizzesInAPI>(jsonData);
     }
 
     public override Questions SerializeQuestions(string jsonData)

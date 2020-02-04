@@ -40,7 +40,7 @@ public class HerokuApi : ApiManager
 
     public override Quizzes SerializeQuizzes(string jsonData)
     {
-        return (Quizzes)JsonUtility.FromJson<HerokuApiModel.QuizzesInAPI>(jsonData) as Quizzes;
+        return (Quizzes)JsonUtility.FromJson<HerokuApiModel.QuizzesInAPI>(jsonData);
     }
 
     public override Questions SerializeQuestions(string jsonData)
@@ -80,5 +80,4 @@ public class HerokuApi : ApiManager
 
         return null;
     }
-
 }

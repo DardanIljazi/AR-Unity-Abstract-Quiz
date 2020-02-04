@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static AbstractQuizzStructure;
+using static DardiNestedApiModel;
 
 /**
  * DardiNestedApi does: 
@@ -14,29 +16,81 @@ public class DardiNestedApi : ApiManager
 
     public DardiNestedApi()
     {
+        base.SetChild(this); // Important, must be set so that ApiManager will call Serialize(Quizzes/Questions/Answers)..
         // Set the configuration needed to get data for Quizzes/Questions/Ansers. 
-        base.rootApiUrl = "https://dardi.ch/nested_api/api/";
+        base.rootApiUrl = "https://dardi.ch/nested_api/api";
         base.apiQuizzesUrl = rootApiUrl + "/quizzes";
-        base.apiQuestionsUrl = rootApiUrl + "/quizzes";
-        base.apiAnswersUrl = rootApiUrl + "/quizzes";
+        base.apiQuestionsUrl = apiQuizzesUrl;
+        base.apiAnswersUrl = apiQuizzesUrl;
+
+        base.apiDataModelEndpointType = ApiDataModelEndpointType.FullyNested;
 
         // Set the configuration needed for the API token.
         base.hasToHaveTokenForApi = false;
         base.hasToLoginToGetToken = false;
     }
 
-    public override AbstractQuizzStructure.Answers SerializeAnswers(string jsonData)
+
+    public override Quizzes SerializeQuizzes(string jsonData)
     {
-        throw new System.NotImplementedException();
+        return (Quizzes)JsonUtility.FromJson<DardiNestedApiModel.QuizzesInAPI>(jsonData);
     }
 
-    public override AbstractQuizzStructure.Questions SerializeQuestions(string jsonData)
+    public override Questions GetQuestionsForQuizz(object quizzId)
     {
-        throw new System.NotImplementedException();
+        string json_quizzes_with_questions_with_answers = NetworkRequestManager.HttpGetRequest(apiQuestionsUrl);
+
+        CheckIfNullAndLog(json_quizzes_with_questions_with_answers, $"[WARNING]: Response for {GetActualMethodName()} is null");
+
+        DardiNestedApiModel.QuizzesInAPI quizzesData = JsonUtility.FromJson<DardiNestedApiModel.QuizzesInAPI>(json_quizzes_with_questions_with_answers);
+
+        Questions questions = new Questions();
+        foreach (QuizzInAPI quizzData in quizzesData.quizzes)
+        {
+            if (quizzData.id.ToString() == quizzId.ToString())
+            {
+                foreach (QuestionInAPI questionData in quizzData.questions)
+                {
+                    questionData.MapAPIValuesToAbstractClass();
+                    questions.AddQuestion(questionData);
+                }
+
+                return questions;
+            }
+        }
+
+        return null;
     }
 
-    public override AbstractQuizzStructure.Quizzes SerializeQuizzes(string jsonData)
+    public override Answers GetAnswersForQuestion(object quizzId, object questionId)
     {
-        throw new System.NotImplementedException();
+        string json_quizzes_with_questions_with_answers = NetworkRequestManager.HttpGetRequest(apiAnswersUrl);
+
+        CheckIfNullAndLog(json_quizzes_with_questions_with_answers, $"[WARNING]: Response for {GetActualMethodName()} is null");
+
+        DardiNestedApiModel.QuizzesInAPI quizzesData = JsonUtility.FromJson<DardiNestedApiModel.QuizzesInAPI>(json_quizzes_with_questions_with_answers);
+
+        Answers answers = new Answers();
+        foreach (QuizzInAPI quizzData in quizzesData.quizzes)
+        {
+            if (quizzData.id.ToString() == quizzId.ToString())
+            {
+                foreach (QuestionInAPI questionData in quizzData.questions)
+                {
+                    if (questionData.id.ToString() == questionId.ToString())
+                    {
+                        foreach (DardiNestedApiModel.AnswerInAPI answerData in questionData.answers)
+                        {
+                            answerData.MapAPIValuesToAbstractClass();
+                            answers.AddAnswer(answerData);
+                        }
+                        
+                        return answers;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 }

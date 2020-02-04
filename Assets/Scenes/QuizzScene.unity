@@ -3502,7 +3502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 419ccb7a15698cb45b1acd9c017c0bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apiToUse: {fileID: 2031938807}
+  apiToUse: {fileID: 919001470}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -4489,24 +4489,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 919001468}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a8cde4c9195f2c479d1114c1c4a2ed5, type: 3}
+  m_Script: {fileID: 11500000, guid: 52d89a1cf97373e468d14cb2ca882797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rootApiUrl: https://awa-quizz.herokuapp.com/api
-  apiQuizzesUrl: https://awa-quizz.herokuapp.com/api/quizzes
-  apiQuestionsUrl: https://awa-quizz.herokuapp.com/api/quizzes/{quizzId}
-  apiAnswersUrl: https://awa-quizz.herokuapp.com/api/quizzes/{quizzId}
+  rootApiUrl: https://dardi.ch/nested_api/api/
+  apiQuizzesUrl: https://dardi.ch/nested_api/api//quizzes
+  apiQuestionsUrl: https://dardi.ch/nested_api/api//quizzes
+  apiAnswersUrl: https://dardi.ch/nested_api/api//quizzes
   apiDataModelEndpointType: 0
-  hasToHaveTokenForApi: 1
+  hasToHaveTokenForApi: 0
   hasToLoginToGetToken: 0
   canRegisterAsUserToApi: 0
   apiLoginUrl: 
   apiRegisteringUrl: 
   apiRegisterUrl: 
   tokenHttpEmplacement: 3
-  apiKeyParamName: quizz-token
-  apiToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0IiwicGFzc3dvcmQiOiIkcGJrZGYyLXNoYTI1NiQyMDAwMCRjNjRWd3RnN0IuQThKeVJrN1AzL1h3JG9BRDloUnVEQTVkWVpKR1Y2cDNpdDBzYVFqdlFBemFZbi9wNW1kSGRDbDQifQ.P-KfTO8nq5oQNC_bIAY5VKOeNLyNbGE-gGrf0oIKQjc
-  herokuApiModel: {fileID: 1657891370}
+  apiKeyParamName: api_param_name_not_defined
+  apiToken: api_token_not_defined
+  dardiNestedApiModel: {fileID: 1657891370}
 --- !u!1 &964125447
 GameObject:
   m_ObjectHideFlags: 0
@@ -6870,7 +6870,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1657891368}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fdc4e44b768d7e4888d4f809620b407, type: 3}
+  m_Script: {fileID: 11500000, guid: 78215b707358d1947867eed797506fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1678091463
@@ -6999,7 +6999,7 @@ MonoBehaviour:
   tokenHttpEmplacement: 3
   apiKeyParamName: api_param_name_not_defined
   apiToken: api_token_not_defined
-  dardiEachResourceHasEndpointApiModel: {fileID: 0}
+  dardiEachResourceHasEndpointApiModel: {fileID: 1446172745}
 --- !u!1 &1787999080
 GameObject:
   m_ObjectHideFlags: 0
@@ -8241,7 +8241,7 @@ MonoBehaviour:
   tokenHttpEmplacement: 3
   apiKeyParamName: quizz-token
   apiToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0IiwicGFzc3dvcmQiOiIkcGJrZGYyLXNoYTI1NiQyMDAwMCRjNjRWd3RnN0IuQThKeVJrN1AzL1h3JG9BRDloUnVEQTVkWVpKR1Y2cDNpdDBzYVFqdlFBemFZbi9wNW1kSGRDbDQifQ.P-KfTO8nq5oQNC_bIAY5VKOeNLyNbGE-gGrf0oIKQjc
-  herokuApiModel: {fileID: 0}
+  herokuApiModel: {fileID: 1821714892}
 --- !u!1 &2054256513
 GameObject:
   m_ObjectHideFlags: 0

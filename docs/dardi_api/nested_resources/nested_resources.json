@@ -7,15 +7,20 @@
             "questions" : [
                 {
                     "id": 1,
+                    "quizzId": 1,
                     "question": "How many do 1+1 equal ?",
-                    "answers" : [
+                    "answers": [
                         {
                             "id" : 1,
+                            "questionId": 1,
+                            "quizzId": 1,
                             "answer" : "It's equal to 3, you dumb !",
                             "rightAnswer": false
                         },
                         {
                             "id": 2,
+                            "questionId": 1,
+                            "quizzId": 1,
                             "answer" : "It's equal to 2, you crazy !",
                             "rightAnswer": true
                         }
@@ -23,20 +28,27 @@
                 },
                 {
                     "id": 2,
+                    "quizzId": 1,
                     "question": "How many do 1+0 equal ?",
-                    "answers" : [
+                    "answers": [
                         {
                             "id" : 3,
+                            "questionId": 2,
+                            "quizzId": 2,
                             "answer" : "It's equal to 10, how can you ?",
                             "rightAnswer": false
                         },
                         {
                             "id": 4,
+                            "questionId": 2,
+                            "quizzId": 2,
                             "answer" : "It's equal to 1",
                             "rightAnswer": true
                         },
                         {
                             "id": 5,
+                            "questionId": 2,
+                            "quizzId": 2,
                             "answer" : "This is undefined",
                             "rightAnswer": false
                         }

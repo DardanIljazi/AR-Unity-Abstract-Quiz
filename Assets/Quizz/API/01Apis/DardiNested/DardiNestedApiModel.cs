@@ -12,7 +12,7 @@ public class DardiNestedApiModel : MonoBehaviour
     [Serializable]
     public class QuizzesInAPI : Quizzes
     {
-        public List<QuizzInAPI> quizzes { get; set; }
+        public List<QuizzInAPI> quizzes = new List<QuizzInAPI>();
 
         public override void MapAPIValuesToAbstractClass()
         {
@@ -27,10 +27,10 @@ public class DardiNestedApiModel : MonoBehaviour
     [Serializable]
     public class QuizzInAPI : Quizz
     {
-        public int id { get; set; }
-        public string title { get; set; }
-        public string description { get; set; }
-        public List<QuestionInAPI> questions { get; set; }
+        public int id;
+        public string title;
+        public string description;
+        public List<QuestionInAPI> questions = new List<QuestionInAPI>();
 
         public override void MapAPIValuesToAbstractClass()
         {
@@ -40,32 +40,12 @@ public class DardiNestedApiModel : MonoBehaviour
     }
 
     [Serializable]
-    public class QuestionsInAPI : Questions // Because we are in nested resources case, we have access to questions only by going from "top to bottom". 
-                                            // So we must go on each quizz and go again inside of them to have questions
-    {
-        public List<QuizzInAPI> quizzes { get; set; }
-
-        public override void MapAPIValuesToAbstractClass()
-        {
-            // Go over quizzes
-            foreach (QuizzInAPI quizzData in this.quizzes)
-            {
-                // Go over questions in quizz
-                foreach (QuestionInAPI questionData in quizzData.questions)
-                {
-                    questionData.MapAPIValuesToAbstractClass();
-                    base.AddQuestion(questionData);
-                }
-            }
-        }
-    }
-
-    [Serializable]
     public class QuestionInAPI : Question
     {
-        public int id { get; set; }
-        public string question { get; set; }
-        public List<AnswerInAPI> answers { get; set; }
+        public int id;
+        public string question;
+        public int quizzId;
+        public List<AnswerInAPI> answers = new List<AnswerInAPI>();
 
         public override void MapAPIValuesToAbstractClass()
         {
@@ -74,38 +54,14 @@ public class DardiNestedApiModel : MonoBehaviour
         }
     }
 
-
-    [Serializable]
-    public class AnswersInAPI : Answers // Because we are in nested resources case, we have access to questions only by going from "top to bottom". 
-                                        // So we must go on each quizz and go again inside of them to have questions, and again to have answers
-    {
-        public List<QuizzInAPI> quizzes { get; set; }
-
-        public override void MapAPIValuesToAbstractClass()
-        {
-            // Go over quizzes
-            foreach (QuizzInAPI quizzData in this.quizzes)
-            {
-                // Go over questions in quizz
-                foreach (QuestionInAPI questionData in quizzData.questions)
-                {
-                    // Go over answers in question
-                    foreach (AnswerInAPI answerInAPI in questionData.answers)
-                    {
-                        answerInAPI.MapAPIValuesToAbstractClass();
-                        base.AddAnswer(answerInAPI);
-                    }
-                }
-            }
-        }
-    }
-
     [Serializable]
     public class AnswerInAPI : Answer
     {
-        public int id { get; set; }
-        public string answer { get; set; }
-        public bool rightAnswer { get; set; }
+        public int id;
+        public string answer;
+        public bool rightAnswer;
+        public int questionId;
+        public int quizzId;
 
         public override void MapAPIValuesToAbstractClass()
         {
