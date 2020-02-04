@@ -25,16 +25,6 @@ public class RespondQuizzManager : PageLogic
     private Quizz _quizz;
     private Questions _questions;
 
-    public override void ActionToDoWhenPageGoingToBeHidden()
-    {
-        
-    }
-
-    public override void ActionToDoWhenPageShowed()
-    {
-        
-    }
-
     public void LoadQuizzQuestions(Quizz quizz)
     {
         this.Reset();
@@ -87,6 +77,8 @@ public class RespondQuizzManager : PageLogic
         {
             Answer answer = answers.GetAnswersList()[answerIndex];
 
+            Debug.Log($"answer: {answer.GetDataToShowAsPossibleAnswer()} is correct ? {answer.IsCorrectAnswer()}");
+
             if (answer.IsCorrectAnswer())
                 goodAnswer = answer.GetDataToShowAsPossibleAnswer();
 
@@ -112,7 +104,7 @@ public class RespondQuizzManager : PageLogic
 
     public void SaveResponseAndGoToNext(Answer answer)
     {
-        if (goodAnswer.Equals(answer))
+        if (goodAnswer == answer.GetDataToShowAsPossibleAnswer())
         {
             rightResponses++;
         }

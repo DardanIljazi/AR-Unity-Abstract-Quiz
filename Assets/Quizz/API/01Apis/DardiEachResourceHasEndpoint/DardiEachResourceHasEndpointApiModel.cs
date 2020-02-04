@@ -4,21 +4,21 @@ using UnityEngine;
 using static AbstractQuizzStructure;
 
 /**
- *  HerokuApiModel is the class that defines how is structured the API data for Heroku Api
+ *  DardiEachResourceHasEndpointApiModel is the class that defines how is structured the API data for Dardi Each Resource Has Endpoint
  *  - It maps the data from API to the classes that are used everywhere in the application logic (Quizzes/Quizz/Questions/Question/Answers/Answer)
  */
-public class HerokuApiModel : MonoBehaviour
+public class DardiEachResourceHasEndpointApiModel : MonoBehaviour
 {
     [Serializable]
     public class QuizzesInAPI : Quizzes
     {
-        public List<QuizzInAPI> quizzes = new List<QuizzInAPI>();
+        public List<QuizzInAPI> quizzes;
 
         public override void MapAPIValuesToAbstractClass()
         {
             foreach (QuizzInAPI quizzData in this.quizzes)
             {
-                quizzData.MapAPIValuesToAbstractClass(); // Map values for QuizzData to Quizz (QuizzData inherits from Quizz)
+                quizzData.MapAPIValuesToAbstractClass(); // Map values
                 base.AddQuizz(quizzData);
             }
         }
@@ -27,12 +27,9 @@ public class HerokuApiModel : MonoBehaviour
     [Serializable]
     public class QuizzInAPI : Quizz
     {
+        public int id;
         public string title;
-        public string image;
         public string description;
-        public Creator created_by = new Creator();
-        public int number_participants;
-        public string id;
 
         public override void MapAPIValuesToAbstractClass()
         {
@@ -41,23 +38,16 @@ public class HerokuApiModel : MonoBehaviour
         }
     }
 
-
     [Serializable]
     public class QuestionsInAPI : Questions
     {
-        public string id;
-        public string title;
-        public string description;
-        public string image;
-        public string created_by;
-        public List<QuestionInAPI> questions = new List<QuestionInAPI>();
-        public int number_participants;
+        public List<QuestionInAPI> questions;
 
         public override void MapAPIValuesToAbstractClass()
         {
-            foreach (QuestionInAPI questionData in questions)
+            foreach (QuestionInAPI questionData in this.questions)
             {
-                questionData.MapAPIValuesToAbstractClass();
+                questionData.MapAPIValuesToAbstractClass(); // Map values
                 base.AddQuestion(questionData);
             }
         }
@@ -66,39 +56,50 @@ public class HerokuApiModel : MonoBehaviour
     [Serializable]
     public class QuestionInAPI : Question
     {
-        public string id;
+        public int id;
         public string question;
-        public string image;
-        public List<AnswerInAPI> answers = new List<AnswerInAPI>();
+        public int quizzId;
 
         public override void MapAPIValuesToAbstractClass()
         {
-            base.SetQuestionText(question);
             base.SetQuestionid(this.id);
+            base.SetQuestionText(this.question);
+        }
+    }
+
+
+    [Serializable]
+    public class AnswersInAPI : Answers
+    {
+        public List<AnswerInAPI> answers;
+
+        public override void MapAPIValuesToAbstractClass()
+        {
+            foreach (AnswerInAPI answerData in this.answers)
+            {
+                answerData.MapAPIValuesToAbstractClass(); // Map values
+                base.AddAnswer(answerData);
+            }
         }
     }
 
     [Serializable]
     public class AnswerInAPI : Answer
     {
-        public string name;
-        public bool value;
+        public int id;
+        public string answer;
+        public bool rightAnswer;
+        public int questionId;
+        public int quizzId;
 
         public override void MapAPIValuesToAbstractClass()
         {
-            base.SetDataToShowAsPossibleAnswer(name);
-            base.SetIsCorrectAnswer(value);
+            base.SetDataToShowAsPossibleAnswer(this.answer);
+            base.SetIsCorrectAnswer(this.rightAnswer);
         }
     }
-
-
-    [Serializable]
-    public class Creator
-    {
-        string id;
-        string username;
-    }
 }
+
 
 
 #region Example of json to class with JsonUtility.FromJson<Class>(JSON_DATA)

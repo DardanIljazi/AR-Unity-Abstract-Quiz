@@ -21,7 +21,6 @@ public class SelectQuizzManager : PageLogic
 
         Quizzes quizzes = GameManager.Instance.GetApiManager().GetQuizzes();
 
-
         if (quizzes == null)
         {
             Debug.LogError("[WARNING]: quizzes is equal to null. Is your QuizzesData superclass class configured in the same way the API (json) data is ?");

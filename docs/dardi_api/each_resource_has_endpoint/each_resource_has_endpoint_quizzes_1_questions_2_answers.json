@@ -1,0 +1,19 @@
+{
+    "answers" : [
+        {
+            "id" : 3,
+            "answer" : "It's equal to 10, how can you ?",
+            "rightAnswer": false
+        },
+        {
+            "id": 4,
+            "answer" : "It's equal to 1",
+            "rightAnswer": true
+        },
+        {
+            "id": 5,
+            "answer" : "This is undefined",
+            "rightAnswer": false
+        }
+    ]
+}

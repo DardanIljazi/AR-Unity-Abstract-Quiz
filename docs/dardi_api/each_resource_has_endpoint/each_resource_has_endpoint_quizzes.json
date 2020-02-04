@@ -1,0 +1,9 @@
+{
+    "quizzes": [
+        {
+            "id": 1,
+            "title": "Additions",
+            "description": "Do you know to make additions ?"
+        }
+    ]
+}

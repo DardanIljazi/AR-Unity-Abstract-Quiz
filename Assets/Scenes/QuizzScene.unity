@@ -3622,6 +3622,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1749843288}
   - {fileID: 2031938806}
   - {fileID: 919001469}
   m_Father: {fileID: 690631468}
@@ -4477,7 +4478,7 @@ Transform:
   m_Children:
   - {fileID: 1657891369}
   m_Father: {fileID: 719161358}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &919001470
 MonoBehaviour:
@@ -4491,7 +4492,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a8cde4c9195f2c479d1114c1c4a2ed5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apiName: Quiz
   rootApiUrl: https://awa-quizz.herokuapp.com/api
   apiQuizzesUrl: https://awa-quizz.herokuapp.com/api/quizzes
   apiQuestionsUrl: https://awa-quizz.herokuapp.com/api/quizzes/{quizzId}
@@ -6040,6 +6040,49 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1444457881}
   m_CullTransparentMesh: 0
+--- !u!1 &1446172743
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1446172744}
+  - component: {fileID: 1446172745}
+  m_Layer: 0
+  m_Name: DardiEachResourceHasEndpointApiModel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1446172744
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1446172743}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1749843288}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1446172745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1446172743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89302db25f14e0d409089d3e607cfe21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1448935249
 GameObject:
   m_ObjectHideFlags: 0
@@ -6898,6 +6941,65 @@ Transform:
   m_Father: {fileID: 778415747}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1749843287
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1749843288}
+  - component: {fileID: 1749843289}
+  m_Layer: 0
+  m_Name: DardiEachResourceHasEndpoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1749843288
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1749843287}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1446172744}
+  m_Father: {fileID: 719161358}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1749843289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1749843287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e586d03f87fff4941bfbb7530baf77f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rootApiUrl: http://dardi.ch/each_resource_has_endpoint/api
+  apiQuizzesUrl: http://dardi.ch/each_resource_has_endpoint/api/quizzes
+  apiQuestionsUrl: http://dardi.ch/each_resource_has_endpoint/api/quizzes/{quizzId}/questions
+  apiAnswersUrl: http://dardi.ch/each_resource_has_endpoint/api/quizzes/{quizzId}/questions/{questionId}/answers
+  apiDataModelEndpointType: 2
+  hasToHaveTokenForApi: 0
+  hasToLoginToGetToken: 0
+  canRegisterAsUserToApi: 0
+  apiLoginUrl: 
+  apiRegisteringUrl: 
+  apiRegisterUrl: 
+  tokenHttpEmplacement: 3
+  apiKeyParamName: api_param_name_not_defined
+  apiToken: api_token_not_defined
+  dardiEachResourceHasEndpointApiModel: {fileID: 0}
 --- !u!1 &1787999080
 GameObject:
   m_ObjectHideFlags: 0
@@ -8111,7 +8213,7 @@ Transform:
   m_Children:
   - {fileID: 1821714891}
   m_Father: {fileID: 719161358}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2031938807
 MonoBehaviour:
@@ -8125,11 +8227,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a8cde4c9195f2c479d1114c1c4a2ed5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apiName: Quiz
-  rootApiUrl: https://awa-quizz.herokuapp.com/api
-  apiQuizzesUrl: https://awa-quizz.herokuapp.com/api/quizzes
-  apiQuestionsUrl: https://awa-quizz.herokuapp.com/api/quizzes/{quizzId}
-  apiAnswersUrl: https://awa-quizz.herokuapp.com/api/quizzes/{quizzId}
+  rootApiUrl: http://awa-quizz.herokuapp.com/api
+  apiQuizzesUrl: http://awa-quizz.herokuapp.com/api/quizzes
+  apiQuestionsUrl: http://awa-quizz.herokuapp.com/api/quizzes/{quizzId}
+  apiAnswersUrl: http://awa-quizz.herokuapp.com/api/quizzes/{quizzId}
   apiDataModelEndpointType: 1
   hasToHaveTokenForApi: 1
   hasToLoginToGetToken: 0
@@ -8140,7 +8241,7 @@ MonoBehaviour:
   tokenHttpEmplacement: 3
   apiKeyParamName: quizz-token
   apiToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Imd1ZXN0IiwicGFzc3dvcmQiOiIkcGJrZGYyLXNoYTI1NiQyMDAwMCRjNjRWd3RnN0IuQThKeVJrN1AzL1h3JG9BRDloUnVEQTVkWVpKR1Y2cDNpdDBzYVFqdlFBemFZbi9wNW1kSGRDbDQifQ.P-KfTO8nq5oQNC_bIAY5VKOeNLyNbGE-gGrf0oIKQjc
-  herokuApiModel: {fileID: 1821714892}
+  herokuApiModel: {fileID: 0}
 --- !u!1 &2054256513
 GameObject:
   m_ObjectHideFlags: 0

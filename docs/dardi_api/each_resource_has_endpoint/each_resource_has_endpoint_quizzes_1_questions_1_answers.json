@@ -1,0 +1,18 @@
+{
+    "answers" : [
+        {
+            "id" : 1,
+            "answer" : "It's equal to 3, you dumb !",
+            "rightAnswer": false,
+            "questionId": 1,
+            "quizzId": 1
+        },
+        {
+            "id": 2,
+            "answer" : "It's equal to 2, you crazy !",
+            "rightAnswer": true,
+            "questionId": 1,
+            "quizzId": 1
+        }
+    ]
+}

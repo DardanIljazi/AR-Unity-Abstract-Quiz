@@ -17,8 +17,6 @@ public class RespondQuizzCellView : EnhancedScrollerCellView, IPointerUpHandler,
 
     public void SetData(Answer data)
     {
-        Debug.Log("SETDATA");
-        Debug.Log(JsonUtility.ToJson(_data));
         _data = data;
         ReloadData();
     }
@@ -48,7 +46,6 @@ public class RespondQuizzCellView : EnhancedScrollerCellView, IPointerUpHandler,
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("OnPointerClick");
         Debug.Log(JsonUtility.ToJson(_data));
         GameManager.Instance.respondQuizzManager.ResponseSelected(_data);
     }

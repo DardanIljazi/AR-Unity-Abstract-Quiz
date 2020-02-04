@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using static AbstractQuizzStructure;
+using static HerokuApiModel;
 
 /**
  * HerokuApi does: 
- *  - Define which model it is attached to (here it is HerokuApiModel)
+ *  - Define which model it is attached to (here it is herokuApiModel)
  *  - Configure/Set how the code should get data
- *      --> Defines the link, if it should have a token to get data
+ * 
+ * The apis like this one that are "partially nested" are not the easiest to implement (Look for DardiEachResourceHasEndpoint to have the easiest example). 
+ * Because ApiManager works with fully restful api (where each resourece has an endpoint) and that this is not the case with HerokuApi, we have to override methods to define how we get and return data.
+ * Have a look at GetQuestions() and GetAnswers() that redefine how to return Questions and Answers --> DardiEachResourceHasEndpoint class doesn't have to do this because for example
  */
 public class HerokuApi : ApiManager
 {
@@ -15,12 +19,16 @@ public class HerokuApi : ApiManager
 
     public HerokuApi()
     {
-        base.SetChild(this);
+        base.SetChild(this); // Important, must be set so that ApiManager will call Serialize(Quizzes/Questions/Answers)..
+
         // Set the configuration needed to get data for Quizzes/Questions/Ansers. 
-        base.rootApiUrl = "https://awa-quizz.herokuapp.com/api";
+        base.rootApiUrl = "http://awa-quizz.herokuapp.com/api";
         base.apiQuizzesUrl = rootApiUrl+ "/quizzes";
         base.apiQuestionsUrl = rootApiUrl+ "/quizzes/{quizzId}";
-        base.apiAnswersUrl = rootApiUrl+ "/quizzes/{quizzId}";
+        base.apiAnswersUrl = base.apiQuestionsUrl; // Answers are contained into questions (nested) = same link to get those datas
+
+        base.apiDataModelEndpointType = ApiDataModelEndpointType.PartiallyNested;
+
 
         // Set the configuration needed for the API token.
         base.hasToHaveTokenForApi = true;
@@ -32,7 +40,7 @@ public class HerokuApi : ApiManager
 
     public override Quizzes SerializeQuizzes(string jsonData)
     {
-        return (Quizzes)JsonUtility.FromJson<HerokuApiModel.QuizzesInAPI>(jsonData);
+        return (Quizzes)JsonUtility.FromJson<HerokuApiModel.QuizzesInAPI>(jsonData) as Quizzes;
     }
 
     public override Questions SerializeQuestions(string jsonData)
@@ -40,8 +48,37 @@ public class HerokuApi : ApiManager
         return (Questions)JsonUtility.FromJson<HerokuApiModel.QuestionsInAPI>(jsonData);
     }
 
-    public override Answers SerializeAnswers(string jsonData)
+
+    public override Answers GetAnswersForQuestion(object quizzId, object questionId)
     {
-        return (Answers)JsonUtility.FromJson<HerokuApiModel.AnswersInAPI>(jsonData);
+        // Replace {quizzId} and {questionid} in the link
+        base.apiAnswersUrl = base._originalApiAnswersUrl.Replace("{quizzId}", quizzId.ToString()).Replace("{questionId}", questionId.ToString());
+
+        string json_questions_with_answers = NetworkRequestManager.HttpGetRequest(apiAnswersUrl);
+
+        CheckIfNullAndLog(json_questions_with_answers, $"[WARNING]: Response for {GetActualMethodName()} is null");
+
+
+        HerokuApiModel.QuestionsInAPI questionsData = JsonUtility.FromJson<HerokuApiModel.QuestionsInAPI>(json_questions_with_answers);
+
+        Answers answers = new Answers();
+        // Let's begin to search the questionId we need in this case
+        foreach (QuestionInAPI questionData in questionsData.questions)
+        {
+            if (questionId.ToString() == questionData.id)
+            {
+                // Now that we found the question with the questionId we need, let's get all answers 
+                foreach (AnswerInAPI answerData in questionData.answers)
+                {
+                    answerData.MapAPIValuesToAbstractClass();
+                    answers.AddAnswer(answerData);
+                }
+
+                return answers;
+            }
+        }
+
+        return null;
     }
+
 }
