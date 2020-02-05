@@ -6,5 +6,7 @@
 
 Those tutorials create a new project from scratch, you can do it to test a new basic project and deploy it to your phone. Otherwise, avoid those parts and configure it to work with `Abstract Quiz AWA` project instead.
 
+## Use image/qr code tracking
 
+For more information about image tracking, please read the file `qrcode_for_ar_tracking.docx` in the `docs` folder.
 

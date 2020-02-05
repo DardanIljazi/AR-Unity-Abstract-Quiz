@@ -76,7 +76,7 @@ The project is intended to be deployed on phones supporting `Augmented Reality`,
 
 From the `Toolbar` of Unity Editor [Learning The Interface (Unity3d)](https://docs.unity3d.com/Manual/LearningtheInterface.html), click on the `Play` button. 
 
-The project is by default configured to work with the api called `herokuapi`.
+The project is by default configured to work with the api called `DardiEachResourceHasEndpoint`.
 
 You should see the picture below asking to scan a QR code but we are on computer, so just click `No, go to quiz list please`
 
@@ -92,11 +92,9 @@ After that you can see the list of quizes. Select one and respond to it until th
 
 You made the project work and you can now go further to deploy it on your phone, implement your own API or to understand how the project works globally:
 
-- [Deploy on phone](DeployOnPhone.md)
 - [Use your own quiz API](UseOwnAPI.md)
-- [Understand how the project works]()
+- [Understand how the project works](HowProjectWorks.md)
+- [Deploy on phone](DeployOnPhone.md)
 
 
-
-This documentation is Work In Progress..
 
